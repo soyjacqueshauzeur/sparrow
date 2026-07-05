@@ -54,6 +54,7 @@ let isRunning = false;
 let isShuffle = true;
 let isRecall = true;
 let isCardHidden = false;
+let personalMode = 'story';
 let hiddenCardData = null;
 let shuffleOrder = [];
 let timer = null;
@@ -102,6 +103,8 @@ let deckConfig = document.getElementById('deckConfig');
 let deckCount = document.getElementById('deckCount');
 let personalConfig = document.getElementById('personalConfig');
 let personalTextarea = document.getElementById('personalTextarea');
+let personalWord = document.getElementById('personalWord');
+let personalStory = document.getElementById('personalStory');
 let instructionsTable = document.getElementById('instructionsTable');
 let clockDisplay = document.getElementById('clockDisplay');
 let timerDisplay = document.getElementById('timerDisplay');
@@ -257,6 +260,20 @@ function setRecallMode(recall) {
 modeTraining.addEventListener('click', () => setRecallMode(false));
 modeRecall.addEventListener('click', () => setRecallMode(true));
 
+personalWord.addEventListener('click', () => {
+  personalMode = 'word';
+  personalWord.classList.add('active');
+  personalStory.classList.remove('active');
+  sessionStorage.setItem('sparrowPersonalMode', 'word');
+});
+
+personalStory.addEventListener('click', () => {
+  personalMode = 'story';
+  personalStory.classList.add('active');
+  personalWord.classList.remove('active');
+  sessionStorage.setItem('sparrowPersonalMode', 'story');
+});
+
 function handleCompareClick() {
   if (!isCardHidden && hiddenCardData === null && (isPaused || !isPaused)) {
     advanceToNextCard();
@@ -309,8 +326,16 @@ function compareAndReveal() {
   const cardEl = container.querySelector('.card');
   if (!cardEl || hiddenCardData === null) return;
 
-  const userAnswer = recallInput.value.trim().replace(/\s/g, '').toLowerCase();
-  const correctAnswer = (hiddenCardData.bottom || hiddenCardData.top).trim().replace(/\s/g, '').toLowerCase();
+  const rawUser = recallInput.value.trim();
+  const rawCorrect = (hiddenCardData.bottom || hiddenCardData.top).trim();
+  let userAnswer, correctAnswer;
+  if (currentSet === 'personal' && personalMode === 'story') {
+    userAnswer = rawUser.replace(/\s+/g, ' ').toLowerCase();
+    correctAnswer = rawCorrect.replace(/\s+/g, ' ').toLowerCase();
+  } else {
+    userAnswer = rawUser.replace(/\s/g, '').toLowerCase();
+    correctAnswer = rawCorrect.replace(/\s/g, '').toLowerCase();
+  }
   const isCorrect = userAnswer === correctAnswer;
 
   const topEl = cardEl.querySelector('.card-top');
@@ -400,7 +425,13 @@ function handlePauseAction() {
     currentSet = '1-100';
   }
   if (!isRunning) {
-    try {
+if (savedPersonalMode !== null) {
+  personalMode = savedPersonalMode;
+  personalWord.classList.toggle('active', personalMode === 'word');
+  personalStory.classList.toggle('active', personalMode === 'story');
+}
+
+try {
       startRunning();
     } catch (e) {
       console.error(e);
@@ -702,14 +733,25 @@ function startRunning() {
     currentIndex = 0;
     showDeckCard();
   } else if (currentSet === 'personal') {
-    const list = parsePersonal();
-    if (list.length === 0) return;
-    dataSets['personal'] = list.map(w => ({ top: w, bottom: '' }));
-    personalConfig.style.display = 'none';
-    shuffleOrder = isShuffle ? buildShuffleOrder(dataSets['personal'].length) : [];
-    currentIndex = 0;
-    updateLessonForPersonal(list.length);
-    showCard(0);
+    if (personalMode === 'story') {
+      const text = personalTextarea.value.trim();
+      if (!text) return;
+      dataSets['personal'] = [{ top: text, bottom: '' }];
+      personalConfig.style.display = 'none';
+      shuffleOrder = [];
+      currentIndex = 0;
+      updateLessonForPersonal(1);
+      showCard(0);
+    } else {
+      const list = parsePersonal();
+      if (list.length === 0) return;
+      dataSets['personal'] = list.map(w => ({ top: w, bottom: '' }));
+      personalConfig.style.display = 'none';
+      shuffleOrder = isShuffle ? buildShuffleOrder(dataSets['personal'].length) : [];
+      currentIndex = 0;
+      updateLessonForPersonal(list.length);
+      showCard(0);
+    }
   } else {
     shuffleOrder = isShuffle ? buildShuffleOrder(dataSets[currentSet].length) : [];
     currentIndex = 0;
@@ -895,12 +937,14 @@ document.querySelectorAll('.cat-pill').forEach(btn => {
     sessionStorage.setItem('sparrowGame', setKey);
     sessionStorage.setItem('sparrowRecall', isRecall);
     sessionStorage.setItem('sparrowShuffle', isShuffle);
+    sessionStorage.setItem('sparrowPersonalMode', personalMode);
   });
 });
 
 const savedGame = sessionStorage.getItem('sparrowGame') || '1-100';
 const savedRecall = sessionStorage.getItem('sparrowRecall');
 const savedShuffle = sessionStorage.getItem('sparrowShuffle');
+const savedPersonalMode = sessionStorage.getItem('sparrowPersonalMode');
 
 if (savedRecall !== null) {
   isRecall = savedRecall === 'true';

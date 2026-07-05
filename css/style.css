@@ -309,6 +309,12 @@ body {
   font-weight: 500;
 }
 
+.personal-modes {
+  display: flex; gap: var(--sp-sm);
+  margin-top: var(--sp-sm);
+  justify-content: center;
+}
+
 .instructions-table {
   width: 100%; max-width: 340px;
   padding: 0 4px;
