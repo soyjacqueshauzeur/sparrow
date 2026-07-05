@@ -81,9 +81,6 @@ let fontSize = 8;
 function applyFontScale() {
   const em = fontSize * 0.5;
   document.documentElement.style.setProperty('--card-font-size', em + 'em');
-  document.querySelectorAll('.card-top').forEach(el => el.style.fontSize = em + 'em');
-  document.querySelectorAll('.card-bottom').forEach(el => el.style.fontSize = (em * 0.4) + 'em');
-  document.querySelectorAll('.card-wrong').forEach(el => el.style.fontSize = (em * 0.35) + 'em');
 }
 
 fontDown.addEventListener('click', () => {

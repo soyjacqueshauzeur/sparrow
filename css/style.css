@@ -21,6 +21,7 @@
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-pill: 999px;
+  --card-font-size: 4em;
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -355,12 +356,10 @@ body {
 }
 
 .card-wrapper {
-  --card-font-size: 4em;
   position: relative;
-  width: 300px;
+  width: 100%;
   min-height: 200px;
   height: auto;
-  max-width: 92vw;
   max-height: none;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
@@ -368,10 +367,11 @@ body {
 
 .card {
   position: relative;
-  width: 100%;
+  width: calc(100% - 16px);
+  min-width: 305px;
+  max-width: 800px;
   height: auto;
   min-height: 180px;
-  max-width: 340px;
   background: var(--bg-card);
   border: 2px solid var(--border);
   border-radius: var(--radius-lg);
@@ -381,7 +381,8 @@ body {
   opacity: 0;
   transition: opacity 0.15s ease, background 0.2s ease, border-color 0.2s ease;
   pointer-events: none;
-  padding: 24px 20px;
+  padding: 24px 0.5em;
+  box-sizing: border-box;
 }
 
 .card.visible {
@@ -684,10 +685,6 @@ body {
 .duo-btn .btn-label { white-space: nowrap; }
 
 /* ========== RESPONSIVE ========== */
-@media (min-width: 600px) {
-  .card-wrapper { width: 340px; }
-}
-
 @media (min-width: 900px) {
   .category-pills { justify-content: center; }
   .bottom-controls {
