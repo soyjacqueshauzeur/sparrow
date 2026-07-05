@@ -101,6 +101,8 @@ let numFrom = document.getElementById('numFrom');
 let numTo = document.getElementById('numTo');
 let binarioConfig = document.getElementById('binarioConfig');
 let binCount = document.getElementById('binCount');
+let deckConfig = document.getElementById('deckConfig');
+let deckCount = document.getElementById('deckCount');
 let personalConfig = document.getElementById('personalConfig');
 let personalTextarea = document.getElementById('personalTextarea');
 let instructionsTable = document.getElementById('instructionsTable');
@@ -256,23 +258,24 @@ function setRecallMode(recall) {
 modeTraining.addEventListener('click', () => setRecallMode(false));
 modeRecall.addEventListener('click', () => setRecallMode(true));
 
-compareBtn.addEventListener('click', () => {
-  if (!isCardHidden) return;
+function handleCompareClick() {
+  if (!isCardHidden && hiddenCardData === null && (isPaused || !isPaused)) {
+    advanceToNextCard();
+    return;
+  }
   if (hiddenCardData !== null && recallInput.value.trim() !== '') {
     compareAndReveal();
   } else {
     advanceToNextCard();
   }
-});
+}
+
+compareBtn.addEventListener('click', handleCompareClick);
 
 recallInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault();
-    if (hiddenCardData !== null && recallInput.value.trim() !== '') {
-      compareAndReveal();
-    } else {
-      advanceToNextCard();
-    }
+    handleCompareClick();
   }
 });
 
@@ -289,6 +292,7 @@ function hideCardShowQuestion() {
   if (bottomEl) bottomEl.textContent = '';
   isCardHidden = true;
   recallInput.value = '';
+  compareBtn.textContent = 'COMPARAR';
   recallCompare.style.display = 'flex';
   recallInput.focus();
 }
@@ -306,9 +310,9 @@ function compareAndReveal() {
   const cardEl = container.querySelector('.card');
   if (!cardEl || hiddenCardData === null) return;
 
-  const userAnswer = recallInput.value.trim().replace(/\s+/g, ' ');
-  const correctAnswer = (hiddenCardData.bottom || hiddenCardData.top).trim().replace(/\s+/g, ' ');
-  const isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+  const userAnswer = recallInput.value.trim().replace(/\s/g, '').toLowerCase();
+  const correctAnswer = (hiddenCardData.bottom || hiddenCardData.top).trim().replace(/\s/g, '').toLowerCase();
+  const isCorrect = userAnswer === correctAnswer;
 
   const topEl = cardEl.querySelector('.card-top');
   const bottomEl = cardEl.querySelector('.card-bottom');
@@ -319,9 +323,6 @@ function compareAndReveal() {
     cardEl.classList.add('correct');
     if (topEl) topEl.textContent = hiddenCardData.top;
     if (bottomEl) bottomEl.textContent = hiddenCardData.bottom;
-    isPaused = true;
-    if (timer) { clearTimeout(timer); timer = null; }
-    updatePauseButton();
   } else {
     cardEl.classList.add('incorrect');
     if (topEl) topEl.textContent = hiddenCardData.top + ' ' + hiddenCardData.bottom;
@@ -340,9 +341,13 @@ function compareAndReveal() {
     existingWrong.textContent = userAnswer;
   }
 
+  isPaused = true;
+  if (timer) { clearTimeout(timer); timer = null; }
+  updatePauseButton();
   hiddenCardData = null;
   isCardHidden = false;
   recallInput.value = '';
+  compareBtn.textContent = 'NEXT';
   recallCompare.style.display = 'flex';
 }
 
@@ -358,6 +363,7 @@ function cleanCardFeedback() {
 
 function advanceToNextCard() {
   recallInput.blur();
+  compareBtn.textContent = 'COMPARAR';
   const cardEl = container.querySelector('.card');
   if (cardEl) cardEl.classList.remove('visible');
   recallCompare.style.display = 'none';
@@ -374,6 +380,9 @@ function advanceToNextCard() {
     } else if (currentSet === 'binario') {
       currentIndex++;
       showBinarioCard();
+    } else if (currentSet === 'deck') {
+      currentIndex++;
+      showDeckCard();
     } else {
       currentIndex = (currentIndex + 1) % dataSets[currentSet].length;
       if (currentIndex === 0 && isShuffle) {
@@ -508,15 +517,6 @@ function fadeOutAndNext() {
   }, 350);
 }
 
-function scheduleNext() {
-  if (timer) clearTimeout(timer);
-  if (isPaused) return;
-  timer = setTimeout(() => {
-    if (isPaused) return;
-    fadeOutAndNext();
-  }, getDelay());
-}
-
 function stopCycle() {
   if (timer) { clearTimeout(timer); timer = null; }
   if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
@@ -524,6 +524,7 @@ function stopCycle() {
   isPaused = false;
   isCardHidden = false;
   hiddenCardData = null;
+  compareBtn.textContent = 'COMPARAR';
   recallCompare.style.display = 'none';
   updatePauseButton();
 }
@@ -533,6 +534,7 @@ function selectSet(setKey) {
   resetTimer();
   isCardHidden = false;
   hiddenCardData = null;
+  compareBtn.textContent = 'COMPARAR';
   recallCompare.style.display = 'none';
   currentSet = setKey;
   currentIndex = 0;
@@ -540,6 +542,7 @@ function selectSet(setKey) {
   contentArea.classList.toggle('no-center', setKey === 'instructions');
   numbersConfig.style.display = 'none';
   binarioConfig.style.display = 'none';
+  deckConfig.style.display = 'none';
   personalConfig.style.display = 'none';
   instructionsTable.style.display = 'none';
   container.style.display = '';
@@ -553,6 +556,14 @@ function selectSet(setKey) {
   if (setKey === 'instructions') {
     lessonSubtitle.textContent = 'Sistema de conversión fonética';
     instructionsTable.style.display = 'block';
+    container.innerHTML = '';
+    emptyState.style.display = 'flex';
+    container.appendChild(emptyState);
+    return;
+  }
+  if (setKey === 'deck') {
+    lessonSubtitle.textContent = 'Cantidad de cartas y COMENZAR';
+    deckConfig.style.display = 'flex';
     container.innerHTML = '';
     emptyState.style.display = 'flex';
     container.appendChild(emptyState);
@@ -633,6 +644,8 @@ function scheduleNext() {
       fadeOutAndNextNumbers();
     } else if (currentSet === 'binario') {
       fadeOutAndNextBinario();
+    } else if (currentSet === 'deck') {
+      fadeOutAndNextDeck();
     } else {
       fadeOutAndNext();
     }
@@ -661,20 +674,33 @@ function fadeOutAndNextBinario() {
   }, 350);
 }
 
+function fadeOutAndNextDeck() {
+  const card = container.querySelector('.card');
+  if (card) card.classList.remove('visible');
+  setTimeout(() => {
+    if (isPaused) return;
+    currentIndex++;
+    showDeckCard();
+    scheduleNext();
+  }, 350);
+}
+
 function startRunning() {
   isRunning = true;
   isPaused = false;
   isCardHidden = false;
   hiddenCardData = null;
+  compareBtn.textContent = 'COMPARAR';
   recallCompare.style.display = 'none';
   if (currentSet === 'numbers') {
-    numbersConfig.style.display = 'none';
     currentIndex = 0;
     showNumbersCard();
   } else if (currentSet === 'binario') {
-    binarioConfig.style.display = 'none';
     currentIndex = 0;
     showBinarioCard();
+  } else if (currentSet === 'deck') {
+    currentIndex = 0;
+    showDeckCard();
   } else if (currentSet === 'personal') {
     const list = parsePersonal();
     if (list.length === 0) return;
@@ -694,19 +720,19 @@ function startRunning() {
 }
 
 function generateNumbers() {
-  const count = parseInt(numCount.value) || 5;
-  const from = parseInt(numFrom.value) || 1;
-  const to = parseInt(numTo.value) || 69;
-  const clampedCount = Math.min(count, Math.max(1, to - from + 1));
-  const pool = [];
-  for (let i = from; i <= to; i++) pool.push(i);
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
+  const count = parseInt(numCount.value) || 2;
+  const from = parseInt(numFrom.value) || 0;
+  const to = parseInt(numTo.value) || 100;
+  const clampedCount = Math.min(count, 50);
+  const digits = [];
+  for (let i = 0; i < clampedCount; i++) {
+    digits.push(String(Math.floor(Math.random() * (to - from + 1)) + from));
   }
-  const selected = pool.slice(0, clampedCount);
-  selected.sort((a, b) => a - b);
-  return selected.map(n => String(n).padStart(2, '0')).join(' ');
+  const groups = [];
+  for (let i = 0; i < digits.length; i += 2) {
+    groups.push(digits.slice(i, i + 2).join(''));
+  }
+  return groups.join(' ');
 }
 
 function parsePersonal() {
@@ -724,14 +750,61 @@ function updateLessonForPersonal(count) {
   lessonSubtitle.textContent = count + ' palabras';
 }
 
+function generateDeckCards() {
+  const count = parseInt(deckCount.value) || 1;
+  const clampedCount = Math.min(count, 52);
+  const allCards = [...dataSets['deck']];
+  for (let i = allCards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [allCards[i], allCards[j]] = [allCards[j], allCards[i]];
+  }
+  return allCards.slice(0, clampedCount);
+}
+
+function showDeckCard() {
+  const cards = generateDeckCards();
+  const tops = cards.map(c => c.top).join('  ');
+  const bottoms = cards.map(c => c.bottom).join('  ');
+  container.innerHTML = '';
+  container.appendChild(emptyState);
+  emptyState.style.display = 'none';
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const label = document.createElement('div');
+  label.className = 'card-label';
+  label.textContent = 'DECK';
+
+  const top = document.createElement('div');
+  top.className = 'card-top';
+  top.textContent = tops;
+
+  const bottom = document.createElement('div');
+  bottom.className = 'card-bottom';
+  bottom.textContent = bottoms;
+
+  card.appendChild(label);
+  card.appendChild(top);
+  card.appendChild(bottom);
+  container.appendChild(card);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      card.classList.add('visible');
+    });
+  });
+}
+
 function generateBinario() {
   const count = parseInt(binCount.value) || 5;
   const clampedCount = Math.min(count, 50);
-  const groups = [];
+  const digits = [];
   for (let i = 0; i < clampedCount; i++) {
-    const a = Math.random() < 0.5 ? '0' : '1';
-    const b = Math.random() < 0.5 ? '0' : '1';
-    groups.push(a + b);
+    digits.push(Math.random() < 0.5 ? '0' : '1');
+  }
+  const groups = [];
+  for (let i = 0; i < digits.length; i += 2) {
+    groups.push(digits.slice(i, i + 2).join(''));
   }
   return groups.join(' ');
 }
@@ -804,6 +877,7 @@ document.querySelectorAll('.cat-pill').forEach(btn => {
       contentArea.classList.remove('no-center');
       numbersConfig.style.display = 'none';
       binarioConfig.style.display = 'none';
+      deckConfig.style.display = 'none';
       personalConfig.style.display = 'none';
       instructionsTable.style.display = 'none';
       lessonTitle.textContent = 'Selecciona un grupo';
