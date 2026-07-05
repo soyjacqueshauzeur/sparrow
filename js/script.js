@@ -536,15 +536,6 @@ function selectSet(setKey) {
   if (recallCompare) recallCompare.style.display = 'none';
   currentSet = setKey;
   currentIndex = 0;
-
-  isRecall = true;
-  modeTraining.classList.remove('active');
-  modeRecall.classList.add('active');
-
-  isShuffle = true;
-  modeOrden.classList.remove('active');
-  modeAleatorio.classList.add('active');
-
   bottomControls.style.display = setKey === 'instructions' ? 'none' : '';
   contentArea.classList.toggle('no-center', setKey === 'instructions');
   numbersConfig.style.display = 'none';
