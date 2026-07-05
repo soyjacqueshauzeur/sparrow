@@ -177,6 +177,7 @@ body {
   display: flex;
   gap: var(--sp-sm);
   padding: 8px var(--sp-lg);
+  justify-content: center;
 }
 
 .info-module {

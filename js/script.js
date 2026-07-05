@@ -730,7 +730,7 @@ function generateNumbers() {
   }
   const selected = pool.slice(0, clampedCount);
   selected.sort((a, b) => a - b);
-  return selected.map(n => String(n).padStart(2, '0')).join(' ');
+  return selected.map(n => String(n)).join(' ');
 }
 
 function parsePersonal() {
