@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Memory Sparrow</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <div class="top-bar">
+    <div class="top-bar-brand">
+      <img src="synaptic.svg" class="logo-icon" width="28" height="28" alt="">
+      <span class="logo-text">Memory Sparrow</span>
+    </div>
+    <div class="top-bar-pills">
+      <button class="mode-pill" id="modeOrden">Orden</button>
+      <button class="mode-pill active" id="modeAleatorio">Aleatorio</button>
+    </div>
+  </div>
+
+  <nav class="category-pills">
+    <button class="cat-pill" data-set="instructions">Instrucciones</button>
+    <button class="cat-pill active" data-set="1-100">1-100</button>
+    <button class="cat-pill" data-set="binario">Binario</button>
+    <button class="cat-pill" data-set="deck">Deck</button>
+    <button class="cat-pill" data-set="numbers">Numbers</button>
+    <button class="cat-pill" data-set="abc">ABC</button>
+    <button class="cat-pill" data-set="cirilico">Cirilico</button>
+    <button class="cat-pill" data-set="cantidades">Cantidades</button>
+    <button class="cat-pill" data-set="meses">Meses</button>
+    <button class="cat-pill" data-set="personal">Personal</button>
+  </nav>
+
+  <div class="info-bar">
+    <div class="info-module clock-module">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#AFAFAF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span class="info-value" id="clockDisplay">00:00:00</span>
+    </div>
+    <div class="info-module timer-module">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#AFAFAF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="12" y1="12" x2="16" y2="14"/></svg>
+      <span class="info-value" id="timerDisplay">00:00:00:00</span>
+    </div>
+  </div>
+
+  <main class="content">
+    <div class="lesson-header">
+      <h2 class="lesson-title" id="lessonTitle">Selecciona un grupo</h2>
+      <p class="lesson-subtitle" id="lessonSubtitle">para comenzar a memorizar</p>
+    </div>
+    <div class="numbers-config" id="numbersConfig" style="display:none">
+      <div class="config-row">
+        <label class="config-label">Cantidad</label>
+        <input type="number" class="config-input" id="numCount" value="5" min="1" max="100" inputmode="numeric">
+      </div>
+      <div class="config-row">
+        <label class="config-label">Desde</label>
+        <input type="number" class="config-input" id="numFrom" value="1" min="0" inputmode="numeric">
+      </div>
+      <div class="config-row">
+        <label class="config-label">Hasta</label>
+        <input type="number" class="config-input" id="numTo" value="69" min="1" inputmode="numeric">
+      </div>
+    </div>
+    <div class="binario-config" id="binarioConfig" style="display:none">
+      <div class="config-row">
+        <label class="config-label">Cantidad</label>
+        <input type="number" class="config-input" id="binCount" value="5" min="1" max="50" inputmode="numeric">
+      </div>
+    </div>
+    <div class="personal-config" id="personalConfig" style="display:none">
+      <textarea class="personal-textarea" id="personalTextarea" rows="3" placeholder="Pega tus palabras... (coma, espacio o salto de línea)"></textarea>
+    </div>
+    <div class="instructions-table" id="instructionsTable" style="display:none">
+      <table>
+        <thead><tr><th>#</th><th>Consonantes</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>R (rr)</td></tr>
+          <tr><td>1</td><td>T · D</td></tr>
+          <tr><td>2</td><td>N · Ñ</td></tr>
+          <tr><td>3</td><td>M</td></tr>
+          <tr><td>4</td><td>C · K · Q</td></tr>
+          <tr><td>5</td><td>L · LL</td></tr>
+          <tr><td>6</td><td>S · Z · C (ce, ci)</td></tr>
+          <tr><td>7</td><td>F · J · G (ge, gi)</td></tr>
+          <tr><td>8</td><td>CH · G (ga, go, gu)</td></tr>
+          <tr><td>9</td><td>V · B · P</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-wrapper" id="cardContainer">
+      <div class="empty-state" id="emptyState">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#37464F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h6l-2 8 10-12h-6l2-8z"/></svg>
+        <span>Toca una categoría</span>
+      </div>
+    </div>
+    <button class="resultado-btn" id="resultadoBtn" style="display:none">RESULTADO</button>
+  </main>
+
+  <div class="bottom-controls">
+    <div class="mode-bar">
+      <button class="mode-pill" id="modeTraining">Training</button>
+      <button class="mode-pill active" id="modeRecall">Recall</button>
+    </div>
+    <div class="speed-box">
+      <div class="speed-label-row">
+        <svg class="speed-icon-small" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#AFAFAF" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span class="speed-title">VELOCIDAD</span>
+      </div>
+      <div class="speed-input-row">
+        <input type="text" class="speed-input" id="speedInput" value="0.10" inputmode="decimal" autocomplete="off">
+        <div class="speed-arrows">
+          <button class="speed-arrow" id="speedUp">▲</button>
+          <button class="speed-arrow" id="speedDown">▼</button>
+        </div>
+        <span class="speed-unit">segundos</span>
+      </div>
+      <div class="speed-bar">
+        <div class="speed-fill" id="speedFill"></div>
+      </div>
+      <div class="speed-limits">
+        <span>0.001s</span>
+        <span>5m</span>
+      </div>
+    </div>
+    <button class="duo-btn play-btn" id="pauseBtn">
+      <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <span class="btn-label">COMENZAR</span>
+    </button>
+  </div>
+
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
