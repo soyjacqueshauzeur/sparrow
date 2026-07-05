@@ -721,16 +721,16 @@ function generateNumbers() {
   const count = parseInt(numCount.value) || 2;
   const from = parseInt(numFrom.value) || 0;
   const to = parseInt(numTo.value) || 100;
-  const clampedCount = Math.min(count, 50);
-  const digits = [];
-  for (let i = 0; i < clampedCount; i++) {
-    digits.push(String(Math.floor(Math.random() * (to - from + 1)) + from));
+  const clampedCount = Math.min(count, Math.max(1, to - from + 1));
+  const pool = [];
+  for (let i = from; i <= to; i++) pool.push(i);
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  const groups = [];
-  for (let i = 0; i < digits.length; i += 2) {
-    groups.push(digits.slice(i, i + 2).join(''));
-  }
-  return groups.join(' ');
+  const selected = pool.slice(0, clampedCount);
+  selected.sort((a, b) => a - b);
+  return selected.map(n => String(n).padStart(2, '0')).join(' ');
 }
 
 function parsePersonal() {
