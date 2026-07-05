@@ -725,7 +725,7 @@ function generateNumbers() {
   const digits = [];
   for (let i = 0; i < clampedCount; i++) {
     const n = Math.floor(Math.random() * (to - from + 1)) + from;
-    digits.push(String(n).padStart(2, '0'));
+    digits.push(String(n));
   }
   const groups = [];
   for (let i = 0; i < digits.length; i += 2) {
