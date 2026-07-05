@@ -224,6 +224,7 @@ function setMode(shuffle) {
   isShuffle = shuffle;
   modeOrden.classList.toggle('active', !shuffle);
   modeAleatorio.classList.toggle('active', shuffle);
+  sessionStorage.setItem('sparrowShuffle', shuffle);
   if (currentSet) {
     const count = dataSets[currentSet].length;
     if (isRunning) {
@@ -245,6 +246,7 @@ function setRecallMode(recall) {
   isRecall = recall;
   modeTraining.classList.toggle('active', !recall);
   modeRecall.classList.toggle('active', recall);
+  sessionStorage.setItem('sparrowRecall', recall);
   if (currentSet) {
     if (recallCompare) recallCompare.style.display = 'none';
     cleanCardFeedback();
@@ -890,12 +892,34 @@ document.querySelectorAll('.cat-pill').forEach(btn => {
     document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     selectSet(setKey);
+    sessionStorage.setItem('sparrowGame', setKey);
+    sessionStorage.setItem('sparrowRecall', isRecall);
+    sessionStorage.setItem('sparrowShuffle', isShuffle);
   });
 });
 
+const savedGame = sessionStorage.getItem('sparrowGame') || '1-100';
+const savedRecall = sessionStorage.getItem('sparrowRecall');
+const savedShuffle = sessionStorage.getItem('sparrowShuffle');
+
+if (savedRecall !== null) {
+  isRecall = savedRecall === 'true';
+  modeTraining.classList.toggle('active', !isRecall);
+  modeRecall.classList.toggle('active', isRecall);
+}
+if (savedShuffle !== null) {
+  isShuffle = savedShuffle === 'true';
+  modeOrden.classList.toggle('active', !isShuffle);
+  modeAleatorio.classList.toggle('active', isShuffle);
+}
+
 try {
-  selectSet('1-100');
+  selectSet(savedGame);
+  document.querySelectorAll('.cat-pill').forEach(b => {
+    b.classList.toggle('active', b.dataset.set === savedGame);
+  });
 } catch (e) {
   currentSet = '1-100';
+  selectSet('1-100');
 }
 updateSpeedFill();
