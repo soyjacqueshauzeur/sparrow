@@ -370,7 +370,6 @@ function advanceToNextCard() {
   updatePauseButton();
   cleanCardFeedback();
   setTimeout(() => {
-    if (isPaused || !isRunning) return;
     if (currentSet === 'numbers') {
       currentIndex++;
       showNumbersCard();
@@ -416,10 +415,6 @@ function handlePauseAction() {
 }
 
 pauseBtn.addEventListener('click', handlePauseAction);
-pauseBtn.addEventListener('touchend', (e) => {
-  e.preventDefault();
-  handlePauseAction();
-});
 
 function startTimerInterval() {
   if (timerInterval) clearInterval(timerInterval);
@@ -432,6 +427,7 @@ function startTimerInterval() {
 }
 
 function updatePauseButton() {
+  if (!pauseLabel || !pauseIcon) return;
   if (!isRunning) {
     pauseIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
     pauseLabel.textContent = 'COMENZAR';
