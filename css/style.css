@@ -681,7 +681,7 @@ body {
   box-shadow: 0 1px 0 #D47A00;
 }
 
-.duo-btn .btn-icon { flex-shrink: 0; }
+.duo-btn .btn-icon { flex-shrink: 0; pointer-events: none; }
 .duo-btn .btn-label { white-space: nowrap; }
 
 /* ========== RESPONSIVE ========== */

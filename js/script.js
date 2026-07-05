@@ -246,7 +246,7 @@ function setRecallMode(recall) {
   modeTraining.classList.toggle('active', !recall);
   modeRecall.classList.toggle('active', recall);
   if (currentSet) {
-    recallCompare.style.display = 'none';
+    if (recallCompare) recallCompare.style.display = 'none';
     cleanCardFeedback();
     selectSet(currentSet);
   }
@@ -289,8 +289,8 @@ function hideCardShowQuestion() {
   if (bottomEl) bottomEl.textContent = '';
   isCardHidden = true;
   recallInput.value = '';
-  compareBtn.textContent = 'COMPARAR';
-  recallCompare.style.display = 'flex';
+  if (compareBtn) compareBtn.textContent = 'COMPARAR';
+  if (recallCompare) recallCompare.style.display = 'flex';
   recallInput.focus();
 }
 
@@ -344,8 +344,8 @@ function compareAndReveal() {
   hiddenCardData = null;
   isCardHidden = false;
   recallInput.value = '';
-  compareBtn.textContent = 'NEXT';
-  recallCompare.style.display = 'flex';
+  if (compareBtn) compareBtn.textContent = 'NEXT';
+  if (recallCompare) recallCompare.style.display = 'flex';
 }
 
 function cleanCardFeedback() {
@@ -360,10 +360,10 @@ function cleanCardFeedback() {
 
 function advanceToNextCard() {
   recallInput.blur();
-  compareBtn.textContent = 'COMPARAR';
+  if (compareBtn) compareBtn.textContent = 'COMPARAR';
   const cardEl = container.querySelector('.card');
   if (cardEl) cardEl.classList.remove('visible');
-  recallCompare.style.display = 'none';
+  if (recallCompare) recallCompare.style.display = 'none';
   isCardHidden = false;
   hiddenCardData = null;
   isPaused = false;
@@ -394,9 +394,15 @@ function getItemIndex() {
 }
 
 function handlePauseAction() {
-  if (!currentSet) return;
+  if (!currentSet) {
+    currentSet = '1-100';
+  }
   if (!isRunning) {
-    startRunning();
+    try {
+      startRunning();
+    } catch (e) {
+      console.error(e);
+    }
     startTimerInterval();
   } else if (isPaused && isRecall && !isCardHidden) {
     advanceToNextCard();
@@ -427,7 +433,6 @@ function startTimerInterval() {
 }
 
 function updatePauseButton() {
-  if (!pauseLabel || !pauseIcon) return;
   if (!isRunning) {
     pauseIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
     pauseLabel.textContent = 'COMENZAR';
@@ -517,8 +522,8 @@ function stopCycle() {
   isPaused = false;
   isCardHidden = false;
   hiddenCardData = null;
-  compareBtn.textContent = 'COMPARAR';
-  recallCompare.style.display = 'none';
+  if (compareBtn) compareBtn.textContent = 'COMPARAR';
+  if (recallCompare) recallCompare.style.display = 'none';
   updatePauseButton();
 }
 
@@ -527,10 +532,19 @@ function selectSet(setKey) {
   resetTimer();
   isCardHidden = false;
   hiddenCardData = null;
-  compareBtn.textContent = 'COMPARAR';
-  recallCompare.style.display = 'none';
+  if (compareBtn) compareBtn.textContent = 'COMPARAR';
+  if (recallCompare) recallCompare.style.display = 'none';
   currentSet = setKey;
   currentIndex = 0;
+
+  isRecall = true;
+  modeTraining.classList.remove('active');
+  modeRecall.classList.add('active');
+
+  isShuffle = true;
+  modeOrden.classList.remove('active');
+  modeAleatorio.classList.add('active');
+
   bottomControls.style.display = setKey === 'instructions' ? 'none' : '';
   contentArea.classList.toggle('no-center', setKey === 'instructions');
   numbersConfig.style.display = 'none';
@@ -683,8 +697,8 @@ function startRunning() {
   isPaused = false;
   isCardHidden = false;
   hiddenCardData = null;
-  compareBtn.textContent = 'COMPARAR';
-  recallCompare.style.display = 'none';
+  if (compareBtn) compareBtn.textContent = 'COMPARAR';
+  if (recallCompare) recallCompare.style.display = 'none';
   if (currentSet === 'numbers') {
     currentIndex = 0;
     showNumbersCard();
@@ -887,5 +901,9 @@ document.querySelectorAll('.cat-pill').forEach(btn => {
   });
 });
 
-selectSet('1-100');
+try {
+  selectSet('1-100');
+} catch (e) {
+  currentSet = '1-100';
+}
 updateSpeedFill();
