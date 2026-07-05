@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Memory Sparrow</title>
+<title>Sparrow</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,11 +13,13 @@
   <div class="top-bar">
     <div class="top-bar-brand">
       <img src="synaptic.svg" class="logo-icon" width="28" height="28" alt="">
-      <span class="logo-text">Memory Sparrow</span>
+      <span class="logo-text">Sparrow</span>
     </div>
     <div class="top-bar-pills">
       <button class="mode-pill" id="modeOrden">Orden</button>
       <button class="mode-pill active" id="modeAleatorio">Aleatorio</button>
+      <button class="mode-pill font-pill" id="fontDown">−</button>
+      <button class="mode-pill font-pill" id="fontUp">+</button>
     </div>
   </div>
 
@@ -61,7 +63,7 @@
       </div>
       <div class="config-row">
         <label class="config-label">Hasta</label>
-        <input type="number" class="config-input" id="numTo" value="69" min="1" inputmode="numeric">
+        <input type="number" class="config-input" id="numTo" value="100" min="1" inputmode="numeric">
       </div>
     </div>
     <div class="binario-config" id="binarioConfig" style="display:none">
@@ -96,7 +98,10 @@
         <span>Toca una categoría</span>
       </div>
     </div>
-    <button class="resultado-btn" id="resultadoBtn" style="display:none">RESULTADO</button>
+    <div class="recall-compare" id="recallCompare" style="display:none">
+      <input type="text" class="recall-input" id="recallInput" placeholder="Escribe lo que recuerdas..." autocomplete="off">
+      <button class="compare-btn" id="compareBtn">COMPARAR</button>
+    </div>
   </main>
 
   <div class="bottom-controls">

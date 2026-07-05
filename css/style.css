@@ -24,7 +24,7 @@
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html, body { height:100%; overflow:hidden; }
+html, body { height:100%; overflow-x:hidden; }
 
 body {
   font-family: 'Nunito', 'Segoe UI', system-ui, sans-serif;
@@ -36,7 +36,7 @@ body {
 
 .app {
   display: flex; flex-direction: column;
-  height: 100vh;
+  min-height: 100%;
 }
 
 /* ========== TOP BAR ========== */
@@ -90,8 +90,15 @@ body {
 }
 
 .mode-pill.active:active {
-  transform: translateY(3px);
   box-shadow: 0 0 0 var(--blue-dark);
+}
+
+.font-pill {
+  width: 30px;
+  padding: 0;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 900;
 }
 
 /* ========== MODE BAR ========== */
@@ -348,6 +355,7 @@ body {
 }
 
 .card-wrapper {
+  --card-font-size: 4em;
   position: relative;
   width: 300px;
   min-height: 200px;
@@ -371,7 +379,7 @@ body {
   align-items: center; justify-content: center;
   gap: var(--sp-md);
   opacity: 0;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.15s ease, background 0.2s ease, border-color 0.2s ease;
   pointer-events: none;
   padding: 24px 20px;
 }
@@ -382,7 +390,7 @@ body {
 }
 
 .card-top {
-  font-size: 3.5rem;
+  font-size: var(--card-font-size);
   font-weight: 900;
   color: var(--text);
   line-height: 1.1;
@@ -393,7 +401,7 @@ body {
 }
 
 .card-bottom {
-  font-size: 1.3rem;
+  font-size: calc(var(--card-font-size) * 0.4);
   font-weight: 800;
   color: var(--green);
   text-align: center;
@@ -433,30 +441,89 @@ body {
   opacity: 0.3;
 }
 
-/* ========== RESULTADO BUTTON ========== */
-.resultado-btn {
-  display: flex; align-items: center; justify-content: center;
-  background: var(--orange);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-md);
-  padding: 12px 24px;
-  font-weight: 800;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  cursor: pointer;
-  box-shadow: 0 4px 0 #D47A00;
-  transition: all 0.1s ease;
-  font-family: 'Nunito', sans-serif;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
+.recall-compare {
+  display: flex; gap: var(--sp-sm);
+  width: 100%; max-width: 340px;
   margin-top: 8px;
 }
 
-.resultado-btn:active {
-  transform: translateY(4px);
-  box-shadow: 0 0 0 #D47A00;
+.recall-input {
+  flex: 1;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'Nunito', sans-serif;
+  outline: none;
+  transition: border-color 0.15s;
+  min-width: 0;
+}
+
+.recall-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(28,176,246,0.15);
+}
+
+.compare-btn {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0 16px;
+  font-weight: 800;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--blue-dark);
+  transition: all 0.1s ease;
+  font-family: 'Nunito', sans-serif;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.compare-btn:active {
+  box-shadow: 0 1px 0 var(--blue-dark);
+}
+
+.card.correct {
+  background: #2D8B2D;
+  border-color: #58CC02;
+}
+
+.card.incorrect {
+  background: #8B2D2D;
+  border-color: #E12B44;
+}
+
+.card.correct .card-top,
+.card.correct .card-bottom {
+  color: #fff !important;
+}
+
+.card.incorrect .card-top,
+.card.incorrect .card-bottom {
+  color: #fff !important;
+}
+
+.card-divider {
+  width: 60%;
+  height: 2px;
+  background: rgba(255,255,255,0.3);
+  margin: 4px 0;
+  border-radius: 1px;
+}
+
+.card-wrong {
+  font-size: calc(var(--card-font-size) * 0.35);
+  font-weight: 700;
+  color: #FF6B6B;
+  text-align: center;
+  padding: 0 12px;
+  word-break: break-word;
 }
 
 /* ========== BOTTOM CONTROLS ========== */
@@ -597,11 +664,11 @@ body {
   width: 100%;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+  touch-action: manipulation;
 }
 
 .duo-btn:active {
-  transform: translateY(4px);
-  box-shadow: 0 0 0 var(--green-shadow);
+  box-shadow: 0 1px 0 var(--green-shadow);
 }
 
 .duo-btn.paused {
@@ -610,7 +677,7 @@ body {
 }
 
 .duo-btn.paused:active {
-  box-shadow: 0 0 0 #D47A00;
+  box-shadow: 0 1px 0 #D47A00;
 }
 
 .duo-btn .btn-icon { flex-shrink: 0; }
@@ -618,9 +685,7 @@ body {
 
 /* ========== RESPONSIVE ========== */
 @media (min-width: 600px) {
-  .card-wrapper { width: 340px; height: 360px; }
-  .card-top { font-size: 4rem; }
-  .card-bottom { font-size: 1.4rem; }
+  .card-wrapper { width: 340px; }
 }
 
 @media (min-width: 900px) {

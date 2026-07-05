@@ -62,7 +62,9 @@ let emptyState = document.getElementById('emptyState');
 let modeAleatorio = document.getElementById('modeAleatorio');
 let modeTraining = document.getElementById('modeTraining');
 let modeRecall = document.getElementById('modeRecall');
-let resultadoBtn = document.getElementById('resultadoBtn');
+let recallCompare = document.getElementById('recallCompare');
+let recallInput = document.getElementById('recallInput');
+let compareBtn = document.getElementById('compareBtn');
 let pauseBtn = document.getElementById('pauseBtn');
 let pauseLabel = pauseBtn.querySelector('.btn-label');
 let pauseIcon = pauseBtn.querySelector('.btn-icon');
@@ -71,6 +73,28 @@ let lessonSubtitle = document.getElementById('lessonSubtitle');
 let modeOrden = document.getElementById('modeOrden');
 let bottomControls = document.querySelector('.bottom-controls');
 let contentArea = document.querySelector('.content');
+let fontDown = document.getElementById('fontDown');
+let fontUp = document.getElementById('fontUp');
+
+let fontSize = 8;
+
+function applyFontScale() {
+  const em = fontSize * 0.5;
+  document.documentElement.style.setProperty('--card-font-size', em + 'em');
+  document.querySelectorAll('.card-top').forEach(el => el.style.fontSize = em + 'em');
+  document.querySelectorAll('.card-bottom').forEach(el => el.style.fontSize = (em * 0.4) + 'em');
+  document.querySelectorAll('.card-wrong').forEach(el => el.style.fontSize = (em * 0.35) + 'em');
+}
+
+fontDown.addEventListener('click', () => {
+  if (fontSize > 0) { fontSize--; applyFontScale(); }
+});
+
+fontUp.addEventListener('click', () => {
+  if (fontSize < 28) { fontSize++; applyFontScale(); }
+});
+
+applyFontScale();
 let numbersConfig = document.getElementById('numbersConfig');
 let numCount = document.getElementById('numCount');
 let numFrom = document.getElementById('numFrom');
@@ -222,17 +246,34 @@ function setRecallMode(recall) {
   isRecall = recall;
   modeTraining.classList.toggle('active', !recall);
   modeRecall.classList.toggle('active', recall);
-  if (!isRunning) {
-    resultadoBtn.style.display = 'none';
+  if (currentSet) {
+    recallCompare.style.display = 'none';
+    cleanCardFeedback();
+    selectSet(currentSet);
   }
 }
 
 modeTraining.addEventListener('click', () => setRecallMode(false));
 modeRecall.addEventListener('click', () => setRecallMode(true));
 
-resultadoBtn.addEventListener('click', () => {
-  if (!isCardHidden || !hiddenCardData) return;
-  revealCard();
+compareBtn.addEventListener('click', () => {
+  if (!isCardHidden) return;
+  if (hiddenCardData !== null && recallInput.value.trim() !== '') {
+    compareAndReveal();
+  } else {
+    advanceToNextCard();
+  }
+});
+
+recallInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    if (hiddenCardData !== null && recallInput.value.trim() !== '') {
+      compareAndReveal();
+    } else {
+      advanceToNextCard();
+    }
+  }
 });
 
 function hideCardShowQuestion() {
@@ -240,56 +281,120 @@ function hideCardShowQuestion() {
   if (!cardEl) return;
   const topEl = cardEl.querySelector('.card-top');
   const bottomEl = cardEl.querySelector('.card-bottom');
-  hiddenCardData = { top: topEl ? topEl.textContent : '', bottom: bottomEl ? bottomEl.textContent : '' };
-  topEl.textContent = '?';
+  hiddenCardData = {
+    top: topEl ? topEl.textContent : '',
+    bottom: bottomEl ? bottomEl.textContent : ''
+  };
+  if (topEl) topEl.textContent = '?';
   if (bottomEl) bottomEl.textContent = '';
   isCardHidden = true;
-  resultadoBtn.style.display = 'flex';
+  recallInput.value = '';
+  recallCompare.style.display = 'flex';
+  recallInput.focus();
 }
 
-function revealCard() {
+function compareAndReveal() {
+  recallInput.blur();
+  if (document.activeElement === recallInput) {
+    const dummy = document.createElement('div');
+    dummy.tabIndex = -1;
+    document.body.appendChild(dummy);
+    dummy.focus();
+    dummy.blur();
+    document.body.removeChild(dummy);
+  }
   const cardEl = container.querySelector('.card');
-  if (!cardEl || !hiddenCardData) return;
+  if (!cardEl || hiddenCardData === null) return;
+
+  const userAnswer = recallInput.value.trim().replace(/\s+/g, ' ');
+  const correctAnswer = (hiddenCardData.bottom || hiddenCardData.top).trim().replace(/\s+/g, ' ');
+  const isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+
   const topEl = cardEl.querySelector('.card-top');
   const bottomEl = cardEl.querySelector('.card-bottom');
-  if (topEl) topEl.textContent = hiddenCardData.top;
-  if (bottomEl) bottomEl.textContent = hiddenCardData.bottom;
-  isCardHidden = false;
-  hiddenCardData = null;
-  resultadoBtn.style.display = 'none';
-  if (isRunning && !isPaused) {
-    setTimeout(() => {
-      if (isPaused || !isRunning) return;
-      cardEl.classList.remove('visible');
-      setTimeout(() => {
-        if (isPaused || !isRunning) return;
-        if (currentSet === 'numbers') {
-          currentIndex++;
-          showNumbersCard();
-        } else if (currentSet === 'binario') {
-          currentIndex++;
-          showBinarioCard();
-        } else {
-          currentIndex = (currentIndex + 1) % dataSets[currentSet].length;
-          if (currentIndex === 0 && isShuffle) {
-            shuffleOrder = buildShuffleOrder(dataSets[currentSet].length);
-          }
-          showCard(currentIndex);
-        }
-        scheduleNext();
-      }, 200);
-    }, 500);
+  let existingDivider = cardEl.querySelector('.card-divider');
+  let existingWrong = cardEl.querySelector('.card-wrong');
+
+  if (isCorrect) {
+    cardEl.classList.add('correct');
+    if (topEl) topEl.textContent = hiddenCardData.top;
+    if (bottomEl) bottomEl.textContent = hiddenCardData.bottom;
+    isPaused = true;
+    if (timer) { clearTimeout(timer); timer = null; }
+    updatePauseButton();
+  } else {
+    cardEl.classList.add('incorrect');
+    if (topEl) topEl.textContent = hiddenCardData.top + ' ' + hiddenCardData.bottom;
+    if (bottomEl) bottomEl.textContent = '';
+
+    if (!existingDivider) {
+      existingDivider = document.createElement('div');
+      existingDivider.className = 'card-divider';
+      bottomEl.parentNode.insertBefore(existingDivider, bottomEl.nextSibling);
+    }
+    if (!existingWrong) {
+      existingWrong = document.createElement('div');
+      existingWrong.className = 'card-wrong';
+      existingDivider.parentNode.insertBefore(existingWrong, existingDivider.nextSibling);
+    }
+    existingWrong.textContent = userAnswer;
   }
+
+  hiddenCardData = null;
+  isCardHidden = false;
+  recallInput.value = '';
+  recallCompare.style.display = 'flex';
 }
 
+function cleanCardFeedback() {
+  const cardEl = container.querySelector('.card');
+  if (!cardEl) return;
+  cardEl.classList.remove('correct', 'incorrect');
+  const divider = cardEl.querySelector('.card-divider');
+  const wrong = cardEl.querySelector('.card-wrong');
+  if (divider) divider.remove();
+  if (wrong) wrong.remove();
+}
+
+function advanceToNextCard() {
+  recallInput.blur();
+  const cardEl = container.querySelector('.card');
+  if (cardEl) cardEl.classList.remove('visible');
+  recallCompare.style.display = 'none';
+  isCardHidden = false;
+  hiddenCardData = null;
+  isPaused = false;
+  updatePauseButton();
+  cleanCardFeedback();
+  setTimeout(() => {
+    if (isPaused || !isRunning) return;
+    if (currentSet === 'numbers') {
+      currentIndex++;
+      showNumbersCard();
+    } else if (currentSet === 'binario') {
+      currentIndex++;
+      showBinarioCard();
+    } else {
+      currentIndex = (currentIndex + 1) % dataSets[currentSet].length;
+      if (currentIndex === 0 && isShuffle) {
+        shuffleOrder = buildShuffleOrder(dataSets[currentSet].length);
+      }
+      showCard(currentIndex);
+    }
+    scheduleNext();
+  }, 200);
+}
 function getItemIndex() {
   return isShuffle && shuffleOrder.length > 0 ? shuffleOrder[currentIndex] : currentIndex;
 }
 
-pauseBtn.addEventListener('click', () => {
+function handlePauseAction() {
   if (!currentSet) return;
   if (!isRunning) {
     startRunning();
+    startTimerInterval();
+  } else if (isPaused && isRecall && !isCardHidden) {
+    advanceToNextCard();
     startTimerInterval();
   } else if (!isPaused) {
     isPaused = true;
@@ -302,6 +407,12 @@ pauseBtn.addEventListener('click', () => {
     startTimerInterval();
     scheduleNext();
   }
+}
+
+pauseBtn.addEventListener('click', handlePauseAction);
+pauseBtn.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  handlePauseAction();
 });
 
 function startTimerInterval() {
@@ -413,7 +524,7 @@ function stopCycle() {
   isPaused = false;
   isCardHidden = false;
   hiddenCardData = null;
-  resultadoBtn.style.display = 'none';
+  recallCompare.style.display = 'none';
   updatePauseButton();
 }
 
@@ -422,7 +533,7 @@ function selectSet(setKey) {
   resetTimer();
   isCardHidden = false;
   hiddenCardData = null;
-  resultadoBtn.style.display = 'none';
+  recallCompare.style.display = 'none';
   currentSet = setKey;
   currentIndex = 0;
   bottomControls.style.display = setKey === 'instructions' ? 'none' : '';
@@ -555,7 +666,7 @@ function startRunning() {
   isPaused = false;
   isCardHidden = false;
   hiddenCardData = null;
-  resultadoBtn.style.display = 'none';
+  recallCompare.style.display = 'none';
   if (currentSet === 'numbers') {
     numbersConfig.style.display = 'none';
     currentIndex = 0;
@@ -616,11 +727,13 @@ function updateLessonForPersonal(count) {
 function generateBinario() {
   const count = parseInt(binCount.value) || 5;
   const clampedCount = Math.min(count, 50);
-  const nums = [];
+  const groups = [];
   for (let i = 0; i < clampedCount; i++) {
-    nums.push(Math.floor(Math.random() * 256).toString(2).padStart(8, '0'));
+    const a = Math.random() < 0.5 ? '0' : '1';
+    const b = Math.random() < 0.5 ? '0' : '1';
+    groups.push(a + b);
   }
-  return nums.join(' ');
+  return groups.join(' ');
 }
 
 function showBinarioCard() {
