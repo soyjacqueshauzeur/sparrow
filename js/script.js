@@ -287,7 +287,11 @@ function setRecallMode(recall) {
   if (currentSet) {
     if (recallCompare) recallCompare.style.display = 'none';
     cleanCardFeedback();
-    selectSet(currentSet);
+    if (currentSet === 'personal') {
+      resetPersonalToConfig();
+    } else {
+      selectSet(currentSet);
+    }
   }
 }
 
@@ -299,7 +303,7 @@ personalWord.addEventListener('click', () => {
   personalWord.classList.add('active');
   personalStory.classList.remove('active');
   sessionStorage.setItem('sparrowPersonalMode', 'word');
-  applyPersonalMode();
+  if (currentSet === 'personal') resetPersonalToConfig();
 });
 
 personalStory.addEventListener('click', () => {
@@ -307,13 +311,10 @@ personalStory.addEventListener('click', () => {
   personalStory.classList.add('active');
   personalWord.classList.remove('active');
   sessionStorage.setItem('sparrowPersonalMode', 'story');
-  applyPersonalMode();
+  if (currentSet === 'personal') resetPersonalToConfig();
 });
 
-function applyPersonalMode() {
-  if (currentSet !== 'personal') return;
-  const text = personalTextarea.value.trim();
-  if (!text) return;
+function resetPersonalToConfig() {
   stopCycle();
   cleanCardFeedback();
   container.innerHTML = '';
@@ -321,26 +322,12 @@ function applyPersonalMode() {
   container.appendChild(emptyState);
   isCardHidden = false;
   hiddenCardData = null;
-  if (compareBtn) compareBtn.textContent = 'COMPARE';
-  if (recallCompare) recallCompare.style.display = 'none';
-  if (personalMode === 'story') {
-    dataSets['personal'] = [{ top: text, bottom: '' }];
-    shuffleOrder = [];
-    currentIndex = 0;
-    updateLessonForPersonal(1);
-  } else {
-    const list = parsePersonal();
-    if (list.length === 0) return;
-    dataSets['personal'] = list.map(w => ({ top: w, bottom: '' }));
-    shuffleOrder = isShuffle ? buildShuffleOrder(dataSets['personal'].length) : [];
-    currentIndex = 0;
-    updateLessonForPersonal(list.length);
-  }
-  updatePauseButton();
-  showCard(0);
+  compareBtn.textContent = 'COMPARE';
+  recallCompare.style.display = 'none';
+  personalConfig.style.display = 'block';
   updatePersonalStartButton();
-  personalConfig.style.display = 'none';
 }
+
 
 function updatePersonalStartButton() {
   if (currentSet !== 'personal') {
