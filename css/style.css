@@ -747,6 +747,10 @@ body {
   width: auto;
 }
 
+.action-buttons .duo-btn.full-width {
+  flex: 0 0 100%;
+}
+
 .clear-btn {
   background: #3a3a44 !important;
   box-shadow: 0 4px 0 #2a2a32 !important;

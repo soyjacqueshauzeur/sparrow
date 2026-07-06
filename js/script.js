@@ -316,17 +316,17 @@ function updatePersonalStartButton() {
   const clearBtn = document.getElementById('clearBtn');
   if (currentSet !== 'personal') {
     pauseBtn.classList.remove('hidden');
-    if (clearBtn) clearBtn.style.flex = '';
+    if (clearBtn) clearBtn.classList.remove('full-width');
     return;
   }
   const hasText = personalTextarea.value.trim().length > 0;
   const hasTime = (personalMinutes * 60 + personalSeconds) > 0;
   if (hasText && hasTime) {
     pauseBtn.classList.remove('hidden');
-    if (clearBtn) clearBtn.style.flex = '';
+    if (clearBtn) clearBtn.classList.remove('full-width');
   } else {
     pauseBtn.classList.add('hidden');
-    if (clearBtn) clearBtn.style.flex = '0 0 100%';
+    if (clearBtn) clearBtn.classList.add('full-width');
   }
 }
 
