@@ -347,7 +347,10 @@ function handleCompareClick() {
 compareBtn.addEventListener('click', handleCompareClick);
 
 function resetGameState() {
-  stopCycle();
+  isRunning = false;
+  isPaused = true;
+  if (timer) { clearTimeout(timer); timer = null; }
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
   resetTimer();
   cleanCardFeedback();
   container.innerHTML = '';
@@ -362,6 +365,7 @@ function resetGameState() {
     personalConfig.style.display = 'block';
     updatePersonalStartButton();
   }
+  updatePauseButton();
 }
 
 document.getElementById('clearBtn').addEventListener('click', resetGameState);
