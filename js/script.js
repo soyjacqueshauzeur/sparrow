@@ -342,18 +342,18 @@ function handleCompareClick() {
 
 compareBtn.addEventListener('click', handleCompareClick);
 
-document.getElementById('cleanBtn').addEventListener('click', () => {
+document.getElementById('clearBtn').addEventListener('click', () => {
   stopCycle();
   resetTimer();
   cleanCardFeedback();
-  personalTextarea.value = '';
   container.innerHTML = '';
   emptyState.style.display = 'none';
   container.appendChild(emptyState);
   isCardHidden = false;
   hiddenCardData = null;
-  if (recallCompare) recallCompare.style.display = 'none';
   if (compareBtn) compareBtn.textContent = 'COMPARE';
+  if (recallCompare) recallCompare.style.display = 'none';
+  personalTextarea.value = '';
   if (currentSet === 'personal') {
     personalConfig.style.display = 'block';
     updatePersonalStartButton();

@@ -738,6 +738,24 @@ body {
 .duo-btn .btn-icon { flex-shrink: 0; pointer-events: none; }
 .duo-btn .btn-label { white-space: nowrap; }
 
+.action-buttons {
+  display: flex; gap: var(--sp-sm);
+}
+
+.action-buttons .duo-btn {
+  flex: 0 0 calc(50% - 4px);
+  width: auto;
+}
+
+.clear-btn {
+  background: #3a3a44 !important;
+  box-shadow: 0 4px 0 #2a2a32 !important;
+}
+
+.clear-btn:active {
+  box-shadow: 0 1px 0 #2a2a32 !important;
+}
+
 /* ========== RESPONSIVE ========== */
 @media (min-width: 900px) {
   .category-pills { justify-content: center; }
