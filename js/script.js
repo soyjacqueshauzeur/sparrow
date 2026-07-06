@@ -320,6 +320,11 @@ function handleCompareClick() {
 
 compareBtn.addEventListener('click', handleCompareClick);
 
+document.getElementById('cleanBtn').addEventListener('click', () => {
+  recallInput.value = '';
+  recallInput.focus();
+});
+
 recallInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     e.preventDefault();

@@ -498,6 +498,28 @@ body {
   box-shadow: 0 1px 0 var(--blue-dark);
 }
 
+.clean-btn {
+  background: #3a3a44;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0 12px;
+  font-weight: 800;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #2a2a32;
+  transition: all 0.1s ease;
+  font-family: 'Nunito', sans-serif;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.clean-btn:active {
+  box-shadow: 0 1px 0 #2a2a32;
+}
+
 .card.correct {
   background: #2D8B2D;
   border-color: #58CC02;
