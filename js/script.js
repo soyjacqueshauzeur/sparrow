@@ -118,13 +118,13 @@ let timerValue = document.getElementById('timerValue');
 let personalMinutes = 0;
 let personalSeconds = 0;
 
-function updateTimerDisplay() {
+function updatePersonalTimerDisplay() {
   timerValue.textContent = pad2(personalMinutes) + ':' + pad2(personalSeconds);
 }
 
 function changeTimerMinutes(delta) {
   personalMinutes = Math.max(0, Math.min(60, personalMinutes + delta));
-  updateTimerDisplay();
+  updatePersonalTimerDisplay();
 }
 
 function changeTimerSeconds(delta) {
@@ -133,7 +133,7 @@ function changeTimerSeconds(delta) {
   if (total > 60 * 60 + 59) total = 60 * 60 + 59;
   personalMinutes = Math.floor(total / 60);
   personalSeconds = total % 60;
-  updateTimerDisplay();
+  updatePersonalTimerDisplay();
 }
 
 document.getElementById('timerMinUp').addEventListener('click', () => changeTimerMinutes(1));
@@ -995,7 +995,7 @@ const savedTimerSec = sessionStorage.getItem('sparrowTimerSec');
 
 if (savedTimerMin !== null) personalMinutes = parseInt(savedTimerMin);
 if (savedTimerSec !== null) personalSeconds = parseInt(savedTimerSec);
-updateTimerDisplay();
+updatePersonalTimerDisplay();
 
 if (savedRecall !== null) {
   isRecall = savedRecall === 'true';
