@@ -299,6 +299,19 @@ personalWord.addEventListener('click', () => {
   personalWord.classList.add('active');
   personalStory.classList.remove('active');
   sessionStorage.setItem('sparrowPersonalMode', 'word');
+  if (currentSet === 'personal' && personalTextarea.value.trim()) {
+    stopCycle();
+    resetTimer();
+    cleanCardFeedback();
+    const list = parsePersonal();
+    if (list.length > 0) {
+      dataSets['personal'] = list.map(w => ({ top: w, bottom: '' }));
+      shuffleOrder = isShuffle ? buildShuffleOrder(dataSets['personal'].length) : [];
+      currentIndex = 0;
+      updateLessonForPersonal(list.length);
+      showCard(0);
+    }
+  }
 });
 
 personalStory.addEventListener('click', () => {
@@ -306,6 +319,17 @@ personalStory.addEventListener('click', () => {
   personalStory.classList.add('active');
   personalWord.classList.remove('active');
   sessionStorage.setItem('sparrowPersonalMode', 'story');
+  if (currentSet === 'personal' && personalTextarea.value.trim()) {
+    stopCycle();
+    resetTimer();
+    cleanCardFeedback();
+    const text = personalTextarea.value.trim();
+    dataSets['personal'] = [{ top: text, bottom: '' }];
+    shuffleOrder = [];
+    currentIndex = 0;
+    updateLessonForPersonal(1);
+    showCard(0);
+  }
 });
 
 function updatePersonalStartButton() {
