@@ -1074,7 +1074,7 @@ function restoreConfigValues() {
   if (si !== null) speedInput.value = si;
 }
 
-const savedGame = sessionStorage.getItem('sparrowGame') || '1-100';
+const savedGame = sessionStorage.getItem('sparrowGame') || 'instructions';
 const savedRecall = sessionStorage.getItem('sparrowRecall');
 const savedShuffle = sessionStorage.getItem('sparrowShuffle');
 const savedPersonalMode = sessionStorage.getItem('sparrowPersonalMode');
