@@ -299,19 +299,7 @@ personalWord.addEventListener('click', () => {
   personalWord.classList.add('active');
   personalStory.classList.remove('active');
   sessionStorage.setItem('sparrowPersonalMode', 'word');
-  if (currentSet === 'personal' && personalTextarea.value.trim()) {
-    stopCycle();
-    resetTimer();
-    cleanCardFeedback();
-    const list = parsePersonal();
-    if (list.length > 0) {
-      dataSets['personal'] = list.map(w => ({ top: w, bottom: '' }));
-      shuffleOrder = isShuffle ? buildShuffleOrder(dataSets['personal'].length) : [];
-      currentIndex = 0;
-      updateLessonForPersonal(list.length);
-      showCard(0);
-    }
-  }
+  applyPersonalMode();
 });
 
 personalStory.addEventListener('click', () => {
@@ -319,18 +307,38 @@ personalStory.addEventListener('click', () => {
   personalStory.classList.add('active');
   personalWord.classList.remove('active');
   sessionStorage.setItem('sparrowPersonalMode', 'story');
-  if (currentSet === 'personal' && personalTextarea.value.trim()) {
-    stopCycle();
-    resetTimer();
-    cleanCardFeedback();
-    const text = personalTextarea.value.trim();
+  applyPersonalMode();
+});
+
+function applyPersonalMode() {
+  if (currentSet !== 'personal') return;
+  const text = personalTextarea.value.trim();
+  if (!text) return;
+  stopCycle();
+  cleanCardFeedback();
+  container.innerHTML = '';
+  emptyState.style.display = 'none';
+  container.appendChild(emptyState);
+  isCardHidden = false;
+  hiddenCardData = null;
+  compareBtn.textContent = 'COMPARE';
+  recallCompare.style.display = 'none';
+  if (personalMode === 'story') {
     dataSets['personal'] = [{ top: text, bottom: '' }];
     shuffleOrder = [];
     currentIndex = 0;
     updateLessonForPersonal(1);
-    showCard(0);
+  } else {
+    const list = parsePersonal();
+    if (list.length === 0) return;
+    dataSets['personal'] = list.map(w => ({ top: w, bottom: '' }));
+    shuffleOrder = isShuffle ? buildShuffleOrder(dataSets['personal'].length) : [];
+    currentIndex = 0;
+    updateLessonForPersonal(list.length);
   }
-});
+  showCard(0);
+  updatePersonalStartButton();
+}
 
 function updatePersonalStartButton() {
   if (currentSet !== 'personal') {
