@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,23 +16,23 @@
       <span class="logo-text">Sparrow</span>
     </div>
     <div class="top-bar-pills">
-      <button class="mode-pill" id="modeOrden">Orden</button>
-      <button class="mode-pill active" id="modeAleatorio">Aleatorio</button>
+      <button class="mode-pill" id="modeOrden">Order</button>
+      <button class="mode-pill active" id="modeAleatorio">Random</button>
       <button class="mode-pill font-pill" id="fontDown">−</button>
       <button class="mode-pill font-pill" id="fontUp">+</button>
     </div>
   </div>
 
   <nav class="category-pills">
-    <button class="cat-pill" data-set="instructions">Instrucciones</button>
+    <button class="cat-pill" data-set="instructions">Instructions</button>
     <button class="cat-pill active" data-set="1-100">1-100</button>
-    <button class="cat-pill" data-set="binario">Binario</button>
+    <button class="cat-pill" data-set="binario">Binary</button>
     <button class="cat-pill" data-set="deck">Deck</button>
     <button class="cat-pill" data-set="numbers">Numbers</button>
     <button class="cat-pill" data-set="abc">ABC</button>
-    <button class="cat-pill" data-set="cirilico">Cirilico</button>
-    <button class="cat-pill" data-set="cantidades">Cantidades</button>
-    <button class="cat-pill" data-set="meses">Meses</button>
+    <button class="cat-pill" data-set="cirilico">Cyrillic</button>
+    <button class="cat-pill" data-set="cantidades">Quantities</button>
+    <button class="cat-pill" data-set="meses">Months</button>
     <button class="cat-pill" data-set="personal">Personal</button>
   </nav>
 
@@ -49,37 +49,37 @@
 
   <main class="content">
     <div class="lesson-header">
-      <h2 class="lesson-title" id="lessonTitle">Selecciona un grupo</h2>
-      <p class="lesson-subtitle" id="lessonSubtitle">para comenzar a memorizar</p>
+      <h2 class="lesson-title" id="lessonTitle">Select a group</h2>
+      <p class="lesson-subtitle" id="lessonSubtitle">to start memorizing</p>
     </div>
     <div class="numbers-config" id="numbersConfig" style="display:none">
       <div class="config-row">
-        <label class="config-label">Cantidad</label>
+        <label class="config-label">Amount</label>
         <input type="number" class="config-input" id="numCount" value="2" min="1" max="100" inputmode="numeric">
       </div>
       <div class="config-row">
-        <label class="config-label">Desde</label>
+        <label class="config-label">From</label>
         <input type="number" class="config-input" id="numFrom" value="0" min="0" inputmode="numeric">
       </div>
       <div class="config-row">
-        <label class="config-label">Hasta</label>
+        <label class="config-label">To</label>
         <input type="number" class="config-input" id="numTo" value="9" min="1" inputmode="numeric">
       </div>
     </div>
     <div class="binario-config" id="binarioConfig" style="display:none">
       <div class="config-row">
-        <label class="config-label">Cantidad</label>
+        <label class="config-label">Amount</label>
         <input type="number" class="config-input" id="binCount" value="5" min="1" max="50" inputmode="numeric">
       </div>
     </div>
     <div class="deck-config" id="deckConfig" style="display:none">
       <div class="config-row">
-        <label class="config-label">Cantidad</label>
+        <label class="config-label">Amount</label>
         <input type="number" class="config-input" id="deckCount" value="1" min="1" max="52" inputmode="numeric">
       </div>
     </div>
     <div class="personal-config" id="personalConfig" style="display:none">
-      <textarea class="personal-textarea" id="personalTextarea" rows="3" placeholder="Pega tus palabras... (coma, espacio o salto de línea)"></textarea>
+      <textarea class="personal-textarea" id="personalTextarea" rows="3" placeholder="Paste your words... (comma, space or line break)"></textarea>
       <div class="personal-modes">
         <button class="mode-pill" id="personalWord">Single Word</button>
         <button class="mode-pill active" id="personalStory">Story</button>
@@ -87,7 +87,7 @@
     </div>
     <div class="instructions-table" id="instructionsTable" style="display:none">
       <table>
-        <thead><tr><th>#</th><th>Consonantes</th></tr></thead>
+        <thead><tr><th>#</th><th>Consonants</th></tr></thead>
         <tbody>
           <tr><td>0</td><td>R (rr)</td></tr>
           <tr><td>1</td><td>T · D</td></tr>
@@ -105,12 +105,12 @@
     <div class="card-wrapper" id="cardContainer">
       <div class="empty-state" id="emptyState">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#37464F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h6l-2 8 10-12h-6l2-8z"/></svg>
-        <span>Toca una categoría</span>
+        <span>Tap a category</span>
       </div>
     </div>
     <div class="recall-compare" id="recallCompare" style="display:none">
-      <input type="text" class="recall-input" id="recallInput" placeholder="Escribe lo que recuerdas..." autocomplete="off">
-      <button class="compare-btn" id="compareBtn">COMPARAR</button>
+      <input type="text" class="recall-input" id="recallInput" placeholder="Write what you remember..." autocomplete="off">
+      <button class="compare-btn" id="compareBtn">COMPARE</button>
     </div>
   </main>
 
@@ -122,7 +122,7 @@
     <div class="speed-box">
       <div class="speed-label-row">
         <svg class="speed-icon-small" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#AFAFAF" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span class="speed-title">VELOCIDAD</span>
+        <span class="speed-title">SPEED</span>
       </div>
       <div class="speed-input-row">
         <input type="text" class="speed-input" id="speedInput" value="0.10" inputmode="decimal" autocomplete="off">
@@ -130,7 +130,7 @@
           <button class="speed-arrow" id="speedUp">▲</button>
           <button class="speed-arrow" id="speedDown">▼</button>
         </div>
-        <span class="speed-unit">segundos</span>
+        <span class="speed-unit">seconds</span>
       </div>
       <div class="speed-bar">
         <div class="speed-fill" id="speedFill"></div>
@@ -142,7 +142,7 @@
     </div>
     <button class="duo-btn play-btn" id="pauseBtn">
       <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      <span class="btn-label">COMENZAR</span>
+      <span class="btn-label">START</span>
     </button>
   </div>
 
