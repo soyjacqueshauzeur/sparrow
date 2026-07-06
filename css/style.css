@@ -290,7 +290,7 @@ body {
   color: var(--text);
   font-family: Nunito, sans-serif;
   resize: vertical;
-  min-height: 200px;
+  min-height: 120px;
   background: var(--bg-card);
   border: 2px solid var(--border);
   border-radius: var(--radius-md);
@@ -366,7 +366,7 @@ body {
 .card-wrapper {
   position: relative;
   width: 100%;
-  min-height: 200px;
+  min-height: 120px;
   height: auto;
   max-height: none;
   display: flex; align-items: center; justify-content: center;
