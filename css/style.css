@@ -278,6 +278,17 @@ body {
   padding: 0 4px;
 }
 
+.binario-config .config-row,
+.deck-config .config-row {
+  flex: 1;
+  max-width: 120px;
+}
+
+.deck-config {
+  display: flex; justify-content: center;
+  width: 100%; max-width: 340px;
+  padding: 0 4px;
+}
 .personal-config {
   width: 100%; max-width: 340px;
   padding: 0 4px;
