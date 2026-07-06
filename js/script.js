@@ -5,7 +5,7 @@ const dataSets = {
   'abc': ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'].map(l => ({ top: l, bottom: '' })),
   'cirilico': 'А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я'.split(' ').map(l => ({ top: l, bottom: '' })),
   'cantidades': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '20', '30', '40', '50', '100', '1.000', '10.000', '100.000', '1.000.000'].map(l => ({ top: l, bottom: '' })),
-  'meses': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map(l => ({ top: l, bottom: '' }))
+  'meses': ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'].map(l => ({ top: l, bottom: '' }))
 };
 
 const pegWords = {
@@ -355,7 +355,7 @@ function resetGameState() {
   container.appendChild(emptyState);
   isCardHidden = false;
   hiddenCardData = null;
-  if (compareBtn) compareBtn.textContent = 'COMPARE';
+  if (compareBtn) compareBtn.textContent = 'COMPARAR';
   if (recallCompare) recallCompare.style.display = 'none';
   personalTextarea.value = '';
   if (currentSet === 'personal') {
@@ -449,7 +449,7 @@ function compareAndReveal() {
   hiddenCardData = null;
   isCardHidden = false;
   recallInput.value = '';
-  if (compareBtn) compareBtn.textContent = 'NEXT';
+  if (compareBtn)   compareBtn.textContent = 'SIGUIENTE';
   if (recallCompare) recallCompare.style.display = 'flex';
 }
 
@@ -554,15 +554,15 @@ function startTimerInterval() {
 function updatePauseButton() {
   if (!isRunning) {
     pauseIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
-    pauseLabel.textContent = 'START';
+    pauseLabel.textContent = 'COMENZAR';
 
   } else if (isPaused) {
     pauseIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
-    pauseLabel.textContent = 'RESUME';
+    pauseLabel.textContent = 'REANUDAR';
 
   } else {
     pauseIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
-    pauseLabel.textContent = 'PAUSE';
+    pauseLabel.textContent = 'PAUSAR';
     pauseBtn.classList.remove('paused');
   }
 }
@@ -605,8 +605,8 @@ function renderCard(item, index, total) {
 
 function currentSetDisplayName() {
   const names = {
-    '1-100': '1-100', 'binario': 'BINARY', 'deck': 'DECK', 'abc': 'ABC',
-    'cirilico': 'CYRILLIC', 'cantidades': 'QTY', 'meses': 'MONTHS', 'personal': 'PERSONAL'
+    '1-100': '1-100', 'binario': 'BINARIO', 'deck': 'DECK', 'abc': 'ABC',
+    'cirilico': 'CIRÍLICO', 'cantidades': 'CANT.', 'meses': 'MESES', 'personal': 'PERSONAL'
   };
   return names[currentSet] || currentSet;
 }
@@ -676,14 +676,14 @@ function selectSet(setKey) {
     pauseBtn.classList.remove('hidden');
   }
   const setNames = {
-    '1-100': 'Numbers 1-100', 'binario': 'Binary numbers', 'deck': 'Deck', 'numbers': 'Numbers',
+    '1-100': 'Números 1-100', 'binario': 'Números binarios', 'deck': 'Baraja', 'numbers': 'Numbers',
     'personal': 'Personal',
-    'abc': 'ABC', 'cirilico': 'Cyrillic alphabet',
-    'cantidades': 'Quantities', 'meses': 'Months of the year'
+    'abc': 'ABC', 'cirilico': 'Alfabeto cirílico',
+    'cantidades': 'Cantidades', 'meses': 'Meses del año'
   };
   lessonTitle.textContent = setNames[setKey] || setKey;
   if (setKey === 'instructions') {
-    lessonSubtitle.textContent = 'Phonetic conversion system';
+    lessonSubtitle.textContent = 'Sistema de conversión fonética';
     instructionsTable.style.display = 'block';
     container.innerHTML = '';
     emptyState.style.display = 'none';
@@ -691,7 +691,7 @@ function selectSet(setKey) {
     return;
   }
   if (setKey === 'deck') {
-    lessonSubtitle.textContent = 'Card count and START';
+    lessonSubtitle.textContent = 'Cantidad de cartas y COMENZAR';
     deckConfig.style.display = 'flex';
     container.innerHTML = '';
     emptyState.style.display = 'none';
@@ -699,7 +699,7 @@ function selectSet(setKey) {
     return;
   }
   if (setKey === 'numbers') {
-    lessonSubtitle.textContent = 'Configure and press START';
+    lessonSubtitle.textContent = 'Configura y presiona COMENZAR';
     numbersConfig.style.display = 'flex';
     container.innerHTML = '';
     emptyState.style.display = 'none';
@@ -707,7 +707,7 @@ function selectSet(setKey) {
     return;
   }
   if (setKey === 'binario') {
-    lessonSubtitle.textContent = 'Binary count and START';
+    lessonSubtitle.textContent = 'Cantidad de binarios y COMENZAR';
     binarioConfig.style.display = 'flex';
     container.innerHTML = '';
     emptyState.style.display = 'none';
@@ -715,7 +715,7 @@ function selectSet(setKey) {
     return;
   }
   if (setKey === 'personal') {
-    lessonSubtitle.textContent = 'Paste words and press START';
+    lessonSubtitle.textContent = 'Pega palabras y presiona COMENZAR';
     personalConfig.style.display = 'block';
     container.innerHTML = '';
     emptyState.style.display = 'none';
@@ -724,7 +724,7 @@ function selectSet(setKey) {
     return;
   }
   const items = dataSets[setKey];
-  lessonSubtitle.textContent = items ? items.length + ' items' : '';
+  lessonSubtitle.textContent = items ? items.length + ' elementos' : '';
   if (!items || items.length === 0) {
     container.innerHTML = '';
     emptyState.style.display = 'none';
@@ -889,7 +889,7 @@ function parsePersonal() {
 
 function updateLessonForPersonal(count) {
   lessonTitle.textContent = 'Personal';
-  lessonSubtitle.textContent = count + ' words';
+  lessonSubtitle.textContent = count + ' palabras';
 }
 
 function generateDeckCards() {
@@ -961,7 +961,7 @@ function showBinarioCard() {
 
   const label = document.createElement('div');
   label.className = 'card-label';
-  label.textContent = 'BINARY';
+  label.textContent = 'BINARIO';
 
   const top = document.createElement('div');
   top.className = 'card-top';
@@ -1022,8 +1022,8 @@ document.querySelectorAll('.cat-pill').forEach(btn => {
       deckConfig.style.display = 'none';
       personalConfig.style.display = 'none';
       instructionsTable.style.display = 'none';
-      lessonTitle.textContent = 'Select a group';
-      lessonSubtitle.textContent = 'to start memorizing';
+      lessonTitle.textContent = 'Selecciona un grupo';
+      lessonSubtitle.textContent = 'para comenzar a memorizar';
       container.innerHTML = '';
       emptyState.style.display = 'none';
       container.appendChild(emptyState);
