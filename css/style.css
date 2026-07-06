@@ -694,7 +694,7 @@ body {
 .speed-fill {
   position: absolute;
   left: 0; top: 0; bottom: 0;
-  background: linear-gradient(90deg, #E12B44, #FF5C00, #FF9600, #FFC800, #89E219, #58CC02);
+  background: linear-gradient(90deg, #58CC02, #89E219, #FFC800, #FF9600, #FF5C00, #E12B44);
   border-radius: 4px;
   transition: width 0.15s ease;
   width: 0%;

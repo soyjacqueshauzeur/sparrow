@@ -237,8 +237,8 @@ function adjustSpeed(up) {
   let ms = parseSpeed(speedInput.value);
   if (ms === null) ms = 500;
   const step = 100;
-  if (up) ms = Math.max(MIN_DELAY, ms - step);
-  else ms = Math.min(MAX_DELAY, ms + step);
+  if (up) ms = Math.min(MAX_DELAY, ms + step);
+  else ms = Math.max(MIN_DELAY, ms - step);
   speedInput.value = msToInput(ms);
   updateSpeedFill();
 }
