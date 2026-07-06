@@ -287,11 +287,7 @@ function setRecallMode(recall) {
   if (currentSet) {
     if (recallCompare) recallCompare.style.display = 'none';
     cleanCardFeedback();
-    if (currentSet === 'personal') {
-      resetPersonalToConfig();
-    } else {
-      selectSet(currentSet);
-    }
+    selectSet(currentSet);
   }
 }
 
@@ -303,7 +299,7 @@ personalWord.addEventListener('click', () => {
   personalWord.classList.add('active');
   personalStory.classList.remove('active');
   sessionStorage.setItem('sparrowPersonalMode', 'word');
-  if (currentSet === 'personal') resetPersonalToConfig();
+  if (currentSet === 'personal') selectSet('personal');
 });
 
 personalStory.addEventListener('click', () => {
@@ -311,26 +307,9 @@ personalStory.addEventListener('click', () => {
   personalStory.classList.add('active');
   personalWord.classList.remove('active');
   sessionStorage.setItem('sparrowPersonalMode', 'story');
-  if (currentSet === 'personal') resetPersonalToConfig();
+  if (currentSet === 'personal') selectSet('personal');
 });
 
-function resetPersonalToConfig() {
-  stopCycle();
-  cleanCardFeedback();
-  const existingCard = container.querySelector('.card');
-  if (existingCard) existingCard.remove();
-  container.innerHTML = '';
-  emptyState.style.display = 'none';
-  container.appendChild(emptyState);
-  isCardHidden = false;
-  hiddenCardData = null;
-  if (compareBtn) compareBtn.textContent = 'COMPARE';
-  if (recallCompare) recallCompare.style.display = 'none';
-  if (timer) { clearTimeout(timer); timer = null; }
-  personalConfig.style.display = 'block';
-  updatePauseButton();
-  updatePersonalStartButton();
-}
 
 
 function updatePersonalStartButton() {
