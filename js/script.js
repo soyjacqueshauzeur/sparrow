@@ -346,7 +346,7 @@ function handleCompareClick() {
 
 compareBtn.addEventListener('click', handleCompareClick);
 
-document.getElementById('clearBtn').addEventListener('click', () => {
+function resetGameState() {
   stopCycle();
   resetTimer();
   cleanCardFeedback();
@@ -362,7 +362,9 @@ document.getElementById('clearBtn').addEventListener('click', () => {
     personalConfig.style.display = 'block';
     updatePersonalStartButton();
   }
-});
+}
+
+document.getElementById('clearBtn').addEventListener('click', resetGameState);
 
 recallInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
