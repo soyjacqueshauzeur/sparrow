@@ -588,7 +588,7 @@ function selectSet(setKey) {
     lessonSubtitle.textContent = 'Phonetic conversion system';
     instructionsTable.style.display = 'block';
     container.innerHTML = '';
-    emptyState.style.display = 'flex';
+    emptyState.style.display = 'none';
     container.appendChild(emptyState);
     return;
   }
@@ -596,7 +596,7 @@ function selectSet(setKey) {
     lessonSubtitle.textContent = 'Card count and START';
     deckConfig.style.display = 'flex';
     container.innerHTML = '';
-    emptyState.style.display = 'flex';
+    emptyState.style.display = 'none';
     container.appendChild(emptyState);
     return;
   }
@@ -604,7 +604,7 @@ function selectSet(setKey) {
     lessonSubtitle.textContent = 'Configure and press START';
     numbersConfig.style.display = 'flex';
     container.innerHTML = '';
-    emptyState.style.display = 'flex';
+    emptyState.style.display = 'none';
     container.appendChild(emptyState);
     return;
   }
@@ -612,7 +612,7 @@ function selectSet(setKey) {
     lessonSubtitle.textContent = 'Binary count and START';
     binarioConfig.style.display = 'flex';
     container.innerHTML = '';
-    emptyState.style.display = 'flex';
+    emptyState.style.display = 'none';
     container.appendChild(emptyState);
     return;
   }
@@ -620,7 +620,7 @@ function selectSet(setKey) {
     lessonSubtitle.textContent = 'Paste words and press START';
     personalConfig.style.display = 'block';
     container.innerHTML = '';
-    emptyState.style.display = 'flex';
+    emptyState.style.display = 'none';
     container.appendChild(emptyState);
     return;
   }
@@ -628,7 +628,7 @@ function selectSet(setKey) {
   lessonSubtitle.textContent = items ? items.length + ' items' : '';
   if (!items || items.length === 0) {
     container.innerHTML = '';
-    emptyState.style.display = 'flex';
+    emptyState.style.display = 'none';
     container.appendChild(emptyState);
     return;
   }
@@ -926,7 +926,7 @@ document.querySelectorAll('.cat-pill').forEach(btn => {
       lessonTitle.textContent = 'Select a group';
       lessonSubtitle.textContent = 'to start memorizing';
       container.innerHTML = '';
-      emptyState.style.display = 'flex';
+      emptyState.style.display = 'none';
       container.appendChild(emptyState);
       document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
       return;
