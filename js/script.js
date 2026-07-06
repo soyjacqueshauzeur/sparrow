@@ -511,13 +511,7 @@ function handlePauseAction() {
     currentSet = '1-100';
   }
   if (!isRunning) {
-if (savedPersonalMode !== null) {
-  personalMode = savedPersonalMode;
-  personalWord.classList.toggle('active', personalMode === 'word');
-  personalStory.classList.toggle('active', personalMode === 'story');
-}
-
-try {
+    try {
       startRunning();
     } catch (e) {
       console.error(e);
@@ -530,6 +524,8 @@ try {
     isPaused = true;
     if (timer) { clearTimeout(timer); timer = null; }
     if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    const cardEl = container.querySelector('.card');
+    if (cardEl) cardEl.classList.add('visible');
     updatePauseButton();
   } else {
     isPaused = false;
@@ -1098,6 +1094,11 @@ if (savedShuffle !== null) {
   isShuffle = savedShuffle === 'true';
   modeOrden.classList.toggle('active', !isShuffle);
   modeAleatorio.classList.toggle('active', isShuffle);
+}
+if (savedPersonalMode !== null) {
+  personalMode = savedPersonalMode;
+  personalWord.classList.toggle('active', personalMode === 'word');
+  personalStory.classList.toggle('active', personalMode === 'story');
 }
 
 restoreConfigValues();
