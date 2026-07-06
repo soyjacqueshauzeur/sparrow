@@ -112,6 +112,35 @@ let timerDisplay = document.getElementById('timerDisplay');
 let speedInput = document.getElementById('speedInput');
 let speedFill = document.getElementById('speedFill');
 
+let speedTimer = document.getElementById('speedTimer');
+let timerValue = document.getElementById('timerValue');
+
+let personalMinutes = 0;
+let personalSeconds = 0;
+
+function updateTimerDisplay() {
+  timerValue.textContent = pad2(personalMinutes) + ':' + pad2(personalSeconds);
+}
+
+function changeTimerMinutes(delta) {
+  personalMinutes = Math.max(0, Math.min(60, personalMinutes + delta));
+  updateTimerDisplay();
+}
+
+function changeTimerSeconds(delta) {
+  let total = personalMinutes * 60 + personalSeconds + delta;
+  if (total < 0) total = 0;
+  if (total > 60 * 60 + 59) total = 60 * 60 + 59;
+  personalMinutes = Math.floor(total / 60);
+  personalSeconds = total % 60;
+  updateTimerDisplay();
+}
+
+document.getElementById('timerMinUp').addEventListener('click', () => changeTimerMinutes(1));
+document.getElementById('timerMinDown').addEventListener('click', () => changeTimerMinutes(-1));
+document.getElementById('timerSecUp').addEventListener('click', () => changeTimerSeconds(1));
+document.getElementById('timerSecDown').addEventListener('click', () => changeTimerSeconds(-1));
+
 let timerElapsed = 0;
 let timerInterval = null;
 
@@ -167,6 +196,9 @@ function msToInput(ms) {
 }
 
 function getDelay() {
+  if (currentSet === 'personal') {
+    return (personalMinutes * 60 + personalSeconds) * 1000;
+  }
   const ms = parseSpeed(speedInput.value);
   if (ms === null || ms < MIN_DELAY) return MIN_DELAY;
   return Math.min(ms, MAX_DELAY);
@@ -577,6 +609,17 @@ function selectSet(setKey) {
   personalConfig.style.display = 'none';
   instructionsTable.style.display = 'none';
   container.style.display = '';
+  if (setKey === 'personal') {
+    speedTimer.style.display = 'flex';
+    document.querySelector('.speed-input-row').style.display = 'none';
+    document.querySelector('.speed-bar').style.display = 'none';
+    document.querySelector('.speed-limits').style.display = 'none';
+  } else {
+    speedTimer.style.display = 'none';
+    document.querySelector('.speed-input-row').style.display = '';
+    document.querySelector('.speed-bar').style.display = '';
+    document.querySelector('.speed-limits').style.display = '';
+  }
   const setNames = {
     '1-100': 'Numbers 1-100', 'binario': 'Binary numbers', 'deck': 'Deck', 'numbers': 'Numbers',
     'personal': 'Personal',
@@ -938,6 +981,8 @@ document.querySelectorAll('.cat-pill').forEach(btn => {
     sessionStorage.setItem('sparrowRecall', isRecall);
     sessionStorage.setItem('sparrowShuffle', isShuffle);
     sessionStorage.setItem('sparrowPersonalMode', personalMode);
+    sessionStorage.setItem('sparrowTimerMin', personalMinutes);
+    sessionStorage.setItem('sparrowTimerSec', personalSeconds);
   });
 });
 
@@ -945,6 +990,12 @@ const savedGame = sessionStorage.getItem('sparrowGame') || '1-100';
 const savedRecall = sessionStorage.getItem('sparrowRecall');
 const savedShuffle = sessionStorage.getItem('sparrowShuffle');
 const savedPersonalMode = sessionStorage.getItem('sparrowPersonalMode');
+const savedTimerMin = sessionStorage.getItem('sparrowTimerMin');
+const savedTimerSec = sessionStorage.getItem('sparrowTimerSec');
+
+if (savedTimerMin !== null) personalMinutes = parseInt(savedTimerMin);
+if (savedTimerSec !== null) personalSeconds = parseInt(savedTimerSec);
+updateTimerDisplay();
 
 if (savedRecall !== null) {
   isRecall = savedRecall === 'true';
