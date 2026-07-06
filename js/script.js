@@ -1012,17 +1012,49 @@ document.querySelectorAll('.cat-pill').forEach(btn => {
       document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
       return;
     }
+    if (isRunning) {
+      sessionStorage.setItem('sparrowGame', setKey);
+      saveConfigValues();
+      location.reload();
+      return;
+    }
     document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     selectSet(setKey);
-    sessionStorage.setItem('sparrowGame', setKey);
-    sessionStorage.setItem('sparrowRecall', isRecall);
-    sessionStorage.setItem('sparrowShuffle', isShuffle);
-    sessionStorage.setItem('sparrowPersonalMode', personalMode);
-    sessionStorage.setItem('sparrowTimerMin', personalMinutes);
-    sessionStorage.setItem('sparrowTimerSec', personalSeconds);
   });
 });
+
+function saveConfigValues() {
+  sessionStorage.setItem('sparrowPersonalText', personalTextarea.value);
+  sessionStorage.setItem('sparrowNumCount', numCount.value);
+  sessionStorage.setItem('sparrowNumFrom', numFrom.value);
+  sessionStorage.setItem('sparrowNumTo', numTo.value);
+  sessionStorage.setItem('sparrowBinCount', binCount.value);
+  sessionStorage.setItem('sparrowDeckCount', deckCount.value);
+  sessionStorage.setItem('sparrowSpeedInput', speedInput.value);
+  sessionStorage.setItem('sparrowTimerMin', personalMinutes);
+  sessionStorage.setItem('sparrowTimerSec', personalSeconds);
+  sessionStorage.setItem('sparrowRecall', isRecall);
+  sessionStorage.setItem('sparrowShuffle', isShuffle);
+  sessionStorage.setItem('sparrowPersonalMode', personalMode);
+}
+
+function restoreConfigValues() {
+  const pt = sessionStorage.getItem('sparrowPersonalText');
+  if (pt !== null) personalTextarea.value = pt;
+  const nc = sessionStorage.getItem('sparrowNumCount');
+  if (nc !== null) numCount.value = nc;
+  const nf = sessionStorage.getItem('sparrowNumFrom');
+  if (nf !== null) numFrom.value = nf;
+  const nt = sessionStorage.getItem('sparrowNumTo');
+  if (nt !== null) numTo.value = nt;
+  const bc = sessionStorage.getItem('sparrowBinCount');
+  if (bc !== null) binCount.value = bc;
+  const dc = sessionStorage.getItem('sparrowDeckCount');
+  if (dc !== null) deckCount.value = dc;
+  const si = sessionStorage.getItem('sparrowSpeedInput');
+  if (si !== null) speedInput.value = si;
+}
 
 const savedGame = sessionStorage.getItem('sparrowGame') || '1-100';
 const savedRecall = sessionStorage.getItem('sparrowRecall');
@@ -1045,6 +1077,8 @@ if (savedShuffle !== null) {
   modeOrden.classList.toggle('active', !isShuffle);
   modeAleatorio.classList.toggle('active', isShuffle);
 }
+
+restoreConfigValues();
 
 try {
   selectSet(savedGame);
