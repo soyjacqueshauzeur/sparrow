@@ -211,7 +211,7 @@ function updateSpeedFill() {
   const logMin = Math.log(MIN_DELAY);
   const logMax = Math.log(MAX_DELAY);
   const pct = (Math.log(ms) - logMin) / (logMax - logMin) * 100;
-  speedFill.style.width = Math.min(100, Math.max(0, pct)) + '%';
+  speedFill.style.width = Math.max(5, Math.min(100, pct)) + '%';
 }
 
 speedInput.addEventListener('input', () => {
