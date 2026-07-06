@@ -317,14 +317,18 @@ personalStory.addEventListener('click', () => {
 function resetPersonalToConfig() {
   stopCycle();
   cleanCardFeedback();
+  const existingCard = container.querySelector('.card');
+  if (existingCard) existingCard.remove();
   container.innerHTML = '';
   emptyState.style.display = 'none';
   container.appendChild(emptyState);
   isCardHidden = false;
   hiddenCardData = null;
-  compareBtn.textContent = 'COMPARE';
-  recallCompare.style.display = 'none';
+  if (compareBtn) compareBtn.textContent = 'COMPARE';
+  if (recallCompare) recallCompare.style.display = 'none';
+  if (timer) { clearTimeout(timer); timer = null; }
   personalConfig.style.display = 'block';
+  updatePauseButton();
   updatePersonalStartButton();
 }
 
