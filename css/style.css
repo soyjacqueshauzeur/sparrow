@@ -696,6 +696,10 @@ body {
 }
 
 /* ========== DUO 3D BUTTON ========== */
+.duo-btn.hidden {
+  display: none;
+}
+
 .duo-btn {
   display: flex; align-items: center; justify-content: center;
   gap: var(--sp-sm);

@@ -314,12 +314,16 @@ personalStory.addEventListener('click', () => {
 
 function updatePersonalStartButton() {
   if (currentSet !== 'personal') {
-    pauseBtn.style.display = '';
+    pauseBtn.classList.remove('hidden');
     return;
   }
   const hasText = personalTextarea.value.trim().length > 0;
   const hasTime = (personalMinutes * 60 + personalSeconds) > 0;
-  pauseBtn.style.display = (hasText && hasTime) ? '' : 'none';
+  if (hasText && hasTime) {
+    pauseBtn.classList.remove('hidden');
+  } else {
+    pauseBtn.classList.add('hidden');
+  }
 }
 
 personalTextarea.addEventListener('input', updatePersonalStartButton);
@@ -488,7 +492,11 @@ function getItemIndex() {
   return isShuffle && shuffleOrder.length > 0 ? shuffleOrder[currentIndex] : currentIndex;
 }
 
+let lastPauseAction = 0;
 function handlePauseAction() {
+  const now = Date.now();
+  if (now - lastPauseAction < 200) return;
+  lastPauseAction = now;
   if (!currentSet) {
     currentSet = '1-100';
   }
@@ -522,6 +530,10 @@ try {
 }
 
 pauseBtn.addEventListener('click', handlePauseAction);
+pauseBtn.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  handlePauseAction();
+});
 
 function startTimerInterval() {
   if (timerInterval) clearInterval(timerInterval);
@@ -655,7 +667,7 @@ function selectSet(setKey) {
     document.querySelector('.speed-input-row').style.display = '';
     document.querySelector('.speed-bar').style.display = '';
     document.querySelector('.speed-limits').style.display = '';
-    pauseBtn.style.display = '';
+    pauseBtn.classList.remove('hidden');
   }
   const setNames = {
     '1-100': 'Numbers 1-100', 'binario': 'Binary numbers', 'deck': 'Deck', 'numbers': 'Numbers',
