@@ -170,7 +170,7 @@ function updateTimerDisplay() {
   timerDisplay.textContent = pad2(h) + ':' + pad2(m) + ':' + pad2(s) + ':' + pad2(cs);
 }
 
-const MIN_DELAY = 1;
+const MIN_DELAY = 100;
 const MAX_DELAY = 300000;
 
 function parseSpeed(raw) {
