@@ -321,8 +321,8 @@ function applyPersonalMode() {
   container.appendChild(emptyState);
   isCardHidden = false;
   hiddenCardData = null;
-  compareBtn.textContent = 'COMPARE';
-  recallCompare.style.display = 'none';
+  if (compareBtn) compareBtn.textContent = 'COMPARE';
+  if (recallCompare) recallCompare.style.display = 'none';
   if (personalMode === 'story') {
     dataSets['personal'] = [{ top: text, bottom: '' }];
     shuffleOrder = [];
@@ -336,8 +336,10 @@ function applyPersonalMode() {
     currentIndex = 0;
     updateLessonForPersonal(list.length);
   }
+  updatePauseButton();
   showCard(0);
   updatePersonalStartButton();
+  personalConfig.style.display = 'none';
 }
 
 function updatePersonalStartButton() {
