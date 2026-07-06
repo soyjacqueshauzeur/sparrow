@@ -1015,6 +1015,7 @@ document.querySelectorAll('.cat-pill').forEach(btn => {
     }
     if (setKey === currentSet && !isRunning) {
       currentSet = null;
+      sessionStorage.removeItem('sparrowGame');
       bottomControls.style.display = '';
       contentArea.classList.remove('no-center');
       numbersConfig.style.display = 'none';
@@ -1038,6 +1039,7 @@ document.querySelectorAll('.cat-pill').forEach(btn => {
     }
     document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+    sessionStorage.setItem('sparrowGame', setKey);
     selectSet(setKey);
   });
 });
