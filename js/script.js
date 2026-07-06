@@ -125,6 +125,7 @@ function updatePersonalTimerDisplay() {
 function changeTimerMinutes(delta) {
   personalMinutes = Math.max(0, Math.min(60, personalMinutes + delta));
   updatePersonalTimerDisplay();
+  updatePersonalStartButton();
 }
 
 function changeTimerSeconds(delta) {
@@ -134,6 +135,7 @@ function changeTimerSeconds(delta) {
   personalMinutes = Math.floor(total / 60);
   personalSeconds = total % 60;
   updatePersonalTimerDisplay();
+  updatePersonalStartButton();
 }
 
 document.getElementById('timerMinUp').addEventListener('click', () => changeTimerMinutes(1));
@@ -306,6 +308,18 @@ personalStory.addEventListener('click', () => {
   sessionStorage.setItem('sparrowPersonalMode', 'story');
 });
 
+function updatePersonalStartButton() {
+  if (currentSet !== 'personal') {
+    pauseBtn.style.display = '';
+    return;
+  }
+  const hasText = personalTextarea.value.trim().length > 0;
+  const hasTime = (personalMinutes * 60 + personalSeconds) > 0;
+  pauseBtn.style.display = (hasText && hasTime) ? '' : 'none';
+}
+
+personalTextarea.addEventListener('input', updatePersonalStartButton);
+
 function handleCompareClick() {
   if (!isCardHidden && hiddenCardData === null && (isPaused || !isPaused)) {
     advanceToNextCard();
@@ -334,6 +348,7 @@ document.getElementById('cleanBtn').addEventListener('click', () => {
   if (compareBtn) compareBtn.textContent = 'COMPARE';
   if (currentSet === 'personal') {
     personalConfig.style.display = 'block';
+    updatePersonalStartButton();
   }
 });
 
@@ -636,6 +651,7 @@ function selectSet(setKey) {
     document.querySelector('.speed-input-row').style.display = '';
     document.querySelector('.speed-bar').style.display = '';
     document.querySelector('.speed-limits').style.display = '';
+    pauseBtn.style.display = '';
   }
   const setNames = {
     '1-100': 'Numbers 1-100', 'binario': 'Binary numbers', 'deck': 'Deck', 'numbers': 'Numbers',
@@ -682,6 +698,7 @@ function selectSet(setKey) {
     container.innerHTML = '';
     emptyState.style.display = 'none';
     container.appendChild(emptyState);
+    updatePersonalStartButton();
     return;
   }
   const items = dataSets[setKey];

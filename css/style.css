@@ -499,7 +499,7 @@ body {
 }
 
 .clean-icon {
-  width: 32px; height: 32px;
+  width: 46px; height: 46px;
   cursor: pointer;
   flex-shrink: 0;
   -webkit-tap-highlight-color: transparent;
