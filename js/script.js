@@ -261,7 +261,7 @@ function setMode(shuffle) {
   isShuffle = shuffle;
   modeOrden.classList.toggle('active', !shuffle);
   modeAleatorio.classList.toggle('active', shuffle);
-  sessionStorage.setItem('sparrowShuffle', shuffle);
+  localStorage.setItem('sparrowShuffle', shuffle);
   if (currentSet) {
     const count = dataSets[currentSet].length;
     if (isRunning) {
@@ -283,7 +283,7 @@ function setRecallMode(recall) {
   isRecall = recall;
   modeTraining.classList.toggle('active', !recall);
   modeRecall.classList.toggle('active', recall);
-  sessionStorage.setItem('sparrowRecall', recall);
+  localStorage.setItem('sparrowRecall', recall);
   if (currentSet) {
     if (recallCompare) recallCompare.style.display = 'none';
     cleanCardFeedback();
@@ -298,7 +298,7 @@ personalWord.addEventListener('click', () => {
   personalMode = 'word';
   personalWord.classList.add('active');
   personalStory.classList.remove('active');
-  sessionStorage.setItem('sparrowPersonalMode', 'word');
+  localStorage.setItem('sparrowPersonalMode', 'word');
   if (currentSet === 'personal') selectSet('personal');
 });
 
@@ -306,7 +306,7 @@ personalStory.addEventListener('click', () => {
   personalMode = 'story';
   personalStory.classList.add('active');
   personalWord.classList.remove('active');
-  sessionStorage.setItem('sparrowPersonalMode', 'story');
+  localStorage.setItem('sparrowPersonalMode', 'story');
   if (currentSet === 'personal') selectSet('personal');
 });
 
@@ -1015,7 +1015,7 @@ document.querySelectorAll('.cat-pill').forEach(btn => {
     }
     if (setKey === currentSet && !isRunning) {
       currentSet = null;
-      sessionStorage.removeItem('sparrowGame');
+      localStorage.removeItem('sparrowGame');
       bottomControls.style.display = '';
       contentArea.classList.remove('no-center');
       numbersConfig.style.display = 'none';
@@ -1032,56 +1032,56 @@ document.querySelectorAll('.cat-pill').forEach(btn => {
       return;
     }
     if (isRunning) {
-      sessionStorage.setItem('sparrowGame', setKey);
+      localStorage.setItem('sparrowGame', setKey);
       saveConfigValues();
       location.reload();
       return;
     }
     document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    sessionStorage.setItem('sparrowGame', setKey);
+    localStorage.setItem('sparrowGame', setKey);
     selectSet(setKey);
   });
 });
 
 function saveConfigValues() {
-  sessionStorage.setItem('sparrowPersonalText', personalTextarea.value);
-  sessionStorage.setItem('sparrowNumCount', numCount.value);
-  sessionStorage.setItem('sparrowNumFrom', numFrom.value);
-  sessionStorage.setItem('sparrowNumTo', numTo.value);
-  sessionStorage.setItem('sparrowBinCount', binCount.value);
-  sessionStorage.setItem('sparrowDeckCount', deckCount.value);
-  sessionStorage.setItem('sparrowSpeedInput', speedInput.value);
-  sessionStorage.setItem('sparrowTimerMin', personalMinutes);
-  sessionStorage.setItem('sparrowTimerSec', personalSeconds);
-  sessionStorage.setItem('sparrowRecall', isRecall);
-  sessionStorage.setItem('sparrowShuffle', isShuffle);
-  sessionStorage.setItem('sparrowPersonalMode', personalMode);
+  localStorage.setItem('sparrowPersonalText', personalTextarea.value);
+  localStorage.setItem('sparrowNumCount', numCount.value);
+  localStorage.setItem('sparrowNumFrom', numFrom.value);
+  localStorage.setItem('sparrowNumTo', numTo.value);
+  localStorage.setItem('sparrowBinCount', binCount.value);
+  localStorage.setItem('sparrowDeckCount', deckCount.value);
+  localStorage.setItem('sparrowSpeedInput', speedInput.value);
+  localStorage.setItem('sparrowTimerMin', personalMinutes);
+  localStorage.setItem('sparrowTimerSec', personalSeconds);
+  localStorage.setItem('sparrowRecall', isRecall);
+  localStorage.setItem('sparrowShuffle', isShuffle);
+  localStorage.setItem('sparrowPersonalMode', personalMode);
 }
 
 function restoreConfigValues() {
-  const pt = sessionStorage.getItem('sparrowPersonalText');
+  const pt = localStorage.getItem('sparrowPersonalText');
   if (pt !== null) personalTextarea.value = pt;
-  const nc = sessionStorage.getItem('sparrowNumCount');
+  const nc = localStorage.getItem('sparrowNumCount');
   if (nc !== null) numCount.value = nc;
-  const nf = sessionStorage.getItem('sparrowNumFrom');
+  const nf = localStorage.getItem('sparrowNumFrom');
   if (nf !== null) numFrom.value = nf;
-  const nt = sessionStorage.getItem('sparrowNumTo');
+  const nt = localStorage.getItem('sparrowNumTo');
   if (nt !== null) numTo.value = nt;
-  const bc = sessionStorage.getItem('sparrowBinCount');
+  const bc = localStorage.getItem('sparrowBinCount');
   if (bc !== null) binCount.value = bc;
-  const dc = sessionStorage.getItem('sparrowDeckCount');
+  const dc = localStorage.getItem('sparrowDeckCount');
   if (dc !== null) deckCount.value = dc;
-  const si = sessionStorage.getItem('sparrowSpeedInput');
+  const si = localStorage.getItem('sparrowSpeedInput');
   if (si !== null) speedInput.value = si;
 }
 
-const savedGame = sessionStorage.getItem('sparrowGame') || 'instructions';
-const savedRecall = sessionStorage.getItem('sparrowRecall');
-const savedShuffle = sessionStorage.getItem('sparrowShuffle');
-const savedPersonalMode = sessionStorage.getItem('sparrowPersonalMode');
-const savedTimerMin = sessionStorage.getItem('sparrowTimerMin');
-const savedTimerSec = sessionStorage.getItem('sparrowTimerSec');
+const savedGame = localStorage.getItem('sparrowGame') || 'instructions';
+const savedRecall = localStorage.getItem('sparrowRecall');
+const savedShuffle = localStorage.getItem('sparrowShuffle');
+const savedPersonalMode = localStorage.getItem('sparrowPersonalMode');
+const savedTimerMin = localStorage.getItem('sparrowTimerMin');
+const savedTimerSec = localStorage.getItem('sparrowTimerSec');
 
 if (savedTimerMin !== null) personalMinutes = parseInt(savedTimerMin);
 if (savedTimerSec !== null) personalSeconds = parseInt(savedTimerSec);
