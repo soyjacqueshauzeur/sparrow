@@ -902,8 +902,18 @@ body {
 .footer-copyright {
   font-weight: 700;
   font-size: 12px;
-  color: var(--text-dim);
+  color: #24ece7;
   letter-spacing: 0.3px;
+}
+
+.footer-copyright a {
+  color: #f72a52;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.footer-copyright a:hover {
+  opacity: 0.8;
 }
 
 .footer-links {

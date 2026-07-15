@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sparrow-v2-20260715';
+const CACHE_NAME = 'sparrow-v4-20260715';
 const ASSETS = [
   './',
   './index.html',

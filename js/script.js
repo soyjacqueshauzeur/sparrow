@@ -101,48 +101,24 @@ let numTo = document.getElementById('numTo');
 document.getElementById('numCountUp').addEventListener('click', () => {
   numCount.value = Math.min(100, (parseInt(numCount.value) || 2) + 1);
 });
-document.getElementById('numCountUp').addEventListener('pointerdown', (e) => {
-  e.preventDefault();
-  numCount.value = Math.min(100, (parseInt(numCount.value) || 2) + 1);
-});
 
 document.getElementById('numCountDown').addEventListener('click', () => {
-  numCount.value = Math.max(1, (parseInt(numCount.value) || 2) - 1);
-});
-document.getElementById('numCountDown').addEventListener('pointerdown', (e) => {
-  e.preventDefault();
   numCount.value = Math.max(1, (parseInt(numCount.value) || 2) - 1);
 });
 
 document.getElementById('binCountUp').addEventListener('click', () => {
   binCount.value = Math.min(50, (parseInt(binCount.value) || 5) + 1);
 });
-document.getElementById('binCountUp').addEventListener('pointerdown', (e) => {
-  e.preventDefault();
-  binCount.value = Math.min(50, (parseInt(binCount.value) || 5) + 1);
-});
 
 document.getElementById('binCountDown').addEventListener('click', () => {
-  binCount.value = Math.max(1, (parseInt(binCount.value) || 5) - 1);
-});
-document.getElementById('binCountDown').addEventListener('pointerdown', (e) => {
-  e.preventDefault();
   binCount.value = Math.max(1, (parseInt(binCount.value) || 5) - 1);
 });
 
 document.getElementById('deckCountUp').addEventListener('click', () => {
   deckCount.value = Math.min(52, (parseInt(deckCount.value) || 1) + 1);
 });
-document.getElementById('deckCountUp').addEventListener('pointerdown', (e) => {
-  e.preventDefault();
-  deckCount.value = Math.min(52, (parseInt(deckCount.value) || 1) + 1);
-});
 
 document.getElementById('deckCountDown').addEventListener('click', () => {
-  deckCount.value = Math.max(1, (parseInt(deckCount.value) || 1) - 1);
-});
-document.getElementById('deckCountDown').addEventListener('pointerdown', (e) => {
-  e.preventDefault();
   deckCount.value = Math.max(1, (parseInt(deckCount.value) || 1) - 1);
 });
 
@@ -285,7 +261,7 @@ speedInput.addEventListener('keydown', (e) => {
 function adjustSpeed(up) {
   let ms = parseSpeed(speedInput.value);
   if (ms === null) ms = 500;
-  const step = 200;
+  const step = 100;
   if (up) ms = Math.min(MAX_DELAY, ms + step);
   else ms = Math.max(MIN_DELAY, ms - step);
   speedInput.value = msToInput(ms);
@@ -293,9 +269,7 @@ function adjustSpeed(up) {
 }
 
 document.getElementById('speedUp').addEventListener('click', () => adjustSpeed(true));
-document.getElementById('speedUp').addEventListener('pointerdown', (e) => { e.preventDefault(); adjustSpeed(true); });
 document.getElementById('speedDown').addEventListener('click', () => adjustSpeed(false));
-document.getElementById('speedDown').addEventListener('pointerdown', (e) => { e.preventDefault(); adjustSpeed(false); });
 
 function buildShuffleOrder(count) {
   const arr = [];
