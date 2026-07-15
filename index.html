@@ -31,16 +31,16 @@
   </div>
 
   <nav class="category-pills">
-    <button class="cat-pill active" data-set="instructions">Instrucciones</button>
     <button class="cat-pill" data-set="1-100">1-100</button>
+    <button class="cat-pill" data-set="abc">ABC</button>
+    <button class="cat-pill" data-set="numbers">Numbers</button>
     <button class="cat-pill" data-set="binario">Binario</button>
     <button class="cat-pill" data-set="deck">Deck</button>
-    <button class="cat-pill" data-set="numbers">Numbers</button>
-    <button class="cat-pill" data-set="abc">ABC</button>
     <button class="cat-pill" data-set="cirilico">Cirílico</button>
     <button class="cat-pill" data-set="cantidades">Cantidades</button>
     <button class="cat-pill" data-set="meses">Meses</button>
     <button class="cat-pill" data-set="personal">Personal</button>
+    <button class="cat-pill active" data-set="instructions">Instrucciones</button>
   </nav>
 
   <div class="info-bar">
@@ -60,6 +60,10 @@
       <p class="lesson-subtitle" id="lessonSubtitle">para comenzar a memorizar</p>
     </div>
     <div class="numbers-config" id="numbersConfig" style="display:none">
+      <div class="config-arrows">
+        <button class="config-arrow" id="numCountUp">▲</button>
+        <button class="config-arrow" id="numCountDown">▼</button>
+      </div>
       <div class="config-row">
         <label class="config-label">Cantidad</label>
         <input type="number" class="config-input" id="numCount" value="2" min="1" max="100" inputmode="numeric">

@@ -97,6 +97,14 @@ let numbersConfig = document.getElementById('numbersConfig');
 let numCount = document.getElementById('numCount');
 let numFrom = document.getElementById('numFrom');
 let numTo = document.getElementById('numTo');
+
+document.getElementById('numCountUp').addEventListener('click', () => {
+  numCount.value = Math.min(100, (parseInt(numCount.value) || 2) + 1);
+});
+
+document.getElementById('numCountDown').addEventListener('click', () => {
+  numCount.value = Math.max(1, (parseInt(numCount.value) || 2) - 1);
+});
 let binarioConfig = document.getElementById('binarioConfig');
 let binCount = document.getElementById('binCount');
 let deckConfig = document.getElementById('deckConfig');
