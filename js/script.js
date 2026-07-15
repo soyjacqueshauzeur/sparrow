@@ -66,6 +66,7 @@ let modeRecall = document.getElementById('modeRecall');
 let recallCompare = document.getElementById('recallCompare');
 let recallInput = document.getElementById('recallInput');
 let compareBtn = document.getElementById('compareBtn');
+let cleanBtn = document.getElementById('cleanBtn');
 let pauseBtn = document.getElementById('pauseBtn');
 let pauseLabel = pauseBtn.querySelector('.btn-label');
 let pauseIcon = pauseBtn.querySelector('.btn-icon');
@@ -370,6 +371,9 @@ function handleCompareClick() {
 }
 
 compareBtn.addEventListener('click', handleCompareClick);
+
+cleanBtn.addEventListener('click', () => advanceToNextCard());
+cleanBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); advanceToNextCard(); });
 
 function resetGameState() {
   isRunning = false;
