@@ -4,7 +4,17 @@ const dataSets = {
   'deck': [],
   'abc': ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'].map(l => ({ top: l, bottom: '' })),
   'cirilico': 'А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я'.split(' ').map(l => ({ top: l, bottom: '' })),
-  'cantidades': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '20', '30', '40', '50', '100', '1.000', '10.000', '100.000', '1.000.000'].map(l => ({ top: l, bottom: '' })),
+  'cantidades': [
+    { top: 'X2', bottom: 'Neque' },
+    { top: 'X3', bottom: 'Morza' },
+    { top: 'X4', bottom: 'Cucaracha' },
+    { top: 'X5', bottom: 'Lagartija' },
+    { top: 'X6', bottom: 'Zorro' },
+    { top: 'X7', bottom: 'Jirafa' },
+    { top: 'X8', bottom: 'Gato' },
+    { top: 'X9', bottom: 'Panda' },
+    { top: 'X10', bottom: 'Rinoceronte' }
+  ],
   'meses': ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'].map(l => ({ top: l, bottom: '' }))
 };
 

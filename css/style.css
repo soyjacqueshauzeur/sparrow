@@ -224,6 +224,8 @@ body {
   font-size: 11px;
 }
 
+.sub-pill[data-set="meses"] { display: none; }
+
 /* ========== INFO BAR ========== */
 .info-bar {
   display: flex;
@@ -433,6 +435,7 @@ body {
   border: 2px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
+  margin-bottom: 1em;
 }
 
 .instructions-table th,
