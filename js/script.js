@@ -113,6 +113,39 @@ document.getElementById('numCountDown').addEventListener('pointerdown', (e) => {
   e.preventDefault();
   numCount.value = Math.max(1, (parseInt(numCount.value) || 2) - 1);
 });
+
+document.getElementById('binCountUp').addEventListener('click', () => {
+  binCount.value = Math.min(50, (parseInt(binCount.value) || 5) + 1);
+});
+document.getElementById('binCountUp').addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  binCount.value = Math.min(50, (parseInt(binCount.value) || 5) + 1);
+});
+
+document.getElementById('binCountDown').addEventListener('click', () => {
+  binCount.value = Math.max(1, (parseInt(binCount.value) || 5) - 1);
+});
+document.getElementById('binCountDown').addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  binCount.value = Math.max(1, (parseInt(binCount.value) || 5) - 1);
+});
+
+document.getElementById('deckCountUp').addEventListener('click', () => {
+  deckCount.value = Math.min(52, (parseInt(deckCount.value) || 1) + 1);
+});
+document.getElementById('deckCountUp').addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  deckCount.value = Math.min(52, (parseInt(deckCount.value) || 1) + 1);
+});
+
+document.getElementById('deckCountDown').addEventListener('click', () => {
+  deckCount.value = Math.max(1, (parseInt(deckCount.value) || 1) - 1);
+});
+document.getElementById('deckCountDown').addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  deckCount.value = Math.max(1, (parseInt(deckCount.value) || 1) - 1);
+});
+
 let binarioConfig = document.getElementById('binarioConfig');
 let binCount = document.getElementById('binCount');
 let deckConfig = document.getElementById('deckConfig');
