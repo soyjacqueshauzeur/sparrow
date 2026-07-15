@@ -1,9 +1,13 @@
-const CACHE_NAME = 'sparrow-v4-20260715';
+const CACHE_NAME = 'sparrow-v5-lectura';
 const ASSETS = [
   './',
   './index.html',
   './css/style.css',
   './js/script.js',
+  './js/lectura.js',
+  './js/vendor/jszip.min.js',
+  './js/vendor/pdf.min.js',
+  './js/vendor/pdf.worker.min.js',
   './synaptic.svg',
   './manifest.json'
 ];

@@ -30,18 +30,12 @@
     </div>
   </div>
 
-  <nav class="category-pills">
-    <button class="cat-pill" data-set="1-100">1-100</button>
-    <button class="cat-pill" data-set="abc">ABC</button>
-    <button class="cat-pill" data-set="numbers">Numbers</button>
-    <button class="cat-pill" data-set="binario">Binario</button>
-    <button class="cat-pill" data-set="deck">Deck</button>
-    <button class="cat-pill" data-set="cirilico">Cirílico</button>
-    <button class="cat-pill" data-set="cantidades">Cantidades</button>
-    <button class="cat-pill" data-set="meses">Meses</button>
-    <button class="cat-pill" data-set="personal">Personal</button>
-    <button class="cat-pill active" data-set="instructions">Instrucciones</button>
+  <nav class="category-pills" id="mainMenu">
+    <button class="cat-pill main-pill aprender-pill" data-menu="aprender">🧠 Aprender</button>
+    <button class="cat-pill main-pill aplicar-pill" data-menu="aplicar">🎯 Aplicar</button>
+    <button class="cat-pill main-pill leer-pill" data-menu="leer">📖 Leer</button>
   </nav>
+  <nav class="sub-pills" id="subMenu"></nav>
 
   <div class="info-bar">
     <div class="info-module clock-module">
@@ -426,6 +420,7 @@
 </div>
 
 <script src="js/script.js"></script>
+<script src="js/lectura.js" defer></script>
 <script>
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(function () {});

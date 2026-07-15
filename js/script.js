@@ -1034,42 +1034,138 @@ function showNumbersCard() {
   });
 }
 
-document.querySelectorAll('.cat-pill').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const setKey = btn.dataset.set;
-    if (setKey === currentSet && isRunning) {
-      stopCycle();
-      selectSet(setKey);
-      return;
+const menuCategories = {
+  'aprender': ['instructions', '1-100', 'abc', 'cirilico'],
+  'aplicar': ['numbers', 'deck', 'binario', 'cantidades', 'meses'],
+  'leer': ['personal', 'lectura']
+};
+
+const subPillNames = {
+  'instructions': 'Instrucciones', '1-100': '1-100', 'abc': 'ABC', 'cirilico': 'Cirílico',
+  'numbers': 'Numbers', 'deck': 'Deck', 'binario': 'Binario', 'cantidades': 'Cantidades',
+  'meses': 'Meses', 'personal': 'Personal', 'lectura': 'Lectura'
+};
+
+let currentMenu = null;
+const mainMenu = document.getElementById('mainMenu');
+const subMenu = document.getElementById('subMenu');
+
+function findMenuForSet(setKey) {
+  for (const menu in menuCategories) {
+    if (menuCategories[menu].includes(setKey)) return menu;
+  }
+  return null;
+}
+
+function deselectCurrentSet() {
+  currentSet = null;
+  localStorage.removeItem('sparrowGame');
+  bottomControls.style.display = '';
+  contentArea.classList.remove('no-center');
+  numbersConfig.style.display = 'none';
+  binarioConfig.style.display = 'none';
+  deckConfig.style.display = 'none';
+  personalConfig.style.display = 'none';
+  instructionsTable.style.display = 'none';
+  lessonTitle.textContent = 'Selecciona un grupo';
+  lessonSubtitle.textContent = 'para comenzar a memorizar';
+  container.innerHTML = '';
+  emptyState.style.display = 'none';
+  container.appendChild(emptyState);
+  subMenu.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+}
+
+function hideLecturaIfVisible() {
+  if (window.LecturaModule && typeof window.LecturaModule.hide === 'function') {
+    window.LecturaModule.hide();
+  }
+}
+
+function activateLectura(btn) {
+  if (isRunning) stopCycle();
+  resetTimer();
+  currentSet = 'lectura';
+  localStorage.setItem('sparrowGame', 'lectura');
+  subMenu.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  if (window.LecturaModule && typeof window.LecturaModule.show === 'function') {
+    window.LecturaModule.show();
+  }
+}
+
+function handleSubPillClick(btn) {
+  const setKey = btn.dataset.set;
+  if (currentSet === 'lectura' && setKey !== 'lectura') {
+    hideLecturaIfVisible();
+    currentSet = null;
+  }
+  if (setKey === 'lectura') {
+    if (currentSet === 'lectura') return;
+    if (isRunning) {
+      saveConfigValues();
     }
-    if (setKey === currentSet && !isRunning) {
+    activateLectura(btn);
+    return;
+  }
+  if (setKey === currentSet && isRunning) {
+    stopCycle();
+    selectSet(setKey);
+    return;
+  }
+  if (setKey === currentSet && !isRunning) {
+    deselectCurrentSet();
+    return;
+  }
+  if (isRunning) {
+    localStorage.setItem('sparrowGame', setKey);
+    saveConfigValues();
+    location.reload();
+    return;
+  }
+  subMenu.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  localStorage.setItem('sparrowGame', setKey);
+  selectSet(setKey);
+}
+
+function renderSubMenu(menuKey, activeSet) {
+  subMenu.innerHTML = '';
+  menuCategories[menuKey].forEach(setKey => {
+    const b = document.createElement('button');
+    b.className = 'cat-pill sub-pill' + (setKey === activeSet ? ' active' : '');
+    b.dataset.set = setKey;
+    b.textContent = subPillNames[setKey];
+    b.addEventListener('click', () => handleSubPillClick(b));
+    subMenu.appendChild(b);
+  });
+}
+
+function selectMenu(menuKey, activeSet) {
+  currentMenu = menuKey;
+  localStorage.setItem('sparrowMenu', menuKey);
+  mainMenu.querySelectorAll('.main-pill').forEach(b => {
+    b.classList.toggle('active', b.dataset.menu === menuKey);
+  });
+  renderSubMenu(menuKey, activeSet || null);
+}
+
+mainMenu.querySelectorAll('.main-pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const menuKey = btn.dataset.menu;
+    if (menuKey === currentMenu) return;
+    if (currentSet === 'lectura') {
+      hideLecturaIfVisible();
       currentSet = null;
       localStorage.removeItem('sparrowGame');
-      bottomControls.style.display = '';
-      contentArea.classList.remove('no-center');
-      numbersConfig.style.display = 'none';
-      binarioConfig.style.display = 'none';
-      deckConfig.style.display = 'none';
-      personalConfig.style.display = 'none';
-      instructionsTable.style.display = 'none';
-      lessonTitle.textContent = 'Selecciona un grupo';
-      lessonSubtitle.textContent = 'para comenzar a memorizar';
-      container.innerHTML = '';
-      emptyState.style.display = 'none';
-      container.appendChild(emptyState);
-      document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
-      return;
     }
     if (isRunning) {
-      localStorage.setItem('sparrowGame', setKey);
-      saveConfigValues();
-      location.reload();
-      return;
+      stopCycle();
+      resetTimer();
     }
-    document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    localStorage.setItem('sparrowGame', setKey);
-    selectSet(setKey);
+    if (currentSet && !menuCategories[menuKey].includes(currentSet)) {
+      deselectCurrentSet();
+    }
+    selectMenu(menuKey, currentSet && menuCategories[menuKey].includes(currentSet) ? currentSet : null);
   });
 });
 
@@ -1134,13 +1230,22 @@ if (savedPersonalMode !== null) {
 
 restoreConfigValues();
 
+const savedMenu = localStorage.getItem('sparrowMenu');
+
 try {
-  selectSet(savedGame);
-  document.querySelectorAll('.cat-pill').forEach(b => {
-    b.classList.toggle('active', b.dataset.set === savedGame);
-  });
+  if (savedGame === 'lectura') {
+    currentSet = 'lectura';
+    selectMenu('leer', 'lectura');
+  } else {
+    const startMenu = (savedMenu && menuCategories[savedMenu] && menuCategories[savedMenu].includes(savedGame))
+      ? savedMenu
+      : (findMenuForSet(savedGame) || 'aprender');
+    selectSet(savedGame);
+    selectMenu(startMenu, savedGame);
+  }
 } catch (e) {
-  currentSet = '1-100';
-  selectSet('1-100');
+  currentSet = 'instructions';
+  selectSet('instructions');
+  selectMenu('aprender', 'instructions');
 }
 updateSpeedFill();

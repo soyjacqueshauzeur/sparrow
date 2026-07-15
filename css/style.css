@@ -173,6 +173,57 @@ body {
   box-shadow: 0 3px 0 var(--green-shadow);
 }
 
+/* ========== MAIN MENU (3 categorías) ========== */
+.category-pills {
+  justify-content: center;
+}
+
+.main-pill {
+  height: 38px;
+  padding: 0 20px;
+  font-size: 13px;
+}
+
+.aprender-pill.active {
+  background: var(--green);
+  border-color: var(--green);
+  box-shadow: 0 3px 0 var(--green-shadow);
+}
+
+.aplicar-pill.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  box-shadow: 0 3px 0 var(--blue-dark);
+}
+
+.leer-pill.active {
+  background: var(--orange);
+  border-color: var(--orange);
+  box-shadow: 0 3px 0 #D47A00;
+}
+
+/* ========== SUB MENU ========== */
+.sub-pills {
+  display: flex;
+  gap: var(--sp-sm);
+  padding: 0.7em 1em;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  border-bottom: 2px solid var(--border);
+  flex-wrap: nowrap;
+}
+
+.sub-pills::-webkit-scrollbar { display: none; }
+
+.sub-pills:empty { display: none; }
+
+.sub-pill {
+  height: 30px;
+  padding: 0 14px;
+  font-size: 11px;
+}
+
 /* ========== INFO BAR ========== */
 .info-bar {
   display: flex;
@@ -821,6 +872,7 @@ body {
 /* ========== RESPONSIVE ========== */
 @media (min-width: 900px) {
   .category-pills { justify-content: center; }
+  .sub-pills { justify-content: center; }
   .bottom-controls {
     max-width: 500px; margin: 0 auto; width: 100%;
   }
@@ -947,4 +999,357 @@ body {
     flex-direction: row;
     justify-content: space-between;
   }
+}
+
+/* ========== LECTURA ========== */
+#lecturaModule {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+  padding: 0 0 2em 0;
+}
+
+.lectura-display-wrap {
+  width: 100%;
+}
+
+.lectura-card {
+  position: relative;
+  width: 100%;
+  min-height: 120px;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-md);
+  cursor: pointer;
+  padding: 30px 0.5em;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s ease;
+}
+.lectura-card:hover { border-color: var(--blue); }
+.lectura-card .card-top {
+  font-size: 38px;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1.15;
+  text-align: center;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  white-space: pre-wrap;
+}
+
+.lectura-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: 0 4px;
+}
+.lectura-progress-bar {
+  flex: 1;
+  height: 12px;
+  background: var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.lectura-progress-fill {
+  height: 100%;
+  background: #58CC02;
+  border-radius: 6px;
+  transition: width 0.15s ease, background 0.2s ease;
+  width: 0%;
+}
+.lectura-progress-label {
+  font-weight: 800;
+  font-size: 12px;
+  color: var(--green);
+  min-width: 32px;
+  text-align: right;
+}
+.lectura-timer-label {
+  font-weight: 800;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  min-width: 58px;
+  text-align: right;
+}
+
+.lectura-nav-row {
+  display: flex;
+  gap: var(--sp-sm);
+  justify-content: center;
+}
+.lectura-nav-btn {
+  width: 40px;
+  height: 32px;
+  padding: 0;
+  font-size: 12px;
+}
+
+.lectura-btn-row {
+  display: flex;
+  gap: var(--sp-sm);
+}
+.lectura-btn-row .duo-btn { flex: 1; }
+.lectura-stop-btn { background: #3a3a44 !important; box-shadow: 0 4px 0 #2a2a32 !important; }
+.lectura-stop-btn:active { box-shadow: 0 1px 0 #2a2a32 !important; }
+
+.lectura-extra-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+  justify-content: center;
+}
+.lectura-extra-btns .mode-pill { font-size: 11px; padding: 0 12px; height: 28px; }
+
+.lectura-textarea-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+.lectura-textarea {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  font-family: Nunito, sans-serif;
+  resize: vertical;
+  min-height: 60px;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.lectura-textarea:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(88,204,2,0.15);
+}
+
+.lectura-speed-box { width: 100%; }
+
+.lectura-font-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-md);
+}
+.lectura-font-size {
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--text-muted);
+  min-width: 42px;
+  text-align: center;
+}
+
+.lectura-source-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+  justify-content: center;
+}
+.lectura-source-row .mode-pill { font-size: 11px; padding: 0 14px; }
+
+/* ========== LECTURA PANEL (OVERLAY) ========== */
+.lectura-panel-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: flex-end;
+}
+.lectura-panel {
+  width: 100%;
+  max-width: 500px;
+  max-height: 75vh;
+  background: var(--bg-darker);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.lectura-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px var(--sp-lg);
+  border-bottom: 2px solid var(--border);
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--text);
+}
+.lectura-panel-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
+  font-family: Nunito, sans-serif;
+}
+.lectura-panel-tabs {
+  display: flex;
+  gap: var(--sp-sm);
+  padding: var(--sp-sm) var(--sp-md);
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--border);
+}
+.lectura-panel-tabs::-webkit-scrollbar { display: none; }
+.lectura-panel-tabs .mode-pill { font-size: 11px; padding: 0 12px; height: 28px; }
+.lectura-panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-sm) var(--sp-md);
+}
+.lectura-panel-item {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--sp-sm);
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.15s;
+}
+.lectura-panel-item:hover { border-color: var(--blue); }
+.lectura-item-main {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+}
+.lectura-item-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+.lectura-item-del {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  font-family: Nunito, sans-serif;
+}
+.lectura-panel-empty {
+  text-align: center;
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 13px;
+  padding: var(--sp-lg);
+}
+
+/* ========== LECTURA MODAL ========== */
+.lectura-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  background: rgba(0,0,0,0.65);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: var(--sp-lg);
+}
+.lectura-modal-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-lg);
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+}
+.lectura-modal-msg {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.5;
+  margin-bottom: var(--sp-md);
+}
+.lectura-modal-msg strong { color: var(--blue); }
+.lectura-modal-actions {
+  display: flex;
+  gap: var(--sp-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.lectura-modal-actions .duo-btn,
+.lectura-modal-actions .mode-pill { font-size: 12px; }
+
+.lectura-summary p {
+  margin: 4px 0;
+  color: var(--text-muted);
+}
+.lectura-summary strong { color: var(--green); }
+
+.lectura-preview-info {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: var(--sp-sm);
+}
+.lectura-preview-text {
+  font-size: 13px;
+  color: var(--text);
+  text-align: left;
+  background: var(--bg);
+  padding: var(--sp-md);
+  border-radius: var(--radius-md);
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.5;
+}
+
+.lectura-url-input {
+  margin-bottom: var(--sp-sm);
+}
+
+.lectura-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-sm);
+}
+.lectura-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.lectura-stat-num {
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--text);
+}
+.lectura-stat-lbl {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
 }
