@@ -368,8 +368,11 @@ body {
 }
 
 .instructions-table {
-  width: 100%; max-width: 340px;
+  width: 100%; max-width: 360px;
   padding: 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
 }
 
 .instructions-table table {
