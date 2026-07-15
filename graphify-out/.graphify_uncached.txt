@@ -1,0 +1,4 @@
+/home/jacques/opencode/Sparrow/README.md
+/home/jacques/opencode/Sparrow/index.html
+/home/jacques/opencode/Sparrow/images/mx-cleanup.svg
+/home/jacques/opencode/Sparrow/synaptic.svg

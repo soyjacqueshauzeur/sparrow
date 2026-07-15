@@ -1,0 +1,27 @@
+{
+  "js/script.js": {
+    "mtime": 1783308217.9572055,
+    "ast_hash": "d7b798aa2c90778c850cb7047bbfb109",
+    "semantic_hash": "d7b798aa2c90778c850cb7047bbfb109"
+  },
+  "README.md": {
+    "mtime": 1783290724.5014253,
+    "ast_hash": "b6430378ef293c9e589f123cfc96c17d",
+    "semantic_hash": "b6430378ef293c9e589f123cfc96c17d"
+  },
+  "index.html": {
+    "mtime": 1783308058.457439,
+    "ast_hash": "e2dc1ece2a8ed1c90a08ac250058bade",
+    "semantic_hash": "e2dc1ece2a8ed1c90a08ac250058bade"
+  },
+  "images/mx-cleanup.svg": {
+    "mtime": 1782936961.8920722,
+    "ast_hash": "67009c7edc95ff623f1da40c4e2236d1",
+    "semantic_hash": "67009c7edc95ff623f1da40c4e2236d1"
+  },
+  "synaptic.svg": {
+    "mtime": 1783284437.0141122,
+    "ast_hash": "2dba23447b9ef012b3eb83801f42cde0",
+    "semantic_hash": "2dba23447b9ef012b3eb83801f42cde0"
+  }
+}

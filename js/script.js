@@ -101,8 +101,16 @@ let numTo = document.getElementById('numTo');
 document.getElementById('numCountUp').addEventListener('click', () => {
   numCount.value = Math.min(100, (parseInt(numCount.value) || 2) + 1);
 });
+document.getElementById('numCountUp').addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  numCount.value = Math.min(100, (parseInt(numCount.value) || 2) + 1);
+});
 
 document.getElementById('numCountDown').addEventListener('click', () => {
+  numCount.value = Math.max(1, (parseInt(numCount.value) || 2) - 1);
+});
+document.getElementById('numCountDown').addEventListener('pointerdown', (e) => {
+  e.preventDefault();
   numCount.value = Math.max(1, (parseInt(numCount.value) || 2) - 1);
 });
 let binarioConfig = document.getElementById('binarioConfig');
@@ -252,7 +260,9 @@ function adjustSpeed(up) {
 }
 
 document.getElementById('speedUp').addEventListener('click', () => adjustSpeed(true));
+document.getElementById('speedUp').addEventListener('pointerdown', (e) => { e.preventDefault(); adjustSpeed(true); });
 document.getElementById('speedDown').addEventListener('click', () => adjustSpeed(false));
+document.getElementById('speedDown').addEventListener('pointerdown', (e) => { e.preventDefault(); adjustSpeed(false); });
 
 function buildShuffleOrder(count) {
   const arr = [];

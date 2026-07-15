@@ -300,6 +300,9 @@ body {
   padding: 0;
   line-height: 1;
   transition: all 0.1s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  touch-action: manipulation;
   font-family: 'Nunito', sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
@@ -711,6 +714,9 @@ body {
   padding: 0;
   line-height: 1;
   transition: all 0.1s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  touch-action: manipulation;
   font-family: 'Nunito', sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
