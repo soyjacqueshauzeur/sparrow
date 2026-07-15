@@ -14,7 +14,7 @@
   var currentWordIndex = 0;
   var isReading = false;
   var isPaused = false;
-  var currentWpm = 300;
+  var currentWpm = 450;
   var currentFontSize = 38;
   var currentFileName = '';
   var bookmarks = [];
@@ -63,7 +63,7 @@
   var modalMsg = null;
   var modalActions = null;
   var resumeModal = null;
-  var speedTimerRow = null;
+  var wpmValueLabel = null;
   var speedInputRow = null;
   var speedBarRow = null;
   var speedLimitsRow = null;
@@ -398,11 +398,16 @@
     currentWpm = Math.max(100, Math.min(2500, wpm));
     if (speedInput) speedInput.value = currentWpm;
     updateSpeedFill();
+    updateWpmLabel();
     updateTimer();
     if (isReading && !isPaused) {
       clearReadTimeout();
       scheduleNext();
     }
+  }
+
+  function updateWpmLabel() {
+    if (wpmValueLabel) wpmValueLabel.textContent = currentWpm + ' PPM';
   }
 
   function updateSpeedFill() {
@@ -414,7 +419,7 @@
   }
 
   function adjustWpm(up) {
-    setWpm(currentWpm + (up ? 50 : -50));
+    setWpm(currentWpm + (up ? 10 : -10));
   }
 
   function adjustFont(up) {
@@ -1122,11 +1127,11 @@
       '</button>' +
       '</div>' +
       '<div class="speed-box lectura-speed-box">' +
-      '<div class="speed-label-row"><svg class="speed-icon-small" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#AFAFAF" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="speed-title">VELOCIDAD (PPM)</span></div>' +
-      '<div class="speed-input-row">' +
-      '<input type="text" class="speed-input" id="lecturaWpmInput" value="' + currentWpm + '" inputmode="numeric" autocomplete="off">' +
-      '<div class="speed-arrows"><button class="speed-arrow" id="lecturaWpmUp">▲</button><button class="speed-arrow" id="lecturaWpmDown">▼</button></div>' +
-      '<span class="speed-unit">PPM</span>' +
+      '<div class="speed-label-row"><svg class="speed-icon-small" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#AFAFAF" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="speed-title" id="lecturaSpeedTitle">' + currentWpm + ' PPM</span></div>' +
+      '<div class="speed-input-row lectura-speed-input-row">' +
+      '<button class="mode-pill lectura-wpm-btn" id="lecturaWpmDown">▼</button>' +
+      '<input type="text" class="speed-input lectura-wpm-input" id="lecturaWpmInput" value="' + currentWpm + '" inputmode="numeric" autocomplete="off">' +
+      '<button class="mode-pill lectura-wpm-btn" id="lecturaWpmUp">▲</button>' +
       '</div>' +
       '<div class="speed-bar"><div class="speed-fill" id="lecturaSpeedFill" style="width:30%"></div></div>' +
       '<div class="speed-limits"><span>100</span><span>2500</span></div>' +
@@ -1151,6 +1156,7 @@
     displayIndex = root.querySelector('#lecturaCardIndex');
     speedInput = root.querySelector('#lecturaWpmInput');
     speedFill = root.querySelector('#lecturaSpeedFill');
+    wpmValueLabel = root.querySelector('#lecturaSpeedTitle');
     fontUp = root.querySelector('#lecturaFontUp');
     fontDown = root.querySelector('#lecturaFontDown');
     progressBar = root.querySelector('#lecturaProgressFill');

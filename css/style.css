@@ -1137,6 +1137,25 @@ body {
 
 .lectura-speed-box { width: 100%; }
 
+.lectura-speed-input-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+}
+
+.lectura-wpm-btn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.lectura-wpm-input {
+  flex: 1;
+  min-width: 0;
+}
+
 .lectura-font-row {
   display: flex;
   align-items: center;
