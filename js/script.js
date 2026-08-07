@@ -275,6 +275,7 @@ let personalConfig = document.getElementById('personalConfig');
 let personalTextarea = document.getElementById('personalTextarea');
 let personalWord = document.getElementById('personalWord');
 let personalStory = document.getElementById('personalStory');
+let personalFrases = document.getElementById('personalFrases');
 let instructionsTable = document.getElementById('instructionsTable');
 let clockDisplay = document.getElementById('clockDisplay');
 let timerDisplay = document.getElementById('timerDisplay');
@@ -298,7 +299,7 @@ function updatePersonalTimerDisplay() {
 }
 
 function changeTimerMinutes(delta) {
-  personalMinutes = Math.max(0, Math.min(60, personalMinutes + delta));
+  personalMinutes = Math.max(0, personalMinutes + delta);
   updatePersonalTimerDisplay();
   updatePersonalStartButton();
 }
@@ -306,7 +307,6 @@ function changeTimerMinutes(delta) {
 function changeTimerSeconds(delta) {
   let total = personalMinutes * 60 + personalSeconds + delta;
   if (total < 0) total = 0;
-  if (total > 60 * 60 + 59) total = 60 * 60 + 59;
   personalMinutes = Math.floor(total / 60);
   personalSeconds = total % 60;
   updatePersonalTimerDisplay();
@@ -346,7 +346,7 @@ function updateTimerDisplay() {
 }
 
 const MIN_DELAY = 100;
-const MAX_DELAY = 300000;
+const MAX_DELAY = 359000;
 
 function parseSpeed(raw) {
   const s = raw.trim().toLowerCase().replace(/\s+/g, '');
@@ -373,6 +373,9 @@ function msToInput(ms) {
 }
 
 function getDelay() {
+  if (currentSet === 'personal') {
+    return Math.max(MIN_DELAY, (personalMinutes * 60 + personalSeconds) * 1000);
+  }
   const ms = parseSpeed(speedInput.value);
   if (ms === null || ms < MIN_DELAY) return MIN_DELAY;
   return Math.min(ms, MAX_DELAY);
@@ -408,7 +411,7 @@ speedInput.addEventListener('keydown', (e) => {
 function adjustSpeed(up) {
   let ms = parseSpeed(speedInput.value);
   if (ms === null) ms = 500;
-  const step = 100;
+  const step = ms >= 60000 ? 5000 : 100;
   if (up) ms = Math.min(MAX_DELAY, ms + step);
   else ms = Math.max(MIN_DELAY, ms - step);
   speedInput.value = msToInput(ms);
@@ -466,21 +469,18 @@ function setRecallMode(recall) {
 modeTraining.addEventListener('click', () => setRecallMode(false));
 modeRecall.addEventListener('click', () => setRecallMode(true));
 
-personalWord.addEventListener('click', () => {
-  personalMode = 'word';
-  personalWord.classList.add('active');
-  personalStory.classList.remove('active');
-  localStorage.setItem('sparrowPersonalMode', 'word');
+function setPersonalMode(mode) {
+  personalMode = mode;
+  personalWord.classList.toggle('active', mode === 'word');
+  personalStory.classList.toggle('active', mode === 'story');
+  personalFrases.classList.toggle('active', mode === 'frases');
+  localStorage.setItem('sparrowPersonalMode', mode);
   if (currentSet === 'personal') selectSet('personal');
-});
+}
 
-personalStory.addEventListener('click', () => {
-  personalMode = 'story';
-  personalStory.classList.add('active');
-  personalWord.classList.remove('active');
-  localStorage.setItem('sparrowPersonalMode', 'story');
-  if (currentSet === 'personal') selectSet('personal');
-});
+personalWord.addEventListener('click', () => setPersonalMode('word'));
+personalStory.addEventListener('click', () => setPersonalMode('story'));
+personalFrases.addEventListener('click', () => setPersonalMode('frases'));
 
 
 
@@ -586,13 +586,16 @@ function compareAndReveal() {
   const rawCorrect = currentSet === 'deck'
     ? currentDeckCards.map(c => deckCardToCode(c.top)).join(' ')
     : (hiddenCardData.bottom || hiddenCardData.top).trim();
+  function normalizeNoAccent(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/^[\.\s]+|[\.\s]+$/g, '');
+  }
   let userAnswer, correctAnswer;
   if (currentSet === 'personal' && personalMode === 'story') {
-    userAnswer = rawUser.replace(/\s+/g, ' ').toLowerCase();
-    correctAnswer = rawCorrect.replace(/\s+/g, ' ').toLowerCase();
+    userAnswer = normalizeNoAccent(rawUser.replace(/\s+/g, ' ').toLowerCase());
+    correctAnswer = normalizeNoAccent(rawCorrect.replace(/\s+/g, ' ').toLowerCase());
   } else {
-    userAnswer = rawUser.replace(/\s/g, '').toLowerCase();
-    correctAnswer = rawCorrect.replace(/\s/g, '').toLowerCase();
+    userAnswer = normalizeNoAccent(rawUser.replace(/\s/g, '').toLowerCase());
+    correctAnswer = normalizeNoAccent(rawCorrect.replace(/\s/g, '').toLowerCase());
   }
   const isCorrect = userAnswer === correctAnswer;
 
@@ -844,10 +847,10 @@ function selectSet(setKey) {
   instructionsTable.style.display = 'none';
   container.style.display = '';
   if (setKey === 'personal') {
-    speedTimer.style.display = 'none';
-    speedInputRow.style.display = '';
-    speedBar.style.display = '';
-    speedLimits.style.display = '';
+    speedTimer.style.display = 'flex';
+    speedInputRow.style.display = 'none';
+    speedBar.style.display = 'none';
+    speedLimits.style.display = 'none';
     speedArrows.style.display = 'none';
     speedUnit.style.display = 'none';
   } else {
@@ -1027,6 +1030,15 @@ function startRunning() {
       currentIndex = 0;
       updateLessonForPersonal(1);
       showCard(0);
+    } else if (personalMode === 'frases') {
+      const list = parsePersonalFrases();
+      if (list.length === 0) return;
+      dataSets['personal'] = list.map(p => ({ top: p, bottom: '' }));
+      personalConfig.style.display = 'none';
+      shuffleOrder = isShuffle ? buildShuffleOrder(dataSets['personal'].length) : [];
+      currentIndex = 0;
+      updateLessonForPersonal(list.length);
+      showCard(0);
     } else {
       const list = parsePersonal();
       if (list.length === 0) return;
@@ -1073,9 +1085,20 @@ function parsePersonal() {
     .filter(w => w.length > 0);
 }
 
+function parsePersonalFrases() {
+  const raw = personalTextarea.value.trim();
+  if (!raw) return [];
+  return raw
+    .split(/[.\n]+/)
+    .map(p => p.trim())
+    .filter(p => p.length > 0)
+    .map(p => p + '.');
+}
+
 function updateLessonForPersonal(count) {
   lessonTitle.textContent = 'Personal';
-  lessonSubtitle.textContent = count + ' palabras';
+  const noun = personalMode === 'frases' ? 'frases' : 'palabras';
+  lessonSubtitle.textContent = count + ' ' + noun;
 }
 
 function generateDeckCards() {
@@ -1193,8 +1216,8 @@ function showNumbersCard() {
 }
 
 const menuCategories = {
-  'aprender': ['instructions', '1-100', 'abc', 'cirilico'],
-  'aplicar': ['numbers', 'deck', 'binario', 'cantidades', 'meses'],
+  'aprender': ['instructions', '1-100', 'abc', 'cirilico', 'meses'],
+  'aplicar': ['numbers', 'deck', 'binario', 'cantidades'],
   'leer': ['personal', 'lectura'],
   'simon': ['simon']
 };
@@ -1428,6 +1451,7 @@ if (savedPersonalMode !== null) {
   personalMode = savedPersonalMode;
   personalWord.classList.toggle('active', personalMode === 'word');
   personalStory.classList.toggle('active', personalMode === 'story');
+  personalFrases.classList.toggle('active', personalMode === 'frases');
 }
 
 restoreConfigValues();
