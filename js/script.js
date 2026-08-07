@@ -1195,13 +1195,14 @@ function showNumbersCard() {
 const menuCategories = {
   'aprender': ['instructions', '1-100', 'abc', 'cirilico'],
   'aplicar': ['numbers', 'deck', 'binario', 'cantidades', 'meses'],
-  'leer': ['personal', 'lectura']
+  'leer': ['personal', 'lectura'],
+  'simon': ['simon']
 };
 
 const subPillNames = {
   'instructions': 'Instrucciones', '1-100': '1-100', 'abc': 'ABC', 'cirilico': 'Cirílico',
   'numbers': 'Numbers', 'deck': 'Deck', 'binario': 'Binario', 'cantidades': 'Cantidades',
-  'meses': 'Meses', 'personal': 'Personal', 'lectura': 'Lectura'
+  'meses': 'Meses', 'personal': 'Personal', 'lectura': 'Lectura', 'simon': 'Simon'
 };
 
 let currentMenu = null;
@@ -1239,6 +1240,24 @@ function hideLecturaIfVisible() {
   }
 }
 
+function hideSimonIfVisible() {
+  if (window.SimonModule && typeof window.SimonModule.hide === 'function') {
+    window.SimonModule.hide();
+  }
+}
+
+function activateSimon(btn) {
+  if (isRunning) stopCycle();
+  resetTimer();
+  currentSet = 'simon';
+  localStorage.setItem('sparrowGame', 'simon');
+  subMenu.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  if (window.SimonModule && typeof window.SimonModule.show === 'function') {
+    window.SimonModule.show();
+  }
+}
+
 function activateLectura(btn) {
   if (isRunning) stopCycle();
   resetTimer();
@@ -1257,12 +1276,24 @@ function handleSubPillClick(btn) {
     hideLecturaIfVisible();
     currentSet = null;
   }
+  if (currentSet === 'simon' && setKey !== 'simon') {
+    hideSimonIfVisible();
+    currentSet = null;
+  }
   if (setKey === 'lectura') {
     if (currentSet === 'lectura') return;
     if (isRunning) {
       saveConfigValues();
     }
     activateLectura(btn);
+    return;
+  }
+  if (setKey === 'simon') {
+    if (currentSet === 'simon') return;
+    if (isRunning) {
+      saveConfigValues();
+    }
+    activateSimon(btn);
     return;
   }
   if (setKey === currentSet && isRunning) {
@@ -1313,6 +1344,11 @@ mainMenu.querySelectorAll('.main-pill').forEach(btn => {
     if (menuKey === currentMenu) return;
     if (currentSet === 'lectura') {
       hideLecturaIfVisible();
+      currentSet = null;
+      localStorage.removeItem('sparrowGame');
+    }
+    if (currentSet === 'simon') {
+      hideSimonIfVisible();
       currentSet = null;
       localStorage.removeItem('sparrowGame');
     }
@@ -1402,6 +1438,9 @@ try {
   if (savedGame === 'lectura') {
     currentSet = 'lectura';
     selectMenu('leer', 'lectura');
+  } else if (savedGame === 'simon') {
+    currentSet = 'simon';
+    selectMenu('simon', 'simon');
   } else {
     const startMenu = (savedMenu && menuCategories[savedMenu] && menuCategories[savedMenu].includes(savedGame))
       ? savedMenu
