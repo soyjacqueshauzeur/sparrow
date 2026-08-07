@@ -199,45 +199,77 @@
     try { localStorage.setItem(LS_SOUND, soundOn ? '1' : '0'); } catch (e) {}
   }
 
-  function sectorPoints(startDeg, endDeg, radius) {
-    function pt(deg) {
-      var rad = (deg * Math.PI) / 180;
-      return { x: 50 + radius * Math.sin(rad), y: 50 - radius * Math.cos(rad) };
-    }
-    var p1 = pt(startDeg);
-    var p2 = pt(endDeg);
-    return 'polygon(50% 50%, ' + p1.x.toFixed(3) + '% ' + p1.y.toFixed(3) + '%, ' +
-      p2.x.toFixed(3) + '% ' + p2.y.toFixed(3) + '%)';
+  var SIMON_CX = 100;
+  var SIMON_CY = 100;
+  var SIMON_R_OUTER = 88;
+  var SIMON_R_INNER = 44;
+
+  function ptOnCircle(deg, radius) {
+    var rad = (deg * Math.PI) / 180;
+    return {
+      x: SIMON_CX + radius * Math.sin(rad),
+      y: SIMON_CY - radius * Math.cos(rad)
+    };
+  }
+
+  function sectorPath(startDeg, endDeg) {
+    var a0 = startDeg + 0.6;
+    var a1 = endDeg - 0.6;
+    var o0 = ptOnCircle(a0, SIMON_R_OUTER);
+    var o1 = ptOnCircle(a1, SIMON_R_OUTER);
+    var i0 = ptOnCircle(a0, SIMON_R_INNER);
+    var i1 = ptOnCircle(a1, SIMON_R_INNER);
+    return 'M ' + o0.x.toFixed(2) + ' ' + o0.y.toFixed(2) +
+      ' A ' + SIMON_R_OUTER + ' ' + SIMON_R_OUTER + ' 0 0 1 ' + o1.x.toFixed(2) + ' ' + o1.y.toFixed(2) +
+      ' L ' + i1.x.toFixed(2) + ' ' + i1.y.toFixed(2) +
+      ' A ' + SIMON_R_INNER + ' ' + SIMON_R_INNER + ' 0 0 0 ' + i0.x.toFixed(2) + ' ' + i0.y.toFixed(2) +
+      ' Z';
   }
 
   function buildBoard() {
     if (!boardEl) return;
     boardEl.querySelectorAll('.simon-sector').forEach(function (el) { el.remove(); });
+    boardEl.querySelectorAll('.simon-sector-key').forEach(function (el) { el.remove(); });
+
     var total = colorCount;
     var sector = 360 / total;
-    var radius = 48.5;
-    var inset = 0.7;
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'simon-svg');
+    svg.setAttribute('viewBox', '0 0 200 200');
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
     for (var i = 0; i < total; i++) {
       (function (idx) {
         var startDeg = 270 + idx * sector;
         var endDeg = startDeg + sector;
-        var btn = document.createElement('button');
-        btn.className = 'simon-sector';
-        btn.dataset.idx = idx;
-        btn.setAttribute('aria-label', COLORS[idx].name + ' (' + KEY_LABELS[idx] + ')');
-        btn.style.background = COLORS[idx].hex;
-        btn.style.clipPath = sectorPoints(startDeg + inset, endDeg - inset, radius);
-        var lbl = document.createElement('span');
-        lbl.className = 'simon-sector-key';
-        lbl.textContent = KEY_LABELS[idx];
-        lbl.style.color = readableText(COLORS[idx].hex);
-        btn.appendChild(lbl);
-        btn.addEventListener('click', function () { handleColorClick(idx); });
-        btn.addEventListener('pointerdown', function (e) { e.preventDefault(); });
-        boardEl.appendChild(btn);
+        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('class', 'simon-sector');
+        path.setAttribute('data-idx', idx);
+        path.setAttribute('d', sectorPath(startDeg, endDeg));
+        path.setAttribute('fill', COLORS[idx].hex);
+        path.setAttribute('stroke', darken(COLORS[idx].hex));
+        path.setAttribute('stroke-width', '7');
+        path.setAttribute('stroke-linejoin', 'round');
+        path.setAttribute('stroke-linecap', 'round');
+        path.addEventListener('click', function () { handleColorClick(idx); });
+        path.addEventListener('pointerdown', function (e) { e.preventDefault(); });
+        svg.appendChild(path);
+
+        var mid = (startDeg + endDeg) / 2;
+        var lp = ptOnCircle(mid, (SIMON_R_OUTER + SIMON_R_INNER) / 2);
+        var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('class', 'simon-sector-key');
+        text.setAttribute('x', lp.x.toFixed(2));
+        text.setAttribute('y', lp.y.toFixed(2));
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('dominant-baseline', 'central');
+        text.setAttribute('fill', readableText(COLORS[idx].hex));
+        text.textContent = KEY_LABELS[idx];
+        svg.appendChild(text);
       })(i);
     }
+
+    boardEl.appendChild(svg);
   }
 
   function renderButtons() {
@@ -252,6 +284,14 @@
       playLbl.textContent = 'REPETIR';
       playBtn.classList.add('paused');
     }
+  }
+
+  function darken(hex) {
+    var n = parseInt(hex.slice(1), 16);
+    var r = Math.max(0, (n >> 16) - 45);
+    var g = Math.max(0, ((n >> 8) & 255) - 45);
+    var b = Math.max(0, (n & 255) - 45);
+    return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
   }
 
   function readableText(hex) {
