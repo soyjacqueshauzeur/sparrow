@@ -2,8 +2,70 @@ const dataSets = {
   '1-100': [],
   'binario': [],
   'deck': [],
-  'abc': ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'].map(l => ({ top: l, bottom: '' })),
-  'cirilico': 'А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю Я'.split(' ').map(l => ({ top: l, bottom: '' })),
+  'abc': [
+    { top: 'A', bottom: 'Abeja' },
+    { top: 'B', bottom: 'Ballena' },
+    { top: 'C', bottom: 'Cocodrilo' },
+    { top: 'D', bottom: 'Delfín' },
+    { top: 'E', bottom: 'Elefante' },
+    { top: 'F', bottom: 'Flamenco' },
+    { top: 'G', bottom: 'Gorila' },
+    { top: 'H', bottom: 'Hámster' },
+    { top: 'I', bottom: 'Iguana' },
+    { top: 'J', bottom: 'Jabalí' },
+    { top: 'K', bottom: 'Kiwi (ave)' },
+    { top: 'L', bottom: 'León' },
+    { top: 'M', bottom: 'Mono' },
+    { top: 'N', bottom: 'Nutria' },
+    { top: 'Ñ', bottom: 'Ñandú' },
+    { top: 'O', bottom: 'Oso' },
+    { top: 'P', bottom: 'Pingüino' },
+    { top: 'Q', bottom: 'Quetzal' },
+    { top: 'R', bottom: 'Rinoceronte' },
+    { top: 'S', bottom: 'Serpiente' },
+    { top: 'T', bottom: 'Tigre' },
+    { top: 'U', bottom: 'Urraca' },
+    { top: 'V', bottom: 'Vaca' },
+    { top: 'W', bottom: 'Wombat' },
+    { top: 'X', bottom: 'Xifóforo (pez de acuario)' },
+    { top: 'Y', bottom: 'Yak' },
+    { top: 'Z', bottom: 'Zorro' }
+  ],
+  'cirilico': [
+    { top: 'А а', bottom: '/a/' },
+    { top: 'Б б', bottom: '/b/' },
+    { top: 'В в', bottom: '/v/' },
+    { top: 'Г г', bottom: '/ɡ/' },
+    { top: 'Д д', bottom: '/d/' },
+    { top: 'Е е', bottom: '/je/, /e/' },
+    { top: 'Ё ё', bottom: '/jo/' },
+    { top: 'Ж ж', bottom: '/ʐ/' },
+    { top: 'З з', bottom: '/z/' },
+    { top: 'И и', bottom: '/i/' },
+    { top: 'Й й', bottom: '/j/' },
+    { top: 'К к', bottom: '/k/' },
+    { top: 'Л л', bottom: '/ɫ/, /lʲ/' },
+    { top: 'М м', bottom: '/m/' },
+    { top: 'Н н', bottom: '/n/' },
+    { top: 'О о', bottom: '/o/, /ɐ/' },
+    { top: 'П п', bottom: '/p/' },
+    { top: 'Р р', bottom: '/r/' },
+    { top: 'С с', bottom: '/s/' },
+    { top: 'Т т', bottom: '/t/' },
+    { top: 'У у', bottom: '/u/' },
+    { top: 'Ф ф', bottom: '/f/' },
+    { top: 'Х х', bottom: '/x/' },
+    { top: 'Ц ц', bottom: '/t͡s/' },
+    { top: 'Ч ч', bottom: '/t͡ɕ/' },
+    { top: 'Ш ш', bottom: '/ʂ/' },
+    { top: 'Щ щ', bottom: '/ɕː/' },
+    { top: 'Ъ ъ', bottom: '' },
+    { top: 'Ы ы', bottom: '/ɨ/' },
+    { top: 'Ь ь', bottom: '' },
+    { top: 'Э э', bottom: '/e/' },
+    { top: 'Ю ю', bottom: '/ju/' },
+    { top: 'Я я', bottom: '/ja/' }
+  ],
   'cantidades': [
     { top: 'X2', bottom: 'Neque' },
     { top: 'X3', bottom: 'Morza' },
@@ -43,10 +105,10 @@ for (const key of pegOrder) {
 }
 
 const deckMatrix = {
-  '♥': { A:'Cai', 2:'Can', 3:'Com', 4:'Caca', 5:'Cal', 6:'Caceria', 7:'Cofre', 8:'Caucho', 9:'Caviar', 10:'Carro', J:'Cajón', Q:'Quicullo', K:'Cekar' },
-  '♣': { A:'Taz', 2:'Tinto', 3:'Timo', 4:'Tac', 5:'Tallo', 6:'Tiza', 7:'Tifón', 8:'Techo', 9:'Tampób', 10:'Tarro', J:'Tejon', Q:'Tequila', K:'Tikuna' },
-  '♠': { A:'Pala', 2:'Pan', 3:'Poma', 4:'Peca', 5:'Pelo', 6:'Pasas', 7:'Puf', 8:'Pecho', 9:'Pibe', 10:'Parra', J:'Pujar', Q:'Pequeca', K:'Pekado' },
-  '♦': { A:'Dia', 2:'Don', 3:'Damian', 4:'Doctor', 5:'Dalmata', 6:'Disco', 7:'Diferente', 8:'Ducha', 9:'Diva', 10:'Dardo', J:'Dejó', Q:'Doqumento', K:'Dekalogo' }
+  '♥': { A:'Cero', 2:'Cada', 3:'Cano', 4:'Cima', 5:'Caqui', 6:'Cala', 7:'Cese', 8:'Ceja', 9:'Cacho', 10:'Cebo', J:'Coro', Q:'Cono', K:'Cuajo' },
+  '♣': { A:'Toro', 2:'Todo', 3:'Tuno', 4:'Timo', 5:'Tique', 6:'Tala', 7:'Tiza', 8:'Tifo', 9:'Toga', 10:'Topo', J:'Tira', Q:'Tuna', K:'Tuco' },
+  '♠': { A:'Paro', 2:'Poda', 3:'Pana', 4:'Pomo', 5:'Pique', 6:'Pelo', 7:'Pozo', 8:'Paje', 9:'Pago', 10:'Pavo', J:'Puro', Q:'Poca', K:'Puya' },
+  '♦': { A:'Doro', 2:'Dato', 3:'Dona', 4:'Domo', 5:'Duque', 6:'Dólar', 7:'Deseo', 8:'Dije', 9:'Ducha', 10:'Debo', J:'Duro', Q:'Duda', K:'Duelo' }
 };
 const deckSuits = ['♥','♣','♠','♦'];
 const deckRanks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
@@ -126,7 +188,7 @@ document.getElementById('binCountDown').addEventListener('click', () => {
 });
 
 document.getElementById('deckCountUp').addEventListener('click', () => {
-  deckCount.value = Math.min(52, (parseInt(deckCount.value) || 1) + 1);
+  deckCount.value = Math.min(getDeckMaxCount(), (parseInt(deckCount.value) || 1) + 1);
 });
 
 document.getElementById('deckCountDown').addEventListener('click', () => {
@@ -137,6 +199,65 @@ let binarioConfig = document.getElementById('binarioConfig');
 let binCount = document.getElementById('binCount');
 let deckConfig = document.getElementById('deckConfig');
 let deckCount = document.getElementById('deckCount');
+
+let deckSelectedSuits = ['♥', '♣', '♠', '♦'];
+const ALL_SUITS = ['♥', '♣', '♠', '♦'];
+let currentDeckCards = [];
+
+const DECK_SUIT_CODE = { '♥': 'C', '♣': 'T', '♠': 'P', '♦': 'D' };
+const DECK_RANK_CODE = { 'A': '1', 'J': '11', 'Q': '12', 'K': '13' };
+
+function deckCardToCode(top) {
+  const rank = top.slice(0, -1);
+  const suit = top.slice(-1);
+  return (DECK_SUIT_CODE[suit] || suit) + (DECK_RANK_CODE[rank] || rank);
+}
+
+function getDeckMaxCount() {
+  return deckSelectedSuits.length * 13;
+}
+
+function updateDeckCountMax() {
+  const max = getDeckMaxCount();
+  deckCount.max = max;
+  const val = parseInt(deckCount.value) || 1;
+  if (val > max) deckCount.value = max;
+}
+
+function setAllSuits() {
+  deckSelectedSuits = [...ALL_SUITS];
+}
+
+function toggleSuit(suit) {
+  const idx = deckSelectedSuits.indexOf(suit);
+  if (idx === -1) {
+    deckSelectedSuits.push(suit);
+  } else {
+    if (deckSelectedSuits.length === 1) return;
+    deckSelectedSuits.splice(idx, 1);
+  }
+}
+
+function syncSuitButtons() {
+  document.querySelectorAll('.suit-pill[data-suit]').forEach(btn => {
+    btn.classList.toggle('active', deckSelectedSuits.includes(btn.dataset.suit));
+  });
+  document.getElementById('suitAll').classList.toggle('active', deckSelectedSuits.length === 4);
+}
+
+document.getElementById('suitAll').addEventListener('click', () => {
+  setAllSuits();
+  syncSuitButtons();
+  updateDeckCountMax();
+});
+
+document.querySelectorAll('.suit-pill[data-suit]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    toggleSuit(btn.dataset.suit);
+    syncSuitButtons();
+    updateDeckCountMax();
+  });
+});
 let personalConfig = document.getElementById('personalConfig');
 let personalTextarea = document.getElementById('personalTextarea');
 let personalWord = document.getElementById('personalWord');
@@ -448,7 +569,9 @@ function compareAndReveal() {
   if (!cardEl || hiddenCardData === null) return;
 
   const rawUser = recallInput.value.trim();
-  const rawCorrect = (hiddenCardData.bottom || hiddenCardData.top).trim();
+  const rawCorrect = currentSet === 'deck'
+    ? currentDeckCards.map(c => deckCardToCode(c.top)).join(' ')
+    : (hiddenCardData.bottom || hiddenCardData.top).trim();
   let userAnswer, correctAnswer;
   if (currentSet === 'personal' && personalMode === 'story') {
     userAnswer = rawUser.replace(/\s+/g, ' ').toLowerCase();
@@ -464,14 +587,18 @@ function compareAndReveal() {
   let existingDivider = cardEl.querySelector('.card-divider');
   let existingWrong = cardEl.querySelector('.card-wrong');
 
+  const deckCodes = currentSet === 'deck'
+    ? currentDeckCards.map(c => deckCardToCode(c.top)).join('  ')
+    : '';
+
   if (isCorrect) {
     cardEl.classList.add('correct');
     if (topEl) topEl.textContent = hiddenCardData.top;
-    if (bottomEl) bottomEl.textContent = hiddenCardData.bottom;
+    if (bottomEl) bottomEl.textContent = currentSet === 'deck' ? deckCodes : hiddenCardData.bottom;
   } else {
     cardEl.classList.add('incorrect');
-    if (topEl) topEl.textContent = hiddenCardData.top + ' ' + hiddenCardData.bottom;
-    if (bottomEl) bottomEl.textContent = '';
+    if (topEl) topEl.textContent = hiddenCardData.top;
+    if (bottomEl) bottomEl.textContent = currentSet === 'deck' ? deckCodes : hiddenCardData.bottom;
 
     if (!existingDivider) {
       existingDivider = document.createElement('div');
@@ -732,6 +859,8 @@ function selectSet(setKey) {
   if (setKey === 'deck') {
     lessonSubtitle.textContent = 'Cantidad de cartas y COMENZAR';
     deckConfig.style.display = 'flex';
+    syncSuitButtons();
+    updateDeckCountMax();
     container.innerHTML = '';
     emptyState.style.display = 'none';
     container.appendChild(emptyState);
@@ -933,8 +1062,8 @@ function updateLessonForPersonal(count) {
 
 function generateDeckCards() {
   const count = parseInt(deckCount.value) || 1;
-  const clampedCount = Math.min(count, 52);
-  const allCards = [...dataSets['deck']];
+  const clampedCount = Math.min(count, getDeckMaxCount());
+  const allCards = dataSets['deck'].filter(c => deckSelectedSuits.some(s => c.top.endsWith(s)));
   for (let i = allCards.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [allCards[i], allCards[j]] = [allCards[j], allCards[i]];
@@ -944,6 +1073,7 @@ function generateDeckCards() {
 
 function showDeckCard() {
   const cards = generateDeckCards();
+  currentDeckCards = cards;
   const tops = cards.map(c => c.top).join('  ');
   const bottoms = cards.map(c => c.bottom).join('  ');
   container.innerHTML = '';
@@ -1186,6 +1316,7 @@ function saveConfigValues() {
   localStorage.setItem('sparrowNumTo', numTo.value);
   localStorage.setItem('sparrowBinCount', binCount.value);
   localStorage.setItem('sparrowDeckCount', deckCount.value);
+  localStorage.setItem('sparrowDeckSuits', deckSelectedSuits.join(''));
   localStorage.setItem('sparrowSpeedInput', speedInput.value);
   localStorage.setItem('sparrowTimerMin', personalMinutes);
   localStorage.setItem('sparrowTimerSec', personalSeconds);
@@ -1207,6 +1338,13 @@ function restoreConfigValues() {
   if (bc !== null) binCount.value = bc;
   const dc = localStorage.getItem('sparrowDeckCount');
   if (dc !== null) deckCount.value = dc;
+  const ds = localStorage.getItem('sparrowDeckSuits');
+  if (ds !== null) {
+    const saved = ds.split('').filter(s => ALL_SUITS.includes(s));
+    deckSelectedSuits = saved.length ? saved : [...ALL_SUITS];
+    syncSuitButtons();
+    updateDeckCountMax();
+  }
   const si = localStorage.getItem('sparrowSpeedInput');
   if (si !== null) speedInput.value = si;
 }

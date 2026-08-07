@@ -379,10 +379,39 @@ body {
 }
 
 .deck-config {
-  display: flex; justify-content: center;
+  display: flex; flex-direction: column;
+  gap: var(--sp-md);
   width: 100%; max-width: 340px;
   padding: 0 4px;
 }
+
+.deck-count-row {
+  display: flex; justify-content: center;
+  width: 100%;
+}
+
+.deck-suits {
+  display: flex; gap: var(--sp-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.suit-pill {
+  min-width: 44px;
+  height: 36px;
+  padding: 0 12px;
+  font-size: 16px;
+}
+
+.suit-pill svg { pointer-events: none; }
+
+.suit-pill[data-suit="♥"],
+.suit-pill[data-suit="♦"] { color: #FF6B6B; }
+
+.suit-pill[data-suit="♣"],
+.suit-pill[data-suit="♠"] { color: #E4E9EC; }
+
+.suit-pill.active { color: #fff; }
 .personal-config {
   width: 100%; max-width: 340px;
   padding: 0 4px;
