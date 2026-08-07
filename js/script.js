@@ -162,20 +162,34 @@ let bottomControls = document.querySelector('.bottom-controls');
 let contentArea = document.querySelector('.content');
 let fontDown = document.getElementById('fontDown');
 let fontUp = document.getElementById('fontUp');
+let fontReset = document.getElementById('fontReset');
+let fontDownVal = document.getElementById('fontDownVal');
+let fontUpVal = document.getElementById('fontUpVal');
+let fontResetVal = document.getElementById('fontResetVal');
 
-let fontSize = 8;
+const FONT_MIN = 8;
+const FONT_MAX = 160;
+const FONT_DEFAULT = 64;
+let fontSize = FONT_DEFAULT;
 
 function applyFontScale() {
-  const em = fontSize * 0.5;
-  document.documentElement.style.setProperty('--card-font-size', em + 'em');
+  document.documentElement.style.setProperty('--card-font-size', fontSize + 'px');
+  fontDownVal.textContent = Math.max(FONT_MIN, fontSize - 1);
+  fontUpVal.textContent = Math.min(FONT_MAX, fontSize + 1);
+  fontResetVal.textContent = fontSize;
 }
 
 fontDown.addEventListener('click', () => {
-  if (fontSize > 0) { fontSize--; applyFontScale(); }
+  if (fontSize > FONT_MIN) { fontSize--; applyFontScale(); }
 });
 
 fontUp.addEventListener('click', () => {
-  if (fontSize < 28) { fontSize++; applyFontScale(); }
+  if (fontSize < FONT_MAX) { fontSize++; applyFontScale(); }
+});
+
+fontReset.addEventListener('click', () => {
+  fontSize = FONT_DEFAULT;
+  applyFontScale();
 });
 
 applyFontScale();

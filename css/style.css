@@ -96,11 +96,44 @@ body {
 }
 
 .font-pill {
-  width: 30px;
-  padding: 0;
+  width: 40px;
+  height: 40px;
+  padding: 2px 0;
   text-align: center;
-  font-size: 16px;
+  flex-direction: column;
+  gap: 0;
+  line-height: 1.05;
+}
+
+.font-pill .font-sign {
+  font-size: 15px;
   font-weight: 900;
+  line-height: 1;
+}
+
+.font-pill .font-val {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.font-pill .font-val:last-child {
+  min-height: 11px;
+}
+
+.font-reset {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.font-reset.active {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+.font-reset .font-val {
+  color: var(--green);
 }
 
 /* ========== MODE BAR ========== */
@@ -1628,3 +1661,19 @@ body {
 .simon-play-btn:active { box-shadow: 0 1px 0 #CC1177 !important; }
 .simon-play-btn.paused { background: var(--orange) !important; box-shadow: 0 4px 0 #D47A00 !important; }
 .simon-play-btn.paused:active { box-shadow: 0 1px 0 #D47A00 !important; }
+
+/* ========== RESPONSIVE MÓVIL ========== */
+@media (max-width: 480px) {
+  .logo-text { display: none; }
+  .top-bar { padding: var(--sp-sm) var(--sp-md); }
+  .top-bar-pills { gap: 6px; }
+  .top-bar-pills .mode-pill:not(.font-pill) {
+    padding: 0 10px;
+    font-size: 11px;
+    height: 34px;
+  }
+  .top-bar-pills .font-pill {
+    width: 34px;
+    height: 38px;
+  }
+}
