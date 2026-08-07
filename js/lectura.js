@@ -5,6 +5,7 @@
   const LS_BOOKMARKS = 'sparrowLecturaBookmarks';
   const LS_HISTORY = 'sparrowLecturaHistory';
   const LS_STATS = 'sparrowLecturaStats';
+  const LS_LOOP = 'sparrowLecturaLoop';
   const MAX_STORAGE_TEXT = 2 * 1024 * 1024;
   const HISTORY_MAX = 50;
   const PROXY_URL_1 = 'https://api.allorigins.win/get?url=';
@@ -17,6 +18,7 @@
   var currentWpm = 450;
   var currentFontSize = 38;
   var currentFileName = '';
+  var loopEnabled = false;
   var bookmarks = [];
   var readingHistory = [];
   var readingStats = getDefaultStats();
@@ -44,6 +46,7 @@
   var playLbl = null;
   var playIco = null;
   var stopBtn = null;
+  var loopBtn = null;
   var bmBtn = null;
   var summaryBtn = null;
   var previewBtn = null;
@@ -328,6 +331,12 @@
     }
   }
 
+  function toggleLoop() {
+    loopEnabled = !loopEnabled;
+    if (loopBtn) loopBtn.classList.toggle('active', loopEnabled);
+    try { localStorage.setItem(LS_LOOP, loopEnabled ? '1' : '0'); } catch (e) {}
+  }
+
   function stopReading(reset) {
     clearReadTimeout();
     stopReadingTimer();
@@ -365,6 +374,19 @@
     updateProgress();
     updateTimer();
     clearSessionState();
+    if (loopEnabled && words.length) {
+      currentWordIndex = 0;
+      totalReadTimeMs = 0;
+      if (displayEl) displayEl.textContent = '';
+      if (displayIndex) displayIndex.textContent = '';
+      isReading = true;
+      isPaused = false;
+      startReadingTimer();
+      updateBtnStates();
+      showNextWord();
+      requestWakeLock();
+      return;
+    }
     var wordsRead = currentWordIndex;
     var timeSpent = getReadingTimeSeconds();
     var avgWpm = timeSpent > 0 ? Math.round((wordsRead / timeSpent) * 60) : currentWpm;
@@ -1069,6 +1091,7 @@
       case 'ArrowDown': e.preventDefault(); adjustFont(false); break;
       case 'b': case 'B': if (e.ctrlKey) { e.preventDefault(); addBookmark(); } break;
       case 'e': case 'E': if (e.ctrlKey) { e.preventDefault(); exportJSON(); } break;
+      case 'l': case 'L': if (!e.ctrlKey && !e.metaKey) { e.preventDefault(); toggleLoop(); } break;
       case 'Escape': closePanel(); closeModal(); break;
     }
   }
@@ -1110,6 +1133,9 @@
       '<button class="duo-btn lectura-stop-btn" id="lecturaStopBtn">' +
       '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>' +
       '<span class="btn-label">DETENER</span>' +
+      '</button>' +
+      '<button class="lectura-loop-btn" id="lecturaLoopBtn" title="Loop">' +
+      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>' +
       '</button>' +
       '</div>' +
       '<div class="lectura-extra-btns" id="lecturaExtraBtns">' +
@@ -1166,6 +1192,7 @@
     playLbl = root.querySelector('#lecturaPlayLabel');
     playIco = root.querySelector('#lecturaPlayIcon');
     stopBtn = root.querySelector('#lecturaStopBtn');
+    loopBtn = root.querySelector('#lecturaLoopBtn');
     bmBtn = root.querySelector('#lecturaBookmarkBtn');
     summaryBtn = root.querySelector('#lecturaSummaryBtn');
     previewBtn = root.querySelector('#lecturaPreviewBtn');
@@ -1181,6 +1208,7 @@
 
     playBtn.addEventListener('click', toggleReading);
     stopBtn.addEventListener('click', function () { stopReading(true); });
+    loopBtn.addEventListener('click', toggleLoop);
     root.querySelector('#lecturaCard').addEventListener('click', toggleReading);
     root.querySelector('#lecturaProgressBarTrack').addEventListener('click', progressBarTap);
 
@@ -1224,6 +1252,9 @@
     loadBookmarks();
     loadHistory();
     loadStats();
+    var loopState = null;
+    try { loopState = localStorage.getItem(LS_LOOP); } catch (e) {}
+    if (loopState !== null) loopEnabled = loopState === '1';
     var root = createRoot();
     var contentArea = document.querySelector('.content');
     if (contentArea) contentArea.appendChild(root);

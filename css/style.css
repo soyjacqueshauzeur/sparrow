@@ -1192,6 +1192,35 @@ body {
 .lectura-stop-btn { background: #3a3a44 !important; box-shadow: 0 4px 0 #2a2a32 !important; }
 .lectura-stop-btn:active { box-shadow: 0 1px 0 #2a2a32 !important; }
 
+.lectura-loop-btn {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 2px solid var(--blue);
+  border-radius: var(--radius-sm);
+  color: var(--blue);
+  cursor: pointer;
+  box-shadow: 0 3px 0 transparent;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  padding: 0;
+}
+
+.lectura-loop-btn.active {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 3px 0 var(--blue-dark);
+}
+
+.lectura-loop-btn.active:active {
+  box-shadow: 0 0 0 var(--blue-dark);
+}
+
 .lectura-extra-btns {
   display: flex;
   flex-wrap: wrap;
