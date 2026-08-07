@@ -4,6 +4,7 @@
   const LS_COLORS = 'sparrowSimonColors';
   const LS_SOUND = 'sparrowSimonSound';
   const LS_STATS = 'sparrowSimonStats';
+  const LS_KEYS = 'sparrowSimonKeys';
 
   const COLORS = [
     { name: 'verde', hex: '#22c55e', freq: 440 },
@@ -24,6 +25,7 @@
 
   var colorCount = 4;
   var soundOn = true;
+  var showKeys = false;
   var sequence = [];
   var playerIdx = 0;
   var round = 0;
@@ -41,6 +43,7 @@
   var playBtn = null;
   var playLbl = null;
   var soundBtn = null;
+  var keysBtn = null;
   var bestEl = null;
 
   function loadStats() {
@@ -199,6 +202,13 @@
     try { localStorage.setItem(LS_SOUND, soundOn ? '1' : '0'); } catch (e) {}
   }
 
+  function toggleKeys() {
+    showKeys = !showKeys;
+    if (keysBtn) keysBtn.classList.toggle('active', showKeys);
+    buildBoard();
+    try { localStorage.setItem(LS_KEYS, showKeys ? '1' : '0'); } catch (e) {}
+  }
+
   var SIMON_CX = 100;
   var SIMON_CY = 100;
   var SIMON_R_OUTER = 88;
@@ -228,8 +238,7 @@
 
   function buildBoard() {
     if (!boardEl) return;
-    boardEl.querySelectorAll('.simon-sector').forEach(function (el) { el.remove(); });
-    boardEl.querySelectorAll('.simon-sector-key').forEach(function (el) { el.remove(); });
+    boardEl.querySelectorAll('.simon-svg').forEach(function (el) { el.remove(); });
 
     var total = colorCount;
     var sector = 360 / total;
@@ -255,17 +264,19 @@
         path.addEventListener('pointerdown', function (e) { e.preventDefault(); });
         svg.appendChild(path);
 
-        var mid = (startDeg + endDeg) / 2;
-        var lp = ptOnCircle(mid, (SIMON_R_OUTER + SIMON_R_INNER) / 2);
-        var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        text.setAttribute('class', 'simon-sector-key');
-        text.setAttribute('x', lp.x.toFixed(2));
-        text.setAttribute('y', lp.y.toFixed(2));
-        text.setAttribute('text-anchor', 'middle');
-        text.setAttribute('dominant-baseline', 'central');
-        text.setAttribute('fill', readableText(COLORS[idx].hex));
-        text.textContent = KEY_LABELS[idx];
-        svg.appendChild(text);
+        if (showKeys) {
+          var mid = (startDeg + endDeg) / 2;
+          var lp = ptOnCircle(mid, (SIMON_R_OUTER + SIMON_R_INNER) / 2);
+          var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('class', 'simon-sector-key');
+          text.setAttribute('x', lp.x.toFixed(2));
+          text.setAttribute('y', lp.y.toFixed(2));
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('dominant-baseline', 'central');
+          text.setAttribute('fill', readableText(COLORS[idx].hex));
+          text.textContent = KEY_LABELS[idx];
+          svg.appendChild(text);
+        }
       })(i);
     }
 
@@ -318,6 +329,7 @@
       '<button class="config-arrow" id="simonColorDown">▼</button>' +
       '</div>' +
       '</div>' +
+      '<button class="mode-pill" id="simonKeysBtn">⌨ Keyboard</button>' +
       '<button class="mode-pill" id="simonSoundBtn">' + (soundOn ? '🔊 Sonido' : '🔇 Silencio') + '</button>' +
       '</div>' +
       '<div class="simon-board" id="simonBoard">' +
@@ -351,10 +363,12 @@
     playBtn = root.querySelector('#simonPlayBtn');
     playLbl = root.querySelector('#simonPlayLabel');
     soundBtn = root.querySelector('#simonSoundBtn');
+    keysBtn = root.querySelector('#simonKeysBtn');
 
     root.querySelector('#simonColorUp').addEventListener('click', function () { setColorCount(colorCount + 1); });
     root.querySelector('#simonColorDown').addEventListener('click', function () { setColorCount(colorCount - 1); });
     soundBtn.addEventListener('click', toggleSound);
+    keysBtn.addEventListener('click', toggleKeys);
 
     playBtn.addEventListener('click', function () {
       if (state === 'idle') {
@@ -448,10 +462,13 @@
     if (c !== null) colorCount = Math.max(4, Math.min(COLORS.length, parseInt(c) || 4));
     var s = localStorage.getItem(LS_SOUND);
     if (s !== null) soundOn = s === '1';
+    var k = localStorage.getItem(LS_KEYS);
+    if (k !== null) showKeys = k === '1';
     var root = createRoot();
     var contentArea = document.querySelector('.content');
     if (contentArea) contentArea.appendChild(root);
     bindUI(root);
+    keysBtn.classList.toggle('active', showKeys);
     document.addEventListener('keydown', handleKeyDown);
     if (localStorage.getItem('sparrowGame') === 'simon') {
       show();
