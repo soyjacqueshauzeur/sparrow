@@ -903,12 +903,19 @@ body {
 }
 
 .action-buttons .duo-btn {
-  flex: 0 0 calc(50% - 4px);
+  flex: 1 1 0;
+  min-width: 0;
   width: auto;
 }
 
 .action-buttons .duo-btn.full-width {
-  flex: 0 0 100%;
+  flex: 1 1 100%;
+}
+
+.action-buttons .duo-btn .btn-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .clear-btn {

@@ -861,6 +861,8 @@ function selectSet(setKey) {
     speedArrows.style.display = '';
     speedUnit.style.display = '';
     pauseBtn.classList.remove('hidden');
+    const cb = document.getElementById('clearBtn');
+    if (cb) cb.classList.remove('full-width');
   }
   const setNames = {
     '1-100': 'Números 1-100', 'binario': 'Números binarios', 'deck': 'Baraja', 'numbers': 'Numbers',
