@@ -77,7 +77,20 @@ const dataSets = {
     { top: 'X9', bottom: 'Panda' },
     { top: 'X10', bottom: 'Rinoceronte' }
   ],
-  'meses': ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'].map(l => ({ top: l, bottom: '' }))
+  'meses': [
+    { top: 'Enero', bottom: '❄️ Hielo' },
+    { top: 'Febrero', bottom: '💘 Cupido' },
+    { top: 'Marzo', bottom: '🌸 Flor' },
+    { top: 'Abril', bottom: '☔ Paraguas' },
+    { top: 'Mayo', bottom: '🐝 Abeja' },
+    { top: 'Junio', bottom: '🎓 Birrete' },
+    { top: 'Julio', bottom: '🎆 Fuegos artificiales' },
+    { top: 'Agosto', bottom: '🏖️ Playa' },
+    { top: 'Septiembre', bottom: '📚 Libro' },
+    { top: 'Octubre', bottom: '🎃 Calabaza' },
+    { top: 'Noviembre', bottom: '🍂 Hoja' },
+    { top: 'Diciembre', bottom: '🎄 Árbol de Navidad' }
+  ]
 };
 
 const pegWords = {
@@ -271,6 +284,11 @@ let speedFill = document.getElementById('speedFill');
 
 let speedTimer = document.getElementById('speedTimer');
 let timerValue = document.getElementById('timerValue');
+let speedInputRow = document.querySelector('.bottom-controls .speed-input-row');
+let speedBar = document.querySelector('.bottom-controls .speed-bar');
+let speedLimits = document.querySelector('.bottom-controls .speed-limits');
+let speedArrows = document.querySelector('.bottom-controls .speed-arrows');
+let speedUnit = document.querySelector('.bottom-controls .speed-unit');
 
 let personalMinutes = 0;
 let personalSeconds = 0;
@@ -355,9 +373,6 @@ function msToInput(ms) {
 }
 
 function getDelay() {
-  if (currentSet === 'personal') {
-    return (personalMinutes * 60 + personalSeconds) * 1000;
-  }
   const ms = parseSpeed(speedInput.value);
   if (ms === null || ms < MIN_DELAY) return MIN_DELAY;
   return Math.min(ms, MAX_DELAY);
@@ -477,8 +492,7 @@ function updatePersonalStartButton() {
     return;
   }
   const hasText = personalTextarea.value.trim().length > 0;
-  const hasTime = (personalMinutes * 60 + personalSeconds) > 0;
-  if (hasText && hasTime) {
+  if (hasText) {
     pauseBtn.classList.remove('hidden');
     if (clearBtn) clearBtn.classList.remove('full-width');
   } else {
@@ -830,15 +844,19 @@ function selectSet(setKey) {
   instructionsTable.style.display = 'none';
   container.style.display = '';
   if (setKey === 'personal') {
-    speedTimer.style.display = 'flex';
-    document.querySelector('.speed-input-row').style.display = 'none';
-    document.querySelector('.speed-bar').style.display = 'none';
-    document.querySelector('.speed-limits').style.display = 'none';
+    speedTimer.style.display = 'none';
+    speedInputRow.style.display = '';
+    speedBar.style.display = '';
+    speedLimits.style.display = '';
+    speedArrows.style.display = 'none';
+    speedUnit.style.display = 'none';
   } else {
     speedTimer.style.display = 'none';
-    document.querySelector('.speed-input-row').style.display = '';
-    document.querySelector('.speed-bar').style.display = '';
-    document.querySelector('.speed-limits').style.display = '';
+    speedInputRow.style.display = '';
+    speedBar.style.display = '';
+    speedLimits.style.display = '';
+    speedArrows.style.display = '';
+    speedUnit.style.display = '';
     pauseBtn.classList.remove('hidden');
   }
   const setNames = {
@@ -850,7 +868,7 @@ function selectSet(setKey) {
   lessonTitle.textContent = setNames[setKey] || setKey;
   if (setKey === 'instructions') {
     lessonSubtitle.textContent = 'Sistema de conversión fonética';
-    instructionsTable.style.display = 'block';
+    instructionsTable.style.display = '';
     container.innerHTML = '';
     emptyState.style.display = 'none';
     container.appendChild(emptyState);

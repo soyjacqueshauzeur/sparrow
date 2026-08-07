@@ -224,8 +224,6 @@ body {
   font-size: 11px;
 }
 
-.sub-pill[data-set="meses"] { display: none; }
-
 /* ========== INFO BAR ========== */
 .info-bar {
   display: flex;
@@ -452,9 +450,31 @@ body {
 .instructions-table {
   width: 100%; max-width: 360px;
   padding: 0 4px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: var(--sp-md);
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .instructions-table {
+    max-width: 720px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .instructions-table {
+    max-width: 1080px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1440px) {
+  .instructions-table {
+    max-width: 1600px;
+    grid-template-columns: repeat(5, 1fr);
+  }
 }
 
 .instructions-table table {
@@ -464,7 +484,6 @@ body {
   border: 2px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
-  margin-bottom: 1em;
 }
 
 .instructions-table th,
