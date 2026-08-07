@@ -169,7 +169,7 @@ let fontResetVal = document.getElementById('fontResetVal');
 
 const FONT_MIN = 8;
 const FONT_MAX = 160;
-const FONT_DEFAULT = 64;
+const FONT_DEFAULT = 32;
 let fontSize = FONT_DEFAULT;
 
 function applyFontScale() {
