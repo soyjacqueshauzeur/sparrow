@@ -1,13 +1,19 @@
-const CACHE_NAME = 'sparrow-v9-animales';
+const CACHE_NAME = 'sparrow-v11-pao';
 const ASSETS = [
   './',
   './index.html',
   './css/style.css',
+  './js/datos.js',
+  './js/juego-numbers.js',
+  './js/juego-binario.js',
+  './js/juego-deck.js',
+  './js/juego-personal.js',
   './js/script.js',
   './js/lectura.js',
   './js/simon.js',
   './js/complemento.js',
   './js/animales.js',
+  './js/juego-pao.js',
   './js/vendor/jszip.min.js',
   './js/vendor/pdf.min.js',
   './js/vendor/pdf.worker.min.js',

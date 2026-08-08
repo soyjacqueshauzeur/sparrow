@@ -1,137 +1,3 @@
-const dataSets = {
-  '1-100': [],
-  'binario': [],
-  'deck': [],
-  'abc': [
-    { top: 'A', bottom: 'Abeja' },
-    { top: 'B', bottom: 'Ballena' },
-    { top: 'C', bottom: 'Cocodrilo' },
-    { top: 'D', bottom: 'Delfín' },
-    { top: 'E', bottom: 'Elefante' },
-    { top: 'F', bottom: 'Flamenco' },
-    { top: 'G', bottom: 'Gorila' },
-    { top: 'H', bottom: 'Hámster' },
-    { top: 'I', bottom: 'Iguana' },
-    { top: 'J', bottom: 'Jabalí' },
-    { top: 'K', bottom: 'Kiwi (ave)' },
-    { top: 'L', bottom: 'León' },
-    { top: 'M', bottom: 'Mono' },
-    { top: 'N', bottom: 'Nutria' },
-    { top: 'Ñ', bottom: 'Ñandú' },
-    { top: 'O', bottom: 'Oso' },
-    { top: 'P', bottom: 'Pingüino' },
-    { top: 'Q', bottom: 'Quetzal' },
-    { top: 'R', bottom: 'Rinoceronte' },
-    { top: 'S', bottom: 'Serpiente' },
-    { top: 'T', bottom: 'Tigre' },
-    { top: 'U', bottom: 'Urraca' },
-    { top: 'V', bottom: 'Vaca' },
-    { top: 'W', bottom: 'Wombat' },
-    { top: 'X', bottom: 'Xifóforo (pez de acuario)' },
-    { top: 'Y', bottom: 'Yak' },
-    { top: 'Z', bottom: 'Zorro' }
-  ],
-  'cirilico': [
-    { top: 'А а', bottom: '/a/' },
-    { top: 'Б б', bottom: '/b/' },
-    { top: 'В в', bottom: '/v/' },
-    { top: 'Г г', bottom: '/ɡ/' },
-    { top: 'Д д', bottom: '/d/' },
-    { top: 'Е е', bottom: '/je/, /e/' },
-    { top: 'Ё ё', bottom: '/jo/' },
-    { top: 'Ж ж', bottom: '/ʐ/' },
-    { top: 'З з', bottom: '/z/' },
-    { top: 'И и', bottom: '/i/' },
-    { top: 'Й й', bottom: '/j/' },
-    { top: 'К к', bottom: '/k/' },
-    { top: 'Л л', bottom: '/ɫ/, /lʲ/' },
-    { top: 'М м', bottom: '/m/' },
-    { top: 'Н н', bottom: '/n/' },
-    { top: 'О о', bottom: '/o/, /ɐ/' },
-    { top: 'П п', bottom: '/p/' },
-    { top: 'Р р', bottom: '/r/' },
-    { top: 'С с', bottom: '/s/' },
-    { top: 'Т т', bottom: '/t/' },
-    { top: 'У у', bottom: '/u/' },
-    { top: 'Ф ф', bottom: '/f/' },
-    { top: 'Х х', bottom: '/x/' },
-    { top: 'Ц ц', bottom: '/t͡s/' },
-    { top: 'Ч ч', bottom: '/t͡ɕ/' },
-    { top: 'Ш ш', bottom: '/ʂ/' },
-    { top: 'Щ щ', bottom: '/ɕː/' },
-    { top: 'Ъ ъ', bottom: '' },
-    { top: 'Ы ы', bottom: '/ɨ/' },
-    { top: 'Ь ь', bottom: '' },
-    { top: 'Э э', bottom: '/e/' },
-    { top: 'Ю ю', bottom: '/ju/' },
-    { top: 'Я я', bottom: '/ja/' }
-  ],
-  'cantidades': [
-    { top: 'X2', bottom: 'Neque' },
-    { top: 'X3', bottom: 'Morza' },
-    { top: 'X4', bottom: 'Cucaracha' },
-    { top: 'X5', bottom: 'Lagartija' },
-    { top: 'X6', bottom: 'Zorro' },
-    { top: 'X7', bottom: 'Jirafa' },
-    { top: 'X8', bottom: 'Gato' },
-    { top: 'X9', bottom: 'Panda' },
-    { top: 'X10', bottom: 'Rinoceronte' }
-  ],
-  'meses': [
-    { top: 'Enero', bottom: '❄️ Hielo' },
-    { top: 'Febrero', bottom: '💘 Cupido' },
-    { top: 'Marzo', bottom: '🌸 Flor' },
-    { top: 'Abril', bottom: '☔ Paraguas' },
-    { top: 'Mayo', bottom: '🐝 Abeja' },
-    { top: 'Junio', bottom: '🎓 Birrete' },
-    { top: 'Julio', bottom: '🎆 Fuegos artificiales' },
-    { top: 'Agosto', bottom: '🏖️ Playa' },
-    { top: 'Septiembre', bottom: '📚 Libro' },
-    { top: 'Octubre', bottom: '🎃 Calabaza' },
-    { top: 'Noviembre', bottom: '🍂 Hoja' },
-    { top: 'Diciembre', bottom: '🎄 Árbol de Navidad' }
-  ]
-};
-
-const pegWords = {
-  '00':'Reir','0':'Aro','1':'Tea','2':'Noe','3':'Amo','4':'Oca','5':'Ley',
-  '6':'Oso','7':'Fea','8':'Ucha','9':'Ave','10':'Torre','11':'Teta','12':'Tina',
-  '13':'Tomo','14':'Taco','15':'Tela','16':'Tez','17':'Tufo','18':'Techo',
-  '19':'Tubo','20':'Nuera','21':'Nido','22':'Niño','23':'Nomo','24':'Naco',
-  '25':'Nilo','26':'Nuez','27':'Naife','28':'Nicho','29':'Nube','30':'Mar',
-  '31':'Mito','32':'Mono','33':'Mama','34':'Meca','35':'Mulo','36':'Mesa',
-  '37':'Mufo','38':'Mecha','39':'Mapa','40':'Corro','41':'Codo','42':'Cuna',
-  '43':'Cama','44':'Coco','45':'Cola','46':'Cazo','47':'Café','48':'Coche',
-  '49':'Cubo','50':'Lira','51':'Loto','52':'Luna','53':'Lima','54':'Loco',
-  '55':'Lulu','56':'Lazo','57':'Elfo','58':'Lucha','59':'Lupa','60':'Suero',
-  '61':'Ostia','62':'Zona','63':'Sima','64':'Saco','65':'Sol','66':'Seso',
-  '67':'Sofa','68':'Asecho','69':'Sapo','70':'Faro','71':'Foto','72':'Faena',
-  '73':'Fama','74':'Foca','75':'Fiel','76':'Fosa','77':'Fofo','78':'Ficha',
-  '79':'Fobia','80':'Chorro','81':'Chita','82':'Chino','83':'Chama','84':'Cheque',
-  '85':'Chal','86':'Choza','87':'Enchufa','88':'Chacha','89':'Chapa','90':'Burro',
-  '91':'Pito','92':'Pino','93':'Puma','94':'Vaca','95':'Bala','96':'Buzo',
-  '97':'Bife','98':'Bache','99':'Pipa','100':'Torero'
-};
-const pegOrder = ['00','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69','70','71','72','73','74','75','76','77','78','79','80','81','82','83','84','85','86','87','88','89','90','91','92','93','94','95','96','97','98','99','100'];
-for (const key of pegOrder) {
-  dataSets['1-100'].push({ top: key, bottom: pegWords[key] });
-}
-
-const deckMatrix = {
-  '♥': { A:'Cero', 2:'Cada', 3:'Cano', 4:'Cima', 5:'Caqui', 6:'Cala', 7:'Cese', 8:'Ceja', 9:'Cacho', 10:'Cebo', J:'Coro', Q:'Cono', K:'Cuajo' },
-  '♣': { A:'Toro', 2:'Todo', 3:'Tuno', 4:'Timo', 5:'Tique', 6:'Tala', 7:'Tiza', 8:'Tifo', 9:'Toga', 10:'Topo', J:'Tira', Q:'Tuna', K:'Tuco' },
-  '♠': { A:'Paro', 2:'Poda', 3:'Pana', 4:'Pomo', 5:'Pique', 6:'Pelo', 7:'Pozo', 8:'Paje', 9:'Pago', 10:'Pavo', J:'Puro', Q:'Poca', K:'Puya' },
-  '♦': { A:'Doro', 2:'Dato', 3:'Dona', 4:'Domo', 5:'Duque', 6:'Dólar', 7:'Deseo', 8:'Dije', 9:'Ducha', 10:'Debo', J:'Duro', Q:'Duda', K:'Duelo' }
-};
-const deckSuits = ['♥','♣','♠','♦'];
-const deckRanks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
-
-for (const s of deckSuits) {
-  for (const r of deckRanks) {
-    dataSets['deck'].push({ top: r + s, bottom: deckMatrix[s][r] });
-  }
-}
-
 let currentSet = null;
 let currentIndex = 0;
 let isPaused = false;
@@ -193,103 +59,7 @@ fontReset.addEventListener('click', () => {
 });
 
 applyFontScale();
-let numbersConfig = document.getElementById('numbersConfig');
-let numCount = document.getElementById('numCount');
-let numFrom = document.getElementById('numFrom');
-let numTo = document.getElementById('numTo');
 
-document.getElementById('numCountUp').addEventListener('click', () => {
-  numCount.value = Math.min(100, (parseInt(numCount.value) || 2) + 1);
-});
-
-document.getElementById('numCountDown').addEventListener('click', () => {
-  numCount.value = Math.max(1, (parseInt(numCount.value) || 2) - 1);
-});
-
-document.getElementById('binCountUp').addEventListener('click', () => {
-  binCount.value = Math.min(50, (parseInt(binCount.value) || 5) + 1);
-});
-
-document.getElementById('binCountDown').addEventListener('click', () => {
-  binCount.value = Math.max(1, (parseInt(binCount.value) || 5) - 1);
-});
-
-document.getElementById('deckCountUp').addEventListener('click', () => {
-  deckCount.value = Math.min(getDeckMaxCount(), (parseInt(deckCount.value) || 1) + 1);
-});
-
-document.getElementById('deckCountDown').addEventListener('click', () => {
-  deckCount.value = Math.max(1, (parseInt(deckCount.value) || 1) - 1);
-});
-
-let binarioConfig = document.getElementById('binarioConfig');
-let binCount = document.getElementById('binCount');
-let deckConfig = document.getElementById('deckConfig');
-let deckCount = document.getElementById('deckCount');
-
-let deckSelectedSuits = ['♥', '♣', '♠', '♦'];
-const ALL_SUITS = ['♥', '♣', '♠', '♦'];
-let currentDeckCards = [];
-
-const DECK_SUIT_CODE = { '♥': 'C', '♣': 'T', '♠': 'P', '♦': 'D' };
-const DECK_RANK_CODE = { 'A': '1', 'J': '11', 'Q': '12', 'K': '13' };
-
-function deckCardToCode(top) {
-  const rank = top.slice(0, -1);
-  const suit = top.slice(-1);
-  return (DECK_SUIT_CODE[suit] || suit) + (DECK_RANK_CODE[rank] || rank);
-}
-
-function getDeckMaxCount() {
-  return deckSelectedSuits.length * 13;
-}
-
-function updateDeckCountMax() {
-  const max = getDeckMaxCount();
-  deckCount.max = max;
-  const val = parseInt(deckCount.value) || 1;
-  if (val > max) deckCount.value = max;
-}
-
-function setAllSuits() {
-  deckSelectedSuits = [...ALL_SUITS];
-}
-
-function toggleSuit(suit) {
-  const idx = deckSelectedSuits.indexOf(suit);
-  if (idx === -1) {
-    deckSelectedSuits.push(suit);
-  } else {
-    if (deckSelectedSuits.length === 1) return;
-    deckSelectedSuits.splice(idx, 1);
-  }
-}
-
-function syncSuitButtons() {
-  document.querySelectorAll('.suit-pill[data-suit]').forEach(btn => {
-    btn.classList.toggle('active', deckSelectedSuits.includes(btn.dataset.suit));
-  });
-  document.getElementById('suitAll').classList.toggle('active', deckSelectedSuits.length === 4);
-}
-
-document.getElementById('suitAll').addEventListener('click', () => {
-  setAllSuits();
-  syncSuitButtons();
-  updateDeckCountMax();
-});
-
-document.querySelectorAll('.suit-pill[data-suit]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    toggleSuit(btn.dataset.suit);
-    syncSuitButtons();
-    updateDeckCountMax();
-  });
-});
-let personalConfig = document.getElementById('personalConfig');
-let personalTextarea = document.getElementById('personalTextarea');
-let personalWord = document.getElementById('personalWord');
-let personalStory = document.getElementById('personalStory');
-let personalFrases = document.getElementById('personalFrases');
 let instructionsTable = document.getElementById('instructionsTable');
 let clockDisplay = document.getElementById('clockDisplay');
 let timerDisplay = document.getElementById('timerDisplay');
@@ -304,33 +74,6 @@ let speedBar = document.querySelector('.bottom-controls .speed-bar');
 let speedLimits = document.querySelector('.bottom-controls .speed-limits');
 let speedArrows = document.querySelector('.bottom-controls .speed-arrows');
 let speedUnit = document.querySelector('.bottom-controls .speed-unit');
-
-let personalMinutes = 0;
-let personalSeconds = 0;
-
-function updatePersonalTimerDisplay() {
-  timerValue.textContent = pad2(personalMinutes) + ':' + pad2(personalSeconds);
-}
-
-function changeTimerMinutes(delta) {
-  personalMinutes = Math.max(0, personalMinutes + delta);
-  updatePersonalTimerDisplay();
-  updatePersonalStartButton();
-}
-
-function changeTimerSeconds(delta) {
-  let total = personalMinutes * 60 + personalSeconds + delta;
-  if (total < 0) total = 0;
-  personalMinutes = Math.floor(total / 60);
-  personalSeconds = total % 60;
-  updatePersonalTimerDisplay();
-  updatePersonalStartButton();
-}
-
-document.getElementById('timerMinUp').addEventListener('click', () => changeTimerMinutes(1));
-document.getElementById('timerMinDown').addEventListener('click', () => changeTimerMinutes(-1));
-document.getElementById('timerSecUp').addEventListener('click', () => changeTimerSeconds(1));
-document.getElementById('timerSecDown').addEventListener('click', () => changeTimerSeconds(-1));
 
 let timerElapsed = 0;
 let timerInterval = null;
@@ -482,40 +225,6 @@ function setRecallMode(recall) {
 
 modeTraining.addEventListener('click', () => setRecallMode(false));
 modeRecall.addEventListener('click', () => setRecallMode(true));
-
-function setPersonalMode(mode) {
-  personalMode = mode;
-  personalWord.classList.toggle('active', mode === 'word');
-  personalStory.classList.toggle('active', mode === 'story');
-  personalFrases.classList.toggle('active', mode === 'frases');
-  localStorage.setItem('sparrowPersonalMode', mode);
-  if (currentSet === 'personal') selectSet('personal');
-}
-
-personalWord.addEventListener('click', () => setPersonalMode('word'));
-personalStory.addEventListener('click', () => setPersonalMode('story'));
-personalFrases.addEventListener('click', () => setPersonalMode('frases'));
-
-
-
-function updatePersonalStartButton() {
-  const clearBtn = document.getElementById('clearBtn');
-  if (currentSet !== 'personal') {
-    pauseBtn.classList.remove('hidden');
-    if (clearBtn) clearBtn.classList.remove('full-width');
-    return;
-  }
-  const hasText = personalTextarea.value.trim().length > 0;
-  if (hasText) {
-    pauseBtn.classList.remove('hidden');
-    if (clearBtn) clearBtn.classList.remove('full-width');
-  } else {
-    pauseBtn.classList.add('hidden');
-    if (clearBtn) clearBtn.classList.add('full-width');
-  }
-}
-
-personalTextarea.addEventListener('input', updatePersonalStartButton);
 
 function handleCompareClick() {
   if (!isCardHidden && hiddenCardData === null && (isPaused || !isPaused)) {
@@ -974,29 +683,6 @@ function selectSet(setKey) {
   showCard(0);
 }
 
-function showCard(index) {
-  const items = dataSets[currentSet];
-  if (!items || items.length === 0) return;
-  const idx = getItemIndex();
-  const item = items[idx];
-  renderCard(item, index, items.length);
-}
-
-function fadeOutAndNext() {
-  const card = container.querySelector('.card');
-  if (card) card.classList.remove('visible');
-
-  setTimeout(() => {
-    if (isPaused) return;
-    currentIndex = (currentIndex + 1) % dataSets[currentSet].length;
-    if (currentIndex === 0 && isShuffle) {
-      shuffleOrder = buildShuffleOrder(dataSets[currentSet].length);
-    }
-    showCard(currentIndex);
-    scheduleNext();
-  }, 350);
-}
-
 function scheduleNext() {
   if (timer) clearTimeout(timer);
   if (isPaused) return;
@@ -1019,39 +705,6 @@ function scheduleNext() {
       fadeOutAndNext();
     }
   }, getDelay());
-}
-
-function fadeOutAndNextNumbers() {
-  const card = container.querySelector('.card');
-  if (card) card.classList.remove('visible');
-  setTimeout(() => {
-    if (isPaused) return;
-    currentIndex++;
-    showNumbersCard();
-    scheduleNext();
-  }, 350);
-}
-
-function fadeOutAndNextBinario() {
-  const card = container.querySelector('.card');
-  if (card) card.classList.remove('visible');
-  setTimeout(() => {
-    if (isPaused) return;
-    currentIndex++;
-    showBinarioCard();
-    scheduleNext();
-  }, 350);
-}
-
-function fadeOutAndNextDeck() {
-  const card = container.querySelector('.card');
-  if (card) card.classList.remove('visible');
-  setTimeout(() => {
-    if (isPaused) return;
-    currentIndex++;
-    showDeckCard();
-    scheduleNext();
-  }, 350);
 }
 
 function startRunning() {
@@ -1108,172 +761,15 @@ function startRunning() {
   scheduleNext();
 }
 
-function generateNumbers() {
-  const count = parseInt(numCount.value) || 2;
-  const from = parseInt(numFrom.value) || 0;
-  const to = parseInt(numTo.value) || 100;
-  const clampedCount = Math.min(count, 50);
-  const digits = [];
-  for (let i = 0; i < clampedCount; i++) {
-    const n = Math.floor(Math.random() * (to - from + 1)) + from;
-    digits.push(String(n));
-  }
-  const groups = [];
-  for (let i = 0; i < digits.length; i += 2) {
-    groups.push(digits.slice(i, i + 2).join(''));
-  }
-  return groups.join(' ');
-}
-
-function parsePersonal() {
-  const raw = personalTextarea.value.trim();
-  if (!raw) return [];
-  const parts = raw.split(/[,\n]+/);
-  return parts
-    .map(p => p.trim())
-    .flatMap(p => p.split(/\s+/))
-    .filter(w => w.length > 0);
-}
-
-function parsePersonalFrases() {
-  const raw = personalTextarea.value.trim();
-  if (!raw) return [];
-  return raw
-    .split(/[.\n]+/)
-    .map(p => p.trim())
-    .filter(p => p.length > 0)
-    .map(p => p + '.');
-}
-
-function updateLessonForPersonal(count) {
-  lessonTitle.textContent = 'Personal';
-  const noun = personalMode === 'frases' ? 'frases' : 'palabras';
-  lessonSubtitle.textContent = count + ' ' + noun;
-}
-
-function generateDeckCards() {
-  const count = parseInt(deckCount.value) || 1;
-  const clampedCount = Math.min(count, getDeckMaxCount());
-  const allCards = dataSets['deck'].filter(c => deckSelectedSuits.some(s => c.top.endsWith(s)));
-  for (let i = allCards.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [allCards[i], allCards[j]] = [allCards[j], allCards[i]];
-  }
-  return allCards.slice(0, clampedCount);
-}
-
-function showDeckCard() {
-  const cards = generateDeckCards();
-  currentDeckCards = cards;
-  const tops = cards.map(c => c.top).join('  ');
-  const bottoms = cards.map(c => c.bottom).join('  ');
-  container.innerHTML = '';
-  container.appendChild(emptyState);
-  emptyState.style.display = 'none';
-  const card = document.createElement('div');
-  card.className = 'card';
-
-  const label = document.createElement('div');
-  label.className = 'card-label';
-  label.textContent = 'DECK';
-
-  const top = document.createElement('div');
-  top.className = 'card-top';
-  top.textContent = tops;
-
-  const bottom = document.createElement('div');
-  bottom.className = 'card-bottom';
-  bottom.textContent = bottoms;
-
-  card.appendChild(label);
-  card.appendChild(top);
-  card.appendChild(bottom);
-  container.appendChild(card);
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      card.classList.add('visible');
-    });
-  });
-}
-
-function generateBinario() {
-  const count = parseInt(binCount.value) || 5;
-  const clampedCount = Math.min(count, 50);
-  const digits = [];
-  for (let i = 0; i < clampedCount; i++) {
-    digits.push(Math.random() < 0.5 ? '0' : '1');
-  }
-  const groups = [];
-  for (let i = 0; i < digits.length; i += 2) {
-    groups.push(digits.slice(i, i + 2).join(''));
-  }
-  return groups.join(' ');
-}
-
-function showBinarioCard() {
-  const binarios = generateBinario();
-  container.innerHTML = '';
-  container.appendChild(emptyState);
-  emptyState.style.display = 'none';
-  const card = document.createElement('div');
-  card.className = 'card';
-
-  const label = document.createElement('div');
-  label.className = 'card-label';
-  label.textContent = 'BINARIO';
-
-  const top = document.createElement('div');
-  top.className = 'card-top';
-  top.textContent = binarios;
-
-  card.appendChild(label);
-  card.appendChild(top);
-  container.appendChild(card);
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      card.classList.add('visible');
-    });
-  });
-}
-
-function showNumbersCard() {
-  const numbers = generateNumbers();
-  container.innerHTML = '';
-  container.appendChild(emptyState);
-  emptyState.style.display = 'none';
-  const card = document.createElement('div');
-  card.className = 'card';
-
-  const label = document.createElement('div');
-  label.className = 'card-label';
-  label.textContent = 'NUMBERS';
-
-  const top = document.createElement('div');
-  top.className = 'card-top';
-  top.textContent = numbers;
-
-  card.appendChild(label);
-  card.appendChild(top);
-  container.appendChild(card);
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      card.classList.add('visible');
-    });
-  });
-}
-
 const menuCategories = {
   'aprender': ['instructions', '1-100', 'abc', 'cirilico', 'meses'],
-  'aplicar': ['numbers', 'deck', 'binario', 'cantidades', 'suplemento', 'animales'],
+  'aplicar': ['numbers', 'pao', 'deck', 'binario', 'cantidades', 'suplemento', 'animales'],
   'leer': ['personal', 'lectura'],
   'simon': ['simon']
 };
 
 const subPillNames = {
-  'instructions': 'Instrucciones', '1-100': '1-100', 'abc': 'ABC', 'cirilico': 'Cirílico',
+  'instructions': 'Instrucciones', '1-100': '1-100', 'pao': 'PAO', 'abc': 'ABC', 'cirilico': 'Cirílico',
   'numbers': 'Numbers', 'deck': 'Deck', 'binario': 'Binario', 'cantidades': 'Cantidades',
   'meses': 'Meses', 'personal': 'Personal', 'lectura': 'Lectura', 'simon': 'Simon',
   'suplemento': 'Suplemento', 'animales': 'Animales'
@@ -1332,6 +828,12 @@ function hideAnimalesIfVisible() {
   }
 }
 
+function hidePAOIfVisible() {
+  if (window.PAOModule && typeof window.PAOModule.hide === 'function') {
+    window.PAOModule.hide();
+  }
+}
+
 function activateSimon(btn) {
   if (isRunning) stopCycle();
   resetTimer();
@@ -1368,6 +870,18 @@ function activateAnimales(btn) {
   }
 }
 
+function activatePAO(btn) {
+  if (isRunning) stopCycle();
+  resetTimer();
+  currentSet = 'pao';
+  localStorage.setItem('sparrowGame', 'pao');
+  subMenu.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  if (window.PAOModule && typeof window.PAOModule.show === 'function') {
+    window.PAOModule.show();
+  }
+}
+
 function activateLectura(btn) {
   if (isRunning) stopCycle();
   resetTimer();
@@ -1396,6 +910,10 @@ function handleSubPillClick(btn) {
   }
   if (currentSet === 'animales' && setKey !== 'animales') {
     hideAnimalesIfVisible();
+    currentSet = null;
+  }
+  if (currentSet === 'pao' && setKey !== 'pao') {
+    hidePAOIfVisible();
     currentSet = null;
   }
   if (setKey === 'lectura') {
@@ -1428,6 +946,14 @@ function handleSubPillClick(btn) {
       saveConfigValues();
     }
     activateAnimales(btn);
+    return;
+  }
+  if (setKey === 'pao') {
+    if (currentSet === 'pao') return;
+    if (isRunning) {
+      saveConfigValues();
+    }
+    activatePAO(btn);
     return;
   }
   if (setKey === currentSet && isRunning) {
@@ -1493,6 +1019,11 @@ mainMenu.querySelectorAll('.main-pill').forEach(btn => {
     }
     if (currentSet === 'animales') {
       hideAnimalesIfVisible();
+      currentSet = null;
+      localStorage.removeItem('sparrowGame');
+    }
+    if (currentSet === 'pao') {
+      hidePAOIfVisible();
       currentSet = null;
       localStorage.removeItem('sparrowGame');
     }
@@ -1592,6 +1123,9 @@ try {
   } else if (savedGame === 'animales') {
     currentSet = 'animales';
     selectMenu('aplicar', 'animales');
+  } else if (savedGame === 'pao') {
+    currentSet = 'pao';
+    selectMenu('aplicar', 'pao');
   } else {
     const startMenu = (savedMenu && menuCategories[savedMenu] && menuCategories[savedMenu].includes(savedGame))
       ? savedMenu
