@@ -194,7 +194,7 @@ function setMode(shuffle) {
   modeOrden.classList.toggle('active', !shuffle);
   modeAleatorio.classList.toggle('active', shuffle);
   localStorage.setItem('sparrowShuffle', shuffle);
-  if (currentSet) {
+  if (currentSet && dataSets[currentSet] && Array.isArray(dataSets[currentSet])) {
     const count = dataSets[currentSet].length;
     if (isRunning) {
       shuffleOrder = isShuffle ? buildShuffleOrder(count) : [];

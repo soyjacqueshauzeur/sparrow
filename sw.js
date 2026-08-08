@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sparrow-v11-pao';
+const CACHE_NAME = 'sparrow-v12-network';
 const ASSETS = [
   './',
   './index.html',
@@ -44,20 +44,18 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      const fetchPromise = fetch(event.request).then((response) => {
-        if (response && response.status === 200) {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, clone);
-          });
-        }
-        return response;
-      }).catch(() => {
+    fetch(event.request).then((response) => {
+      if (response && response.status === 200) {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, clone);
+        });
+      }
+      return response;
+    }).catch(() => {
+      return caches.match(event.request).then((cached) => {
         return cached || new Response('Offline', { status: 503 });
       });
-
-      return cached || fetchPromise;
     })
   );
 });
