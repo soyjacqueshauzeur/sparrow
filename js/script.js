@@ -559,6 +559,16 @@ function resetGameState() {
 document.getElementById('clearBtn').addEventListener('click', () => {
   if (currentSet === 'suplemento' && window.SuplementoModule && typeof window.SuplementoModule.reset === 'function') {
     window.SuplementoModule.reset();
+    isRunning = false;
+    isPaused = false;
+    resetTimer();
+    return;
+  }
+  if (currentSet === 'animales' && window.AnimalesModule && typeof window.AnimalesModule.reset === 'function') {
+    window.AnimalesModule.reset();
+    isRunning = false;
+    isPaused = false;
+    resetTimer();
     return;
   }
   resetGameState();
@@ -714,6 +724,18 @@ function handlePauseAction() {
     if (window.SuplementoModule && typeof window.SuplementoModule.start === 'function') {
       window.SuplementoModule.start();
     }
+    isRunning = true;
+    isPaused = false;
+    startTimerInterval();
+    return;
+  }
+  if (currentSet === 'animales') {
+    if (window.AnimalesModule && typeof window.AnimalesModule.start === 'function') {
+      window.AnimalesModule.start();
+    }
+    isRunning = true;
+    isPaused = false;
+    startTimerInterval();
     return;
   }
   if (!currentSet) {
@@ -1245,7 +1267,7 @@ function showNumbersCard() {
 
 const menuCategories = {
   'aprender': ['instructions', '1-100', 'abc', 'cirilico', 'meses'],
-  'aplicar': ['numbers', 'deck', 'binario', 'cantidades', 'suplemento'],
+  'aplicar': ['numbers', 'deck', 'binario', 'cantidades', 'suplemento', 'animales'],
   'leer': ['personal', 'lectura'],
   'simon': ['simon']
 };
@@ -1254,7 +1276,7 @@ const subPillNames = {
   'instructions': 'Instrucciones', '1-100': '1-100', 'abc': 'ABC', 'cirilico': 'Cirílico',
   'numbers': 'Numbers', 'deck': 'Deck', 'binario': 'Binario', 'cantidades': 'Cantidades',
   'meses': 'Meses', 'personal': 'Personal', 'lectura': 'Lectura', 'simon': 'Simon',
-  'suplemento': 'Suplemento'
+  'suplemento': 'Suplemento', 'animales': 'Animales'
 };
 
 let currentMenu = null;
@@ -1304,6 +1326,12 @@ function hideSuplementoIfVisible() {
   }
 }
 
+function hideAnimalesIfVisible() {
+  if (window.AnimalesModule && typeof window.AnimalesModule.hide === 'function') {
+    window.AnimalesModule.hide();
+  }
+}
+
 function activateSimon(btn) {
   if (isRunning) stopCycle();
   resetTimer();
@@ -1325,6 +1353,18 @@ function activateSuplemento(btn) {
   if (btn) btn.classList.add('active');
   if (window.SuplementoModule && typeof window.SuplementoModule.show === 'function') {
     window.SuplementoModule.show();
+  }
+}
+
+function activateAnimales(btn) {
+  if (isRunning) stopCycle();
+  resetTimer();
+  currentSet = 'animales';
+  localStorage.setItem('sparrowGame', 'animales');
+  subMenu.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  if (window.AnimalesModule && typeof window.AnimalesModule.show === 'function') {
+    window.AnimalesModule.show();
   }
 }
 
@@ -1354,6 +1394,10 @@ function handleSubPillClick(btn) {
     hideSuplementoIfVisible();
     currentSet = null;
   }
+  if (currentSet === 'animales' && setKey !== 'animales') {
+    hideAnimalesIfVisible();
+    currentSet = null;
+  }
   if (setKey === 'lectura') {
     if (currentSet === 'lectura') return;
     if (isRunning) {
@@ -1376,6 +1420,14 @@ function handleSubPillClick(btn) {
       saveConfigValues();
     }
     activateSuplemento(btn);
+    return;
+  }
+  if (setKey === 'animales') {
+    if (currentSet === 'animales') return;
+    if (isRunning) {
+      saveConfigValues();
+    }
+    activateAnimales(btn);
     return;
   }
   if (setKey === currentSet && isRunning) {
@@ -1436,6 +1488,11 @@ mainMenu.querySelectorAll('.main-pill').forEach(btn => {
     }
     if (currentSet === 'suplemento') {
       hideSuplementoIfVisible();
+      currentSet = null;
+      localStorage.removeItem('sparrowGame');
+    }
+    if (currentSet === 'animales') {
+      hideAnimalesIfVisible();
       currentSet = null;
       localStorage.removeItem('sparrowGame');
     }
@@ -1532,6 +1589,9 @@ try {
   } else if (savedGame === 'suplemento') {
     currentSet = 'suplemento';
     selectMenu('aplicar', 'suplemento');
+  } else if (savedGame === 'animales') {
+    currentSet = 'animales';
+    selectMenu('aplicar', 'animales');
   } else {
     const startMenu = (savedMenu && menuCategories[savedMenu] && menuCategories[savedMenu].includes(savedGame))
       ? savedMenu

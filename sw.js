@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sparrow-v8-suplemento';
+const CACHE_NAME = 'sparrow-v9-animales';
 const ASSETS = [
   './',
   './index.html',
@@ -7,6 +7,7 @@ const ASSETS = [
   './js/lectura.js',
   './js/simon.js',
   './js/complemento.js',
+  './js/animales.js',
   './js/vendor/jszip.min.js',
   './js/vendor/pdf.min.js',
   './js/vendor/pdf.worker.min.js',

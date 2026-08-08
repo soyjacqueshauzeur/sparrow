@@ -16,6 +16,8 @@
   var recallIdx = 0;
   var hits = 0;
   var misses = 0;
+  var selCell = null;
+  var selSymbol = null;
   var timeouts = [];
   var isRecallMode = false;
   var isShuffle = true;
@@ -51,10 +53,12 @@
   function buildRefGrid() {
     if (!refGridEl) return;
     refGridEl.innerHTML = '';
-    SYMBOLS.forEach(function (sym) {
+    SYMBOLS.forEach(function (sym, idx) {
       var cell = document.createElement('div');
       cell.className = 'supl-ref-cell';
+      cell.dataset.idx = idx;
       cell.textContent = sym;
+      cell.addEventListener('click', function () { handleRefCellClick(idx); });
       refGridEl.appendChild(cell);
     });
   }
@@ -73,11 +77,15 @@
     }
   }
 
-  function renderPlayGrid(symbolIdx) {
+  function renderPlayGrid(seqPos) {
     var cells = playGridEl.children;
     for (var i = 0; i < cells.length; i++) {
-      cells[i].textContent = (symbolIdx === i) ? SYMBOLS[sequence[symbolIdx]] : '';
+      cells[i].textContent = '';
       cells[i].classList.remove('supl-hit', 'supl-miss', 'supl-current');
+    }
+    if (seqPos >= 0 && seqPos < sequence.length) {
+      var cell = sequence[seqPos].cell;
+      cells[cell].textContent = SYMBOLS[sequence[seqPos].symbol];
     }
   }
 
@@ -96,16 +104,25 @@
 
   function buildSequence() {
     sequence = [];
-    if (isShuffle) {
-      var pool = [];
-      for (var i = 0; i < SYMBOLS.length; i++) pool.push(i);
-      for (var i = pool.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-      sequence = pool.slice(0, count);
-    } else {
-      for (var i = 0; i < count; i++) sequence.push(i);
+    // pick `count` distinct random symbol indices
+    var symPool = [];
+    for (var i = 0; i < SYMBOLS.length; i++) symPool.push(i);
+    for (var i = symPool.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      [symPool[i], symPool[j]] = [symPool[j], symPool[i]];
+    }
+    var chosenSymbols = symPool.slice(0, count);
+    // pick `count` distinct random cell positions
+    var cellPool = [];
+    for (var c = 0; c < 24; c++) cellPool.push(c);
+    for (var c = cellPool.length - 1; c > 0; c--) {
+      var j2 = Math.floor(Math.random() * (c + 1));
+      [cellPool[c], cellPool[j2]] = [cellPool[j2], cellPool[c]];
+    }
+    var chosenCells = cellPool.slice(0, count);
+    // build ordered pairs: sequence[k] = {symbol, cell}
+    for (var k = 0; k < count; k++) {
+      sequence.push({ symbol: chosenSymbols[k], cell: chosenCells[k] });
     }
   }
 
@@ -160,6 +177,8 @@
     recallIdx = 0;
     hits = 0;
     misses = 0;
+    selCell = null;
+    selSymbol = null;
     updateScore();
     setState('recall-show');
     statusEl.textContent = 'Memoriza la secuencia…';
@@ -171,7 +190,9 @@
     if (seqIdx >= sequence.length) {
       seqIdx = 0;
       setState('recall-input');
-      statusEl.textContent = 'Haz click en la casilla donde apareció: ' + SYMBOLS[sequence[recallIdx]];
+      clearPlayGrid();
+      clearRefSelection();
+      statusEl.textContent = 'Selecciona la casilla donde apareció y el símbolo de referencia';
       updateScore();
       return;
     }
@@ -185,36 +206,88 @@
     }, getShowDelay());
   }
 
+  function clearRefSelection() {
+    selCell = null;
+    selSymbol = null;
+    var cells = playGridEl.children;
+    for (var i = 0; i < cells.length; i++) {
+      cells[i].classList.remove('supl-selected');
+    }
+    var refs = refGridEl.children;
+    for (var r = 0; r < refs.length; r++) {
+      refs[r].classList.remove('supl-selected');
+    }
+  }
+
   function handleCellClick(idx) {
     if (state !== 'recall-input') return;
     var cells = playGridEl.children;
-    if (idx === sequence[recallIdx]) {
-      cells[idx].classList.add('supl-hit');
-      cells[idx].textContent = SYMBOLS[sequence[recallIdx]];
+    if (selCell === null) {
+      selCell = idx;
+      cells[idx].classList.add('supl-selected');
+    } else {
+      cells[selCell].classList.remove('supl-selected');
+      selCell = idx;
+      cells[idx].classList.add('supl-selected');
+    }
+    checkPair();
+  }
+
+  function handleRefCellClick(idx) {
+    if (state !== 'recall-input') return;
+    var refs = refGridEl.children;
+    if (selSymbol === null) {
+      selSymbol = idx;
+      refs[idx].classList.add('supl-selected');
+    } else {
+      refs[selSymbol].classList.remove('supl-selected');
+      selSymbol = idx;
+      refs[idx].classList.add('supl-selected');
+    }
+    checkPair();
+  }
+
+  function checkPair() {
+    if (selCell === null || selSymbol === null) return;
+    var cells = playGridEl.children;
+    var refs = refGridEl.children;
+    var correctCell = sequence[recallIdx].cell;
+    var correctSymbol = sequence[recallIdx].symbol;
+    if (selCell === correctCell && selSymbol === correctSymbol) {
+      cells[selCell].classList.remove('supl-selected');
+      cells[selCell].classList.add('supl-hit');
+      cells[selCell].textContent = SYMBOLS[correctSymbol];
+      refs[selSymbol].classList.remove('supl-selected');
+      refs[selSymbol].classList.add('supl-hit');
       hits++;
       recallIdx++;
+      selCell = null;
+      selSymbol = null;
       if (recallIdx >= sequence.length) {
         setState('done');
         statusEl.textContent = '¡Completado!';
+        updateScore();
         showResultModal();
         return;
       }
-      statusEl.textContent = 'Haz click en la casilla donde apareció: ' + SYMBOLS[sequence[recallIdx]];
       updateScore();
+      statusEl.textContent = '¡Correcto! Siguiente símbolo.';
     } else {
-      cells[idx].classList.add('supl-miss');
       misses++;
+      cells[selCell].classList.remove('supl-selected');
+      cells[selCell].classList.add('supl-miss');
+      refs[selSymbol].classList.remove('supl-selected');
+      refs[selSymbol].classList.add('supl-miss');
       updateScore();
-      var correctCell = cells[sequence[recallIdx]];
-      correctCell.classList.add('supl-current');
-      correctCell.textContent = SYMBOLS[sequence[recallIdx]];
+      statusEl.textContent = 'Incorrecto, vuelve a intentarlo.';
+      var wrongCell = selCell;
+      var wrongSymbol = selSymbol;
+      selCell = null;
+      selSymbol = null;
       delay(function () {
         if (state === 'recall-input') {
-          correctCell.classList.remove('supl-current');
-          if (cells[idx].classList.contains('supl-miss')) {
-            cells[idx].classList.remove('supl-miss');
-            cells[idx].textContent = '';
-          }
+          cells[wrongCell].classList.remove('supl-miss');
+          refs[wrongSymbol].classList.remove('supl-miss');
         }
       }, 700);
     }
@@ -343,7 +416,7 @@
     var lessonHeader = document.querySelector('.lesson-header');
     if (contentArea) contentArea.classList.add('no-center');
     if (bottomControls) bottomControls.style.display = '';
-    if (infoBar) infoBar.style.display = 'none';
+    if (infoBar) infoBar.style.display = '';
     if (instructTbl) instructTbl.style.display = 'none';
     if (cardContainer) cardContainer.style.display = 'none';
     if (recallCompare) recallCompare.style.display = 'none';
@@ -364,9 +437,7 @@
     var contentArea = document.querySelector('.content');
     if (contentArea) contentArea.classList.remove('no-center');
     var bottomControls = document.querySelector('.bottom-controls');
-    var infoBar = document.querySelector('.info-bar');
     if (bottomControls) bottomControls.style.display = '';
-    if (infoBar) infoBar.style.display = '';
   }
 
   function startGame() {
