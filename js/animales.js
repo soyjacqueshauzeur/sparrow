@@ -80,7 +80,7 @@
     { emoji: '🐚', name: 'Caracola' },
     { emoji: '🐌', name: 'Caracol' },
     { emoji: '🦋', name: 'Mariposa' },
-    { emoji: '🐛', name: 'Bicho' },
+    { emoji: '🐛', name: 'Oruga' },
     { emoji: '🐜', name: 'Hormiga' },
     { emoji: '🐝', name: 'Abeja' },
     { emoji: '🐞', name: 'Mariquita' },
@@ -154,35 +154,29 @@
   }
 
   function buildPool() {
-    var idxs = [];
-    if (isShuffle) {
-      var tmp = [];
-      for (var i = 0; i < ANIMALS.length; i++) tmp.push(i);
-      for (var i = tmp.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        [tmp[i], tmp[j]] = [tmp[j], tmp[i]];
-      }
-      idxs = tmp.slice(0, count);
-    } else {
-      for (var i = 0; i < count; i++) idxs.push(i);
+    var tmp = [];
+    for (var i = 0; i < ANIMALS.length; i++) tmp.push(i);
+    for (var i = tmp.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      [tmp[i], tmp[j]] = [tmp[j], tmp[i]];
     }
-    pool = idxs;
+    pool = tmp.slice(0, count);
   }
 
   function buildSequence() {
-    sequence = [];
-    if (repeat) {
+    sequence = pool.slice();
+    if (isShuffle) {
+      for (var i = sequence.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        [sequence[i], sequence[j]] = [sequence[j], sequence[i]];
+      }
+    }
+    if (repeat && count > 1) {
+      var repSeq = [];
       for (var i = 0; i < count; i++) {
-        sequence.push(pool[Math.floor(Math.random() * pool.length)]);
+        repSeq.push(sequence[Math.floor(Math.random() * sequence.length)]);
       }
-    } else {
-      sequence = pool.slice();
-      if (isShuffle) {
-        for (var i = sequence.length - 1; i > 0; i--) {
-          var j = Math.floor(Math.random() * (i + 1));
-          [sequence[i], sequence[j]] = [sequence[j], sequence[i]];
-        }
-      }
+      sequence = repSeq;
     }
   }
 
