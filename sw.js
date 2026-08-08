@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sparrow-v6-simon-loop';
+const CACHE_NAME = 'sparrow-v7-responsive';
 const ASSETS = [
   './',
   './index.html',

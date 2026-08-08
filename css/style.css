@@ -1187,8 +1187,18 @@ body {
 .lectura-btn-row {
   display: flex;
   gap: var(--sp-sm);
+  width: 100%;
 }
-.lectura-btn-row .duo-btn { flex: 1; }
+.lectura-btn-row .duo-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+}
+.lectura-btn-row .duo-btn .btn-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .lectura-stop-btn { background: #3a3a44 !important; box-shadow: 0 4px 0 #2a2a32 !important; }
 .lectura-stop-btn:active { box-shadow: 0 1px 0 #2a2a32 !important; }
 
@@ -1695,7 +1705,7 @@ body {
 @media (max-width: 480px) {
   .logo-text { display: none; }
   .top-bar { padding: var(--sp-sm) var(--sp-md); }
-  .top-bar-pills { gap: 6px; }
+  .top-bar-pills { gap: 10px; }
   .top-bar-pills .mode-pill:not(.font-pill) {
     padding: 0 10px;
     font-size: 11px;
@@ -1705,4 +1715,10 @@ body {
     width: 34px;
     height: 38px;
   }
+  .lectura-btn-row { flex-wrap: wrap; }
+  .lectura-btn-row .duo-btn {
+    flex: 1 1 100%;
+    padding: 12px 8px;
+  }
+  .lectura-btn-row .duo-btn .btn-label { font-size: 11px; letter-spacing: 1px; }
 }
