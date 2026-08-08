@@ -556,7 +556,13 @@ function resetGameState() {
   updatePauseButton();
 }
 
-document.getElementById('clearBtn').addEventListener('click', resetGameState);
+document.getElementById('clearBtn').addEventListener('click', () => {
+  if (currentSet === 'suplemento' && window.SuplementoModule && typeof window.SuplementoModule.reset === 'function') {
+    window.SuplementoModule.reset();
+    return;
+  }
+  resetGameState();
+});
 
 recallInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
@@ -704,6 +710,12 @@ function handlePauseAction() {
   const now = Date.now();
   if (now - lastPauseAction < 200) return;
   lastPauseAction = now;
+  if (currentSet === 'suplemento') {
+    if (window.SuplementoModule && typeof window.SuplementoModule.start === 'function') {
+      window.SuplementoModule.start();
+    }
+    return;
+  }
   if (!currentSet) {
     currentSet = '1-100';
   }
@@ -1233,7 +1245,7 @@ function showNumbersCard() {
 
 const menuCategories = {
   'aprender': ['instructions', '1-100', 'abc', 'cirilico', 'meses'],
-  'aplicar': ['numbers', 'deck', 'binario', 'cantidades'],
+  'aplicar': ['numbers', 'deck', 'binario', 'cantidades', 'suplemento'],
   'leer': ['personal', 'lectura'],
   'simon': ['simon']
 };
@@ -1241,7 +1253,8 @@ const menuCategories = {
 const subPillNames = {
   'instructions': 'Instrucciones', '1-100': '1-100', 'abc': 'ABC', 'cirilico': 'Cirílico',
   'numbers': 'Numbers', 'deck': 'Deck', 'binario': 'Binario', 'cantidades': 'Cantidades',
-  'meses': 'Meses', 'personal': 'Personal', 'lectura': 'Lectura', 'simon': 'Simon'
+  'meses': 'Meses', 'personal': 'Personal', 'lectura': 'Lectura', 'simon': 'Simon',
+  'suplemento': 'Suplemento'
 };
 
 let currentMenu = null;
@@ -1285,6 +1298,12 @@ function hideSimonIfVisible() {
   }
 }
 
+function hideSuplementoIfVisible() {
+  if (window.SuplementoModule && typeof window.SuplementoModule.hide === 'function') {
+    window.SuplementoModule.hide();
+  }
+}
+
 function activateSimon(btn) {
   if (isRunning) stopCycle();
   resetTimer();
@@ -1294,6 +1313,18 @@ function activateSimon(btn) {
   if (btn) btn.classList.add('active');
   if (window.SimonModule && typeof window.SimonModule.show === 'function') {
     window.SimonModule.show();
+  }
+}
+
+function activateSuplemento(btn) {
+  if (isRunning) stopCycle();
+  resetTimer();
+  currentSet = 'suplemento';
+  localStorage.setItem('sparrowGame', 'suplemento');
+  subMenu.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  if (window.SuplementoModule && typeof window.SuplementoModule.show === 'function') {
+    window.SuplementoModule.show();
   }
 }
 
@@ -1319,6 +1350,10 @@ function handleSubPillClick(btn) {
     hideSimonIfVisible();
     currentSet = null;
   }
+  if (currentSet === 'suplemento' && setKey !== 'suplemento') {
+    hideSuplementoIfVisible();
+    currentSet = null;
+  }
   if (setKey === 'lectura') {
     if (currentSet === 'lectura') return;
     if (isRunning) {
@@ -1333,6 +1368,14 @@ function handleSubPillClick(btn) {
       saveConfigValues();
     }
     activateSimon(btn);
+    return;
+  }
+  if (setKey === 'suplemento') {
+    if (currentSet === 'suplemento') return;
+    if (isRunning) {
+      saveConfigValues();
+    }
+    activateSuplemento(btn);
     return;
   }
   if (setKey === currentSet && isRunning) {
@@ -1388,6 +1431,11 @@ mainMenu.querySelectorAll('.main-pill').forEach(btn => {
     }
     if (currentSet === 'simon') {
       hideSimonIfVisible();
+      currentSet = null;
+      localStorage.removeItem('sparrowGame');
+    }
+    if (currentSet === 'suplemento') {
+      hideSuplementoIfVisible();
       currentSet = null;
       localStorage.removeItem('sparrowGame');
     }
@@ -1481,6 +1529,9 @@ try {
   } else if (savedGame === 'simon') {
     currentSet = 'simon';
     selectMenu('simon', 'simon');
+  } else if (savedGame === 'suplemento') {
+    currentSet = 'suplemento';
+    selectMenu('aplicar', 'suplemento');
   } else {
     const startMenu = (savedMenu && menuCategories[savedMenu] && menuCategories[savedMenu].includes(savedGame))
       ? savedMenu

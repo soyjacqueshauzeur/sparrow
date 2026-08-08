@@ -1,10 +1,12 @@
-const CACHE_NAME = 'sparrow-v7-responsive';
+const CACHE_NAME = 'sparrow-v8-suplemento';
 const ASSETS = [
   './',
   './index.html',
   './css/style.css',
   './js/script.js',
   './js/lectura.js',
+  './js/simon.js',
+  './js/complemento.js',
   './js/vendor/jszip.min.js',
   './js/vendor/pdf.min.js',
   './js/vendor/pdf.worker.min.js',
